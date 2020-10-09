@@ -28,4 +28,13 @@ return [
         "url" => "Website is invalid.",
         "max:50" => "Bio can't be more than 50 character.",
     ],
+    "post_id" => [
+        "required" => "Post id must required.",
+        "integer" => "Post id must be an integer.",
+    ],
+    "comment" => [
+        "required" => "Comment can't be empty.",
+        "string" => "Comment must be a string.",
+        "max:255" => "Comment can't be more than 255 character.",
+    ],
 ];

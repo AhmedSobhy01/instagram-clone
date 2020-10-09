@@ -13,7 +13,7 @@ class ProfileController extends Controller
     {
         $user = User::firstWhere('username', $username);
         if (!$user) :
-            return abort(404, __('main.user_not_found'));
+            return abort(404, __('main.messages_title.user_delete_error'));
         endif;
         return view('profile.index', compact('user'));
     }

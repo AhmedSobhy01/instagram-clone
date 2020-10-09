@@ -26,11 +26,19 @@ class Post extends Model
     public function like()
     {
         if (!auth()->user()->likedPost($this)) {
-            $this->likes()->updateOrCreate([
+            return $this->likes()->updateOrCreate([
                 'user_id' => auth()->id()
             ]);
         } else {
-            $this->likes()->delete(auth()->id());
+            return $this->likes()->delete(auth()->id());
         }
+    }
+
+    public function comment(string $body)
+    {
+        return $this->comments()->create([
+            'user_id' => auth()->id(),
+            'body' => $body
+        ]);
     }
 }

@@ -1960,7 +1960,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return response.data;
       }).then(function (data) {
-        if (data.error_code == 201) {
+        if (data.response_code == 201) {
           _this.status = !_this.status;
         }
 
@@ -2255,6 +2255,29 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["feedUrl", "likeUrl", "commentUrl", "authId", "endMessage"],
   data: function data() {
@@ -2266,7 +2289,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       error: {
         status: false,
         message: ""
-      }
+      },
+      commentLoading: false
     };
   },
   methods: {
@@ -2284,6 +2308,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }).then(function (data) {
           var _this$posts;
 
+          console.log(data.data);
           _this.page++;
 
           (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data));
@@ -2311,6 +2336,55 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           _this2.getPosts();
         }
       });
+    },
+    addComment: function addComment(e, post) {
+      var _this3 = this;
+
+      var form = e.target,
+          postId = form.querySelector(".add-comment-field").id.split("-")[1],
+          commentBody = form.querySelector(".add-comment-field").value;
+
+      if (!this.commentLoading) {
+        this.commentLoading = true;
+        form.querySelector(".btn").style.display = "none";
+        form.querySelector(".comment-loader").style.display = "inline-block";
+        axios.post(this.commentUrl, {
+          postID: postId,
+          comment: commentBody
+        }).then(function (res) {
+          return res.data;
+        }).then(function (data) {
+          if (data.response_code == 201) {
+            post.comments.push(data.comment);
+            post.commentsCount += 1;
+          }
+
+          form.querySelector(".add-comment-field").value = "";
+        })["catch"](function (err) {
+          if (err.response.status == 401) {
+            window.location = err.response.data.redirectUrl;
+          } else {
+            toastr.error(err.response.data.error_message, err.response.data.error_title, {
+              closeButton: true,
+              progressBar: true,
+              positionClass: "toast-top-right",
+              preventDuplicates: true,
+              showDuration: 300,
+              hideDuration: 1000,
+              timeOut: 5000,
+              extendedTimeOut: 5000,
+              showEasing: "swing",
+              hideEasing: "linear",
+              showMethod: "fadeIn",
+              hideMethod: "fadeOut"
+            });
+          }
+        })["finally"](function () {
+          form.querySelector(".comment-loader").style.display = "none";
+          form.querySelector(".btn").style.display = "inline-block";
+          _this3.commentLoading = false;
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -38661,7 +38735,7 @@ var render = function() {
         return _c("div", { key: post.id, staticClass: "post card mb-4" }, [
           _c("div", { staticClass: "card-header post-user" }, [
             _c("div", { staticClass: "d-flex align-items-center" }, [
-              _c("a", { attrs: { href: post.user.url } }, [
+              _c("a", { attrs: { href: post.user.profile_url } }, [
                 _c("img", {
                   staticStyle: { width: "35px", heigh: "35px" },
                   attrs: { src: post.user.profile_image, alt: "Profile Image" }
@@ -38672,7 +38746,7 @@ var render = function() {
                 "a",
                 {
                   staticClass: "post-author-username h6",
-                  attrs: { href: post.user.url }
+                  attrs: { href: post.user.profile_url }
                 },
                 [_vm._v(_vm._s(post.user.username))]
               )
@@ -38696,11 +38770,7 @@ var render = function() {
                     attrs: {
                       "post-id": post.id,
                       "post-to": _vm.likeUrl,
-                      likes: post.likes
-                        .map(function(x) {
-                          return x.user.id
-                        })
-                        .includes(parseInt(_vm.authId))
+                      likes: post.likedByUser
                     }
                   }),
                   _vm._v(" "),
@@ -38743,21 +38813,20 @@ var render = function() {
                   staticStyle: { cursor: "pointer" }
                 },
                 [
-                  _c("span", { attrs: { id: "likes-" + post.id } }, [
-                    _vm._v(_vm._s(post.likes.length))
-                  ]),
+                  _c("span", {
+                    attrs: { id: "likes-" + post.id },
+                    domProps: { textContent: _vm._s(post.likesCount) }
+                  }),
                   _vm._v("\n                    likes\n                ")
                 ]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "post-caption mt-2" }, [
-                _c("span", { staticClass: "post-caption-author mr-1" }, [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(post.user.username) +
-                      "\n                    "
-                  )
-                ]),
+                _c("a", {
+                  staticClass: "post-caption-author",
+                  attrs: { href: post.user.profile_url },
+                  domProps: { textContent: _vm._s(post.user.username) }
+                }),
                 _vm._v(
                   "\n                    " +
                     _vm._s(post.caption) +
@@ -38766,11 +38835,11 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "post-comments mt-1" }, [
-                post.comments.length > 0
-                  ? _c("div", { staticClass: "mb-1" }, [
+                post.commentsCount
+                  ? _c("div", { staticClass: "mb-1 view-all-comments" }, [
                       _vm._v(
                         "\n                        View all " +
-                          _vm._s(post.comments.length) +
+                          _vm._s(post.commentsCount) +
                           " comments\n                    "
                       )
                     ])
@@ -38789,9 +38858,11 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "comment-autor" }, [
-                            _c("a", { attrs: { href: "#" } }, [
-                              _vm._v(_vm._s(comment.user.username))
-                            ])
+                            _c(
+                              "a",
+                              { attrs: { href: comment.user.profile_url } },
+                              [_vm._v(_vm._s(comment.user.username))]
+                            )
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "comment-body ml-1" }, [
@@ -38815,7 +38886,44 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(0, true)
+          _c("div", { staticClass: "card-footer p-0 py-2" }, [
+            _c(
+              "form",
+              {
+                staticClass: "d-flex align-items-center",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.addComment($event, post)
+                  }
+                }
+              },
+              [
+                _c("textarea", {
+                  staticClass: "add-comment-field pl-3",
+                  attrs: {
+                    "aria-label": "Add a comment…",
+                    placeholder: "Add a comment…",
+                    autocomplete: "off",
+                    autocorrect: "off",
+                    id: "comment-" + post.id
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "ml-auto px-4 py-0 btn",
+                    style: [_vm.commentLoading ? { cursor: "no-drop" } : ""],
+                    attrs: { disabled: _vm.commentLoading }
+                  },
+                  [_vm._v("\n                    Post\n                ")]
+                ),
+                _vm._v(" "),
+                _vm._m(0, true)
+              ]
+            )
+          ])
         ])
       }),
       _vm._v(" "),
@@ -38842,25 +38950,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-footer p-0 py-2" }, [
-      _c(
-        "form",
-        { staticClass: "d-flex align-items-center", attrs: { action: "" } },
-        [
-          _c("textarea", {
-            staticClass: "add-comment-field pl-3",
-            attrs: {
-              "aria-label": "Add a comment…",
-              placeholder: "Add a comment…",
-              autocomplete: "off",
-              autocorrect: "off"
-            }
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "ml-auto px-4 btn" }, [_vm._v("Post")])
-        ]
-      )
-    ])
+    return _c(
+      "div",
+      {
+        staticClass:
+          "mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
+      },
+      [_c("div", { staticClass: "ldio-va3amnnosd" }, [_c("div")])]
+    )
   }
 ]
 render._withStripped = true

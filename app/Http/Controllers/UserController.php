@@ -11,11 +11,13 @@ class UserController extends Controller
 {
     public function follow(Request $request)
     {
+        if (!$request->wantsJson()) return abort(404);
+
         $user = User::find($request->userID);
 
         if (!$user) {
             return response()->json([
-                "error_code" => 404,
+                "response_code" => 404,
                 "error_title" => __("main.messages_title.user_delete_error"),
                 "error_message" => __("main.user_delete_error")
             ], 404);
@@ -23,9 +25,9 @@ class UserController extends Controller
 
         if (!auth()->check()) {
             return response()->json([
-                "error_code" => 401,
+                "response_code" => 401,
                 "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login_follow"),
+                "error_message" => __("main.please_login"),
                 "redirectUrl" => route("login")
             ], 401);
         }
@@ -34,7 +36,7 @@ class UserController extends Controller
             DB::beginTransaction();
             if (auth()->user()->follow($user)) {
                 return response()->json([
-                    "error_code" => 201,
+                    "response_code" => 201,
                     "error_title" => "",
                     "error_message" => ""
                 ], 201);
@@ -43,7 +45,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                "error_code" => 500,
+                "response_code" => 500,
                 "error_title" => __("main.messages_title.error"),
                 "error_message" => __('main.error')
             ], 500);

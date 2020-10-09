@@ -27,6 +27,7 @@ Route::post('/search', [SearchController::class, 'users'])->name('search');
 Route::get('/feed', [FeedController::class, 'index'])->name('feed');
 Route::post('/user/follow', [UserController::class, 'follow'])->name('follow');
 Route::post('/like', [PostController::class, 'like'])->name('like');
+Route::post('/comment', [PostController::class, 'comment'])->name('comment');
 // #########################################
 
 Route::group(['middleware' => 'auth', 'prefix' => 'profile', 'as' => 'profile.'], function () {

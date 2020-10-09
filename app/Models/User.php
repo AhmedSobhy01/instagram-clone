@@ -42,6 +42,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['profile_url'];
+
+    public function getProfileUrlAttribute($value)
+    {
+        return route('profile', $this->username);
+    }
+
     public function getProfileImageAttribute($value)
     {
         return asset('storage/profile_images') . "/" . $value;

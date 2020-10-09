@@ -43,12 +43,14 @@ return [
         "post_delete_error" => "Post Not Found",
         "user_delete_error" => "User Not Found",
         "profile_updated" => "Profile Updated",
-        "login" => "Unauthenticated"
+        "login" => "Unauthenticated",
+        "invalid_inputs" => "Request Invalid",
     ],
-    "error" => "There has been error. Please try again",
-    "please_login_follow" => "Please Login To Follow",
+    "error" => "There has been error. Please try again.",
+    "please_login" => "Please login to proceed.",
     "user_delete_error" => "Seems like the user has been deleted.",
     "post_delete_error" => "Seems like the post has been deleted.",
     "profile_updated" => 'Your profile has been updated successfully.',
-
+    "invalid_inputs" => "The request wasn't well-formed",
+    "invalid_comment" => "Comment can't be empty and no more than 255 characters.",
 ];

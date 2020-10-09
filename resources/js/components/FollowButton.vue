@@ -57,7 +57,7 @@ export default {
                 })
                 .then(response => response.data)
                 .then(data => {
-                    if (data.error_code == 201) {
+                    if (data.response_code == 201) {
                         this.status = !this.status;
                     }
 

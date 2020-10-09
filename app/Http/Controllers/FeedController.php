@@ -9,11 +9,13 @@ class FeedController extends Controller
 {
     public function index(Request $request)
     {
+        if (!$request->wantsJson()) return abort(404);
+
         if (!auth()->check()) {
             return response()->json([
-                "error_code" => 401,
+                "response_code" => 401,
                 "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login_follow"),
+                "error_message" => __("main.please_login"),
                 "redirectUrl" => route("login")
             ], 401);
         }
@@ -27,33 +29,32 @@ class FeedController extends Controller
                 'user' => function ($q) {
                     $q->select('id', 'name', 'username', 'profile_image');
                 },
-                "likes" => function ($q) {
-                    $q->select('post_id', 'user_id')->with(['user' => function ($q) {
-                        $q->select('id');
-                    },]);
-                },
-                'comments' => function ($q) {
-                    $q->inRandomOrder()->select('post_id', 'user_id', 'body')->limit(2)->with(['user' => function ($q) {
-                        $q->select('id', 'name', 'username', 'profile_image');
-                    }]);
-                }
             ])->latest()->paginate(5);
 
             $posts->map(function ($item) {
-                $item->user->url = route('profile', $item->user->username);
+                $item->likedByUser = auth()->user()->likedPost(Post::find($item->id));
+                $item->likesCount = Post::find($item->id)->likes()->count();
+                $item->commentsCount = Post::find($item->id)->comments()->count();
+                $item->load(['comments' => function ($q) {
+                    $q->inRandomOrder()->select('id', 'post_id', 'user_id', 'body')->with([
+                        'user' => function ($q) {
+                            $q->select('id', 'username');
+                        },
+                    ])->limit(2);
+                }]);
                 return $item;
             });
 
             $r = [
-                "error_code" => 200,
+                "response_code" => 200,
                 "error_title" => "",
                 "error_message" => ""
             ];
 
-            return $request->wantsJson() ? array_merge($r, $posts->toArray()) : abort(404);
+            return array_merge($r, $posts->toArray());
         } catch (\Exception $e) {
             return response()->json([
-                "error_code" => 500,
+                "response_code" => 500,
                 "error_title" => __("main.messages_title.error"),
                 "error_message" => __("main.error") . $e,
             ], 500);

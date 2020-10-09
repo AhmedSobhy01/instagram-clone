@@ -25,7 +25,16 @@
     font-weight: 600;
 }
 
-.post-comments > div:first-child {
+.post-caption-author {
+    text-decoration: none;
+}
+
+.post-caption-author,
+.post-caption-author:hover {
+    color: #000;
+}
+
+.post-comments .view-all-comments {
     cursor: pointer;
     color: #8e8e8e;
 }

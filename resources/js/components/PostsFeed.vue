@@ -3,16 +3,18 @@
         <div class="post card mb-4" v-for="post in posts" :key="post.id">
             <div class="card-header post-user">
                 <div class="d-flex align-items-center">
-                    <a :href="post.user.url">
+                    <a :href="post.user.profile_url">
                         <img
                             :src="post.user.profile_image"
                             alt="Profile Image"
                             style="width: 35px;heigh: 35px;"
                         />
                     </a>
-                    <a :href="post.user.url" class="post-author-username h6">{{
-                        post.user.username
-                    }}</a>
+                    <a
+                        :href="post.user.profile_url"
+                        class="post-author-username h6"
+                        >{{ post.user.username }}</a
+                    >
                 </div>
             </div>
             <div class="card-body p-0">
@@ -24,11 +26,7 @@
                         <like-button
                             :post-id="post.id"
                             :post-to="likeUrl"
-                            :likes="
-                                post.likes
-                                    .map(x => x.user.id)
-                                    .includes(parseInt(authId))
-                            "
+                            :likes="post.likedByUser"
                         ></like-button>
                         <div class="ml-3" style="cursor: pointer">
                             <svg
@@ -47,20 +45,26 @@
                         </div>
                     </div>
                     <div class="post-likes mt-2" style="cursor: pointer">
-                        <span :id="'likes-' + post.id">{{
-                            post.likes.length
-                        }}</span>
+                        <span
+                            :id="'likes-' + post.id"
+                            v-text="post.likesCount"
+                        ></span>
                         likes
                     </div>
                     <div class="post-caption mt-2">
-                        <span class="post-caption-author mr-1">
-                            {{ post.user.username }}
-                        </span>
+                        <a
+                            :href="post.user.profile_url"
+                            class="post-caption-author"
+                            v-text="post.user.username"
+                        ></a>
                         {{ post.caption }}
                     </div>
                     <div class="post-comments mt-1">
-                        <div class="mb-1" v-if="post.comments.length > 0">
-                            View all {{ post.comments.length }} comments
+                        <div
+                            class="mb-1 view-all-comments"
+                            v-if="post.commentsCount"
+                        >
+                            View all {{ post.commentsCount }} comments
                         </div>
                         <div class="post-comments-latest">
                             <div
@@ -69,7 +73,9 @@
                                 :key="comment.id"
                             >
                                 <div class="comment-autor">
-                                    <a href="#">{{ comment.user.username }}</a>
+                                    <a :href="comment.user.profile_url">{{
+                                        comment.user.username
+                                    }}</a>
                                 </div>
                                 <div class="comment-body ml-1">
                                     {{ comment.body }}
@@ -81,15 +87,32 @@
                 </div>
             </div>
             <div class="card-footer p-0 py-2">
-                <form action="" class="d-flex align-items-center">
+                <form
+                    class="d-flex align-items-center"
+                    @submit.prevent="addComment($event, post)"
+                >
                     <textarea
                         class="add-comment-field pl-3"
                         aria-label="Add a comment…"
                         placeholder="Add a comment…"
                         autocomplete="off"
                         autocorrect="off"
+                        :id="'comment-' + post.id"
                     ></textarea>
-                    <button class="ml-auto px-4 btn">Post</button>
+                    <button
+                        class="ml-auto px-4 py-0 btn"
+                        :disabled="commentLoading"
+                        :style="[commentLoading ? { cursor: 'no-drop' } : '']"
+                    >
+                        Post
+                    </button>
+                    <div
+                        class="mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
+                    >
+                        <div class="ldio-va3amnnosd">
+                            <div></div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -121,7 +144,8 @@ export default {
             error: {
                 status: false,
                 message: ""
-            }
+            },
+            commentLoading: false
         };
     },
 
@@ -137,6 +161,7 @@ export default {
                     })
                     .then(res => res.data)
                     .then(data => {
+                        console.log(data.data);
                         this.page++;
                         this.posts.push(...data.data);
                         if (data.data.length == 0) {
@@ -167,6 +192,64 @@ export default {
                     this.getPosts();
                 }
             });
+        },
+        addComment(e, post) {
+            let form = e.target,
+                postId = form
+                    .querySelector(".add-comment-field")
+                    .id.split("-")[1],
+                commentBody = form.querySelector(".add-comment-field").value;
+
+            if (!this.commentLoading) {
+                this.commentLoading = true;
+                form.querySelector(".btn").style.display = "none";
+                form.querySelector(".comment-loader").style.display =
+                    "inline-block";
+                axios
+                    .post(this.commentUrl, {
+                        postID: postId,
+                        comment: commentBody
+                    })
+                    .then(res => res.data)
+                    .then(data => {
+                        if (data.response_code == 201) {
+                            post.comments.push(data.comment);
+                            post.commentsCount += 1;
+                        }
+                        form.querySelector(".add-comment-field").value = "";
+                    })
+                    .catch(err => {
+                        if (err.response.status == 401) {
+                            window.location = err.response.data.redirectUrl;
+                        } else {
+                            toastr.error(
+                                err.response.data.error_message,
+                                err.response.data.error_title,
+                                {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right",
+                                    preventDuplicates: true,
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 5000,
+                                    extendedTimeOut: 5000,
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut"
+                                }
+                            );
+                        }
+                    })
+                    .finally(() => {
+                        form.querySelector(".comment-loader").style.display =
+                            "none";
+                        form.querySelector(".btn").style.display =
+                            "inline-block";
+                        this.commentLoading = false;
+                    });
+            }
         }
     },
 

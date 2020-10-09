@@ -9,6 +9,8 @@ class SearchController extends Controller
 {
     public function users(Request $request)
     {
+        if (!$request->wantsJson()) return abort(404);
+
         try {
             $q = $request->q;
             $qStartsWith = $q . "%";
@@ -23,17 +25,14 @@ class SearchController extends Controller
                 ->selectRaw($relevanceQuery, [$qStartsWith, $qStartsOrEndsWith, $qStartsWith, $qStartsOrEndsWith])
                 ->where('username', 'LIKE', $qStartsOrEndsWith)
                 ->orWhere('name', 'LIKE', $qStartsOrEndsWith)
-                ->limit(20)->orderBy('weight', 'desc')->get();
-
-            $users->map(function ($item) {
-                unset($item->weight);
-                $item->profileUrl = route('profile', $item->username);
-                return $item;
-            });
+                ->limit(20)->orderBy('weight', 'desc')->get()->map(function ($v) {
+                    unset($v->weight);
+                    return $v;
+                });
 
             $r = [
                 "results" => $users->toArray(),
-                "error_code" => 200,
+                "response_code" => 200,
                 "error_title" => "",
                 "error_message" => ""
             ];
@@ -41,8 +40,8 @@ class SearchController extends Controller
             return $r;
         } catch (\Exception $e) {
             return response()->json([
-                "error_code" => 500,
-                "error_title" => __("messages_title.error"),
+                "response_code" => 500,
+                "error_title" => __("main.messages_title.error"),
                 "error_message" => __("main.error")
             ], 500);
         }

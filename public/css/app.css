@@ -17382,6 +17382,64 @@ body {
   box-sizing: content-box;
 }
 
+@-webkit-keyframes ldio-va3amnnosd {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes ldio-va3amnnosd {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.ldio-va3amnnosd div {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 10px solid #000000;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+.ldio-va3amnnosd div {
+  -webkit-animation: ldio-va3amnnosd 1s linear infinite;
+          animation: ldio-va3amnnosd 1s linear infinite;
+  top: 50px;
+  left: 50px;
+}
+
+.loadingio-spinner-rolling-mufr14le4r {
+  width: 20px;
+  height: 20px;
+  display: none;
+  overflow: hidden;
+  background: none;
+}
+
+.ldio-va3amnnosd {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(0.2);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  transform-origin: 0 0;
+}
+
+.ldio-va3amnnosd div {
+  box-sizing: content-box;
+}
+
 .loader {
   width: 5em;
   height: 5em;
