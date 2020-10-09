@@ -24,17 +24,15 @@ Auth::routes();
 // #########################################
 // Ajax API
 Route::post('/search', [SearchController::class, 'users'])->name('search');
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/feed', [FeedController::class, 'index'])->name('feed');
-    Route::post('/user/follow', [UserController::class, 'follow'])->name('follow');
-    Route::post('/like', [PostController::class, 'like'])->name('like');
-});
+Route::get('/feed', [FeedController::class, 'index'])->name('feed');
+Route::post('/user/follow', [UserController::class, 'follow'])->name('follow');
+Route::post('/like', [PostController::class, 'like'])->name('like');
 // #########################################
 
-Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
-    Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::group(['middleware' => 'auth', 'prefix' => 'profile', 'as' => 'profile.'], function () {
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->middleware("auth")->name('home');
 Route::get('/{username}', [ProfileController::class, 'index'])->name('profile');

@@ -24,8 +24,11 @@
                         <like-button
                             :post-id="post.id"
                             :post-to="likeUrl"
-                            :likes="post.likes.map(x => x.user.id)"
-                            :auth-id="authId"
+                            :likes="
+                                post.likes
+                                    .map(x => x.user.id)
+                                    .includes(parseInt(authId))
+                            "
                         ></like-button>
                         <div class="ml-3" style="cursor: pointer">
                             <svg
@@ -90,10 +93,11 @@
                 </form>
             </div>
         </div>
-        <div class="h2 text-center m-0 py-3" v-if="end">
-            Looks like the end. &#128549;<br />Follow more people for more
-            posts.
-        </div>
+        <div
+            class="h2 text-center m-0 py-3"
+            v-if="end"
+            v-html="endMessage"
+        ></div>
         <div
             class="h2 text-center m-0 py-3 text-danger"
             v-if="this.error.status && !busy && !end"
@@ -106,7 +110,7 @@
 
 <script>
 export default {
-    props: ["feedUrl", "likeUrl", "commentUrl", "loginUrl", "authId"],
+    props: ["feedUrl", "likeUrl", "commentUrl", "authId", "endMessage"],
 
     data: function() {
         return {
@@ -141,11 +145,11 @@ export default {
                     })
                     .catch(err => {
                         if (err.response.status == 401) {
-                            window.location = this.loginUrl;
+                            window.location = err.response.data.redirectUrl;
                         } else {
                             this.error.status = true;
                             this.error.message =
-                                err.response.data.message ||
+                                err.response.data.error_message ||
                                 "There has been an error. Please try again.";
                         }
                     })

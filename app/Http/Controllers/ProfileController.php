@@ -43,11 +43,11 @@ class ProfileController extends Controller
 
             DB::commit();
 
-            session()->flash('success', 'Your profile has been updated successfully.');
+            session()->flash('success', __("main.profile_updated"));
             return redirect()->route('profile.edit');
         } catch (\Exception $e) {
             DB::rollback();
-            session()->flash('error', 'There has been an error. Please try again.');
+            session()->flash('error', __("main.error"));
             return redirect()->route('profile.edit');
         }
     }

@@ -9,16 +9,16 @@ class FeedController extends Controller
 {
     public function index(Request $request)
     {
-        try {
-            if (!auth()->user()) {
-                session()->put("redirectTo", url()->previous());
-                return response()->json([
-                    "code" => 401,
-                    "message" => "Please Login To Follow",
-                    "redirectUrl" => route("login")
-                ], 401);
-            }
+        if (!auth()->check()) {
+            return response()->json([
+                "error_code" => 401,
+                "error_title" => __("main.messages_title.login"),
+                "error_message" => __("main.please_login_follow"),
+                "redirectUrl" => route("login")
+            ], 401);
+        }
 
+        try {
             $following = auth()->user()->following()->select('users.id')->get()->map(function ($item) {
                 return $item->id;
             });
@@ -44,11 +44,18 @@ class FeedController extends Controller
                 return $item;
             });
 
-            return $request->wantsJson() ? $posts->toJson() : abort(404);
+            $r = [
+                "error_code" => 200,
+                "error_title" => "",
+                "error_message" => ""
+            ];
+
+            return $request->wantsJson() ? array_merge($r, $posts->toArray()) : abort(404);
         } catch (\Exception $e) {
             return response()->json([
-                "code" => 500,
-                "message" => "There has been error. Please try again"
+                "error_code" => 500,
+                "error_title" => __("main.messages_title.error"),
+                "error_message" => __("main.error") . $e,
             ], 500);
         }
     }

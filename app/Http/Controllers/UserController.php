@@ -11,45 +11,42 @@ class UserController extends Controller
 {
     public function follow(Request $request)
     {
-        $user = User::find(request()->userID);
+        $user = User::find($request->userID);
 
         if (!$user) {
             return response()->json([
-                "code" => 404,
-                "message" => "Seems like the user has been deleted."
+                "error_code" => 404,
+                "error_title" => __("main.messages_title.user_delete_error"),
+                "error_message" => __("main.user_delete_error")
             ], 404);
         }
 
-        if (!auth()->user()) {
-            session()->put("redirectTo", url()->previous());
+        if (!auth()->check()) {
             return response()->json([
-                "code" => 401,
-                "message" => "Please Login To Follow",
+                "error_code" => 401,
+                "error_title" => __("main.messages_title.login"),
+                "error_message" => __("main.please_login_follow"),
                 "redirectUrl" => route("login")
             ], 401);
         }
 
-        $action = auth()->user()->follow($user);
-
-        if ($action) {
+        try {
+            DB::beginTransaction();
+            if (auth()->user()->follow($user)) {
+                return response()->json([
+                    "error_code" => 201,
+                    "error_title" => "",
+                    "error_message" => ""
+                ], 201);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
-                "code" => 201,
-                "message" => ""
-            ], 201);
-        }
-
-        return response()->json([
-            "code" => 500,
-            "message" => "There has been error. Please try again"
-        ], 500);
-    }
-
-    public function likePost($id)
-    {
-        if (Post::find($id)->like()) {
-            return 'done';
-        } else {
-            return 'fail';
+                "error_code" => 500,
+                "error_title" => __("main.messages_title.error"),
+                "error_message" => __('main.error')
+            ], 500);
         }
     }
 }

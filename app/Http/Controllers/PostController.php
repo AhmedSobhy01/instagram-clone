@@ -13,26 +13,38 @@ class PostController extends Controller
 
     public function like(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                "error_code" => 401,
+                "error_title" => __("main.messages_title.login"),
+                "error_message" => __("main.please_login_follow"),
+                "redirectUrl" => route("login")
+            ], 401);
+        }
+
         try {
             $post = Post::find($request->postID);
 
             if (!$post) {
                 return response()->json([
-                    "code" => 404,
-                    "message" => "Seems like the post has been deleted."
+                    "error_code" => 404,
+                    "error_title" => __("main.messages_title.post_delete_error"),
+                    "message" => __("main.post_deleted")
                 ], 404);
             }
 
             $post->like();
 
             return response()->json([
-                "code" => 201,
-                "message" => ""
+                "error_code" => 201,
+                "error_title" => "",
+                "error_message" => ""
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
-                "code" => 500,
-                "message" => "There has been error. Please try again" . $e
+                "error_code" => 500,
+                "error_title" => __("messages_title.error"),
+                "error_message" => __("main.error")
             ], 500);
         }
     }

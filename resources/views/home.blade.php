@@ -9,7 +9,7 @@
 <div class="row w-100 m-0">
     <div class="col-md-6 offset-md-3">
         <div class="container">
-            <posts-feed feed-url="{{ route('feed') }}" like-url="{{ route('like') }}" login-url="{{ route('login') }}" :auth-id="{{ auth()->id() }}"></posts-feed>
+            <posts-feed feed-url="{{ route('feed') }}" like-url="{{ route('like') }}" auth-id="{{ auth()->id() }}" end-message="{{ __('main.end_message') }}"></posts-feed>
         </div>
     </div>
 </div>

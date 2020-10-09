@@ -1960,7 +1960,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return response.data;
       }).then(function (data) {
-        _this.status = !_this.status;
+        if (data.error_code == 201) {
+          _this.status = !_this.status;
+        }
 
         if (_this.status) {
           document.getElementById("followers-count").innerHTML = parseInt(document.getElementById("followers-count").innerHTML) + 1;
@@ -1973,7 +1975,7 @@ __webpack_require__.r(__webpack_exports__);
         if (err.response.status == 401) {
           window.location = err.response.data.redirectUrl;
         } else if (err.response.status == 404) {
-          toastr.error(err.response.data.message, "User Not Found", {
+          toastr.error(err.response.data.error_message, err.response.data.error_title, {
             closeButton: true,
             progressBar: true,
             positionClass: "toast-top-right",
@@ -1988,8 +1990,7 @@ __webpack_require__.r(__webpack_exports__);
             hideMethod: "fadeOut"
           });
         } else {
-          var message = err.response.data.message || "There has been error. Please try again";
-          toastr.error(message, "Error", {
+          toastr.error(err.response.data.error_message || "There has been error. Please try again", err.response.data.error_title || "Error", {
             closeButton: true,
             progressBar: true,
             positionClass: "toast-top-right",
@@ -2052,7 +2053,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["postTo", "postId", "likes", "authId"],
+  props: ["postTo", "postId", "likes"],
   watch: {
     status: function status() {
       if (this.status) {
@@ -2064,9 +2065,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      liked: this.likes,
       busy: false,
-      status: this.likes.includes(this.authId)
+      status: this.likes
     };
   },
   methods: {
@@ -2085,7 +2085,7 @@ __webpack_require__.r(__webpack_exports__);
         if (err.response.status == 401) {
           window.location = err.response.data.redirectUrl;
         } else if (err.response.status == 404) {
-          toastr.error(err.response.data.message, "Post Not Found", {
+          toastr.error(err.response.data.error_message, err.response.data.error_title, {
             closeButton: true,
             progressBar: true,
             positionClass: "toast-top-right",
@@ -2100,8 +2100,7 @@ __webpack_require__.r(__webpack_exports__);
             hideMethod: "fadeOut"
           });
         } else {
-          var message = err.response.data.message || "There has been error. Please try again";
-          toastr.error(message, "Error", {
+          toastr.error(err.response.data.error_message || "There has been error. Please try again", err.response.data.error_title || "Error", {
             closeButton: true,
             progressBar: true,
             positionClass: "toast-top-right",
@@ -2252,8 +2251,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["feedUrl", "likeUrl", "commentUrl", "loginUrl", "authId"],
+  props: ["feedUrl", "likeUrl", "commentUrl", "authId", "endMessage"],
   data: function data() {
     return {
       posts: [],
@@ -2290,10 +2293,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           }
         })["catch"](function (err) {
           if (err.response.status == 401) {
-            window.location = _this.loginUrl;
+            window.location = err.response.data.redirectUrl;
           } else {
             _this.error.status = true;
-            _this.error.message = err.response.data.message || "There has been an error. Please try again.";
+            _this.error.message = err.response.data.error_message || "There has been an error. Please try again.";
           }
         })["finally"](function () {
           _this.busy = false;
@@ -2424,7 +2427,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.data;
         }).then(function (data) {
-          _this.data = data;
+          _this.data = data.results;
 
           if (_this.data.length < 1 && _this.q !== "") {
             _this.noResult = true;
@@ -38693,10 +38696,11 @@ var render = function() {
                     attrs: {
                       "post-id": post.id,
                       "post-to": _vm.likeUrl,
-                      likes: post.likes.map(function(x) {
-                        return x.user.id
-                      }),
-                      "auth-id": _vm.authId
+                      likes: post.likes
+                        .map(function(x) {
+                          return x.user.id
+                        })
+                        .includes(parseInt(_vm.authId))
                     }
                   }),
                   _vm._v(" "),
@@ -38816,11 +38820,10 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.end
-        ? _c("div", { staticClass: "h2 text-center m-0 py-3" }, [
-            _vm._v("\n        Looks like the end. 😥"),
-            _c("br"),
-            _vm._v("Follow more people for more\n        posts.\n    ")
-          ])
+        ? _c("div", {
+            staticClass: "h2 text-center m-0 py-3",
+            domProps: { innerHTML: _vm._s(_vm.endMessage) }
+          })
         : _vm._e(),
       _vm._v(" "),
       this.error.status && !_vm.busy && !_vm.end

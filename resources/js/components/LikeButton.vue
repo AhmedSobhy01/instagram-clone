@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    props: ["postTo", "postId", "likes", "authId"],
+    props: ["postTo", "postId", "likes"],
 
     watch: {
         status: function() {
@@ -51,9 +51,8 @@ export default {
 
     data: function() {
         return {
-            liked: this.likes,
             busy: false,
-            status: this.likes.includes(this.authId)
+            status: this.likes
         };
     },
 
@@ -74,8 +73,8 @@ export default {
                         window.location = err.response.data.redirectUrl;
                     } else if (err.response.status == 404) {
                         toastr.error(
-                            err.response.data.message,
-                            "Post Not Found",
+                            err.response.data.error_message,
+                            err.response.data.error_title,
                             {
                                 closeButton: true,
                                 progressBar: true,
@@ -92,24 +91,25 @@ export default {
                             }
                         );
                     } else {
-                        let message =
-                            err.response.data.message ||
-                            "There has been error. Please try again";
-
-                        toastr.error(message, "Error", {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: "toast-top-right",
-                            preventDuplicates: true,
-                            showDuration: 300,
-                            hideDuration: 1000,
-                            timeOut: 5000,
-                            extendedTimeOut: 5000,
-                            showEasing: "swing",
-                            hideEasing: "linear",
-                            showMethod: "fadeIn",
-                            hideMethod: "fadeOut"
-                        });
+                        toastr.error(
+                            err.response.data.error_message ||
+                                "There has been error. Please try again",
+                            err.response.data.error_title || "Error",
+                            {
+                                closeButton: true,
+                                progressBar: true,
+                                positionClass: "toast-top-right",
+                                preventDuplicates: true,
+                                showDuration: 300,
+                                hideDuration: 1000,
+                                timeOut: 5000,
+                                extendedTimeOut: 5000,
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut"
+                            }
+                        );
                     }
                 })
                 .finally(() => (this.busy = false));

@@ -57,7 +57,9 @@ export default {
                 })
                 .then(response => response.data)
                 .then(data => {
-                    this.status = !this.status;
+                    if (data.error_code == 201) {
+                        this.status = !this.status;
+                    }
 
                     if (this.status) {
                         document.getElementById("followers-count").innerHTML =
@@ -80,8 +82,8 @@ export default {
                         window.location = err.response.data.redirectUrl;
                     } else if (err.response.status == 404) {
                         toastr.error(
-                            err.response.data.message,
-                            "User Not Found",
+                            err.response.data.error_message,
+                            err.response.data.error_title,
                             {
                                 closeButton: true,
                                 progressBar: true,
@@ -98,24 +100,25 @@ export default {
                             }
                         );
                     } else {
-                        let message =
-                            err.response.data.message ||
-                            "There has been error. Please try again";
-
-                        toastr.error(message, "Error", {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: "toast-top-right",
-                            preventDuplicates: true,
-                            showDuration: 300,
-                            hideDuration: 1000,
-                            timeOut: 5000,
-                            extendedTimeOut: 5000,
-                            showEasing: "swing",
-                            hideEasing: "linear",
-                            showMethod: "fadeIn",
-                            hideMethod: "fadeOut"
-                        });
+                        toastr.error(
+                            err.response.data.error_message ||
+                                "There has been error. Please try again",
+                            err.response.data.error_title || "Error",
+                            {
+                                closeButton: true,
+                                progressBar: true,
+                                positionClass: "toast-top-right",
+                                preventDuplicates: true,
+                                showDuration: 300,
+                                hideDuration: 1000,
+                                timeOut: 5000,
+                                extendedTimeOut: 5000,
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut"
+                            }
+                        );
                     }
                     this.loading = !this.loading;
                 });

@@ -98,7 +98,7 @@ export default {
                     })
                     .then(res => res.data)
                     .then(data => {
-                        this.data = data;
+                        this.data = data.results;
 
                         if (this.data.length < 1 && this.q !== "") {
                             this.noResult = true;

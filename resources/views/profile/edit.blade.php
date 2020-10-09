@@ -84,6 +84,7 @@
             toastr.success("{{ session()->get('success') }}", "Profile Updated", {
                 "closeButton": true,
                 "newestOnTop": true,
+                "progressBar": true,
                 "positionClass": "toast-top-right",
                 "showDuration": "300",
                 "hideDuration": "1000",
@@ -105,6 +106,7 @@
             toastr.error("{{ session()->get('error') }}", "Error", {
                 "closeButton": true,
                 "newestOnTop": true,
+                "progressBar": true,
                 "positionClass": "toast-top-right",
                 "showDuration": "300",
                 "hideDuration": "1000",
