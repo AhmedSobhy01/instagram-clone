@@ -1,0 +1,61 @@
+.post {
+    border-radius: 5px;
+    border: 1px solid #dbdbdb;
+}
+
+.post-user {
+    background-color: #fff;
+}
+
+.post-author-username {
+    margin: 0 0 0 0.8em;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+}
+
+.post-author-username:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+.post-likes,
+.post-caption-author,
+.comment-autor {
+    font-weight: 600;
+}
+
+.post-comments > div:first-child {
+    cursor: pointer;
+    color: #8e8e8e;
+}
+
+.add-comment-field {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    resize: none;
+    height: 30px;
+    width: 90%;
+    line-height: 25px;
+}
+
+.comment-autor a {
+    text-decoration: none;
+    color: #000;
+}
+
+.comment-autor a:hover {
+    text-decoration: underline;
+    color: #000;
+}
+
+.comment-body {
+    color: #000;
+}
+
+.time-posted {
+    color: #8e8e8e;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}

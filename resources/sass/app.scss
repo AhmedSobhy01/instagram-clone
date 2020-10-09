@@ -1,0 +1,159 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Font Awesome
+// @import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+
+// Toastr
+@import "~toastr/toastr";
+
+// Using Font Over Body
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+// search bar in navabr
+@media (min-width: 768px) and (max-width: 992px) {
+    .search-box {
+        margin-left: 15% !important;
+    }
+}
+@media (max-width: 768px) {
+    .search-box {
+        margin-left: 18% !important;
+    }
+}
+
+// Loaders
+@keyframes ldio-7lxobt9epcp {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+.ldio-7lxobt9epcp div {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+}
+.ldio-7lxobt9epcp div {
+    animation: ldio-7lxobt9epcp 1s linear infinite;
+    top: 50px;
+    left: 50px;
+}
+.loadingio-spinner-rolling-azt7iucozal {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    background: none;
+}
+.ldio-7lxobt9epcp {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.2);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
+.ldio-7lxobt9epcp div {
+    box-sizing: content-box;
+}
+
+@keyframes ldio-904g46jbyyt {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+.ldio-904g46jbyyt div {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #000000;
+    border-top-color: transparent;
+    border-radius: 50%;
+}
+.ldio-904g46jbyyt div {
+    animation: ldio-904g46jbyyt 1s linear infinite;
+    top: 50px;
+    left: 50px;
+}
+.loadingio-spinner-rolling-0tu00tw3hyi {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    background: none;
+    position: absolute;
+    right: 3%;
+    top: 17%;
+}
+.ldio-904g46jbyyt {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.2);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
+.ldio-904g46jbyyt div {
+    box-sizing: content-box;
+}
+
+.loader {
+    width: 5em;
+    height: 5em;
+    border: 0.6em solid #999;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: loader 500ms linear infinite;
+}
+
+@keyframes loader {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Search Results Dropdown
+.search-results {
+    max-height: 362px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+    position: absolute;
+    z-index: 100;
+    min-width: 15.6rem;
+    font-size: 13px;
+}
+
+.search-results a {
+    color: #000;
+    text-decoration: none;
+}
+
+.search-results-username {
+    font-weight: 600;
+}
+
+.search-results-name {
+    color: #8e8e8e;
+}
