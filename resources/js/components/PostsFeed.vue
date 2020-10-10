@@ -161,7 +161,6 @@ export default {
                     })
                     .then(res => res.data)
                     .then(data => {
-                        console.log(data.data);
                         this.page++;
                         this.posts.push(...data.data);
                         if (data.data.length == 0) {

@@ -2308,7 +2308,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }).then(function (data) {
           var _this$posts;
 
-          console.log(data.data);
           _this.page++;
 
           (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data));

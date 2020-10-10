@@ -53,7 +53,7 @@ class FeedController extends Controller
             return response()->json([
                 "response_code" => 500,
                 "error_title" => __("main.messages_title.error"),
-                "error_message" => __("main.error") . $e,
+                "error_message" => __("main.error"),
             ], 500);
         }
     }
