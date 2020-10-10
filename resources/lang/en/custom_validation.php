@@ -37,4 +37,11 @@ return [
         "string" => "Comment must be a string.",
         "max:255" => "Comment can't be more than 255 character.",
     ],
+    "userID" => [
+        "required" => "User id is required.",
+        "integer" => "User id is invalid.",
+    ],
+    "q" => [
+        "required" => "Search query is required.",
+    ],
 ];

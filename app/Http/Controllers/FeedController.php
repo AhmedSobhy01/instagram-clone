@@ -12,12 +12,7 @@ class FeedController extends Controller
         if (!$request->wantsJson()) return abort(404);
 
         if (!auth()->check()) {
-            return response()->json([
-                "response_code" => 401,
-                "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login"),
-                "redirectUrl" => route("login")
-            ], 401);
+            return \response_unauthenticated();
         }
 
         try {
@@ -42,19 +37,9 @@ class FeedController extends Controller
                 return $item;
             });
 
-            $r = [
-                "response_code" => 200,
-                "error_title" => "",
-                "error_message" => ""
-            ];
-
-            return array_merge($r, $posts->toArray());
+            return response_ok("", "", $posts->toArray());
         } catch (\Exception $e) {
-            return response()->json([
-                "response_code" => 500,
-                "error_title" => __("main.messages_title.error"),
-                "error_message" => __("main.error"),
-            ], 500);
+            return response_server_error();
         }
     }
 }

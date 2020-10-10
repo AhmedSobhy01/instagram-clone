@@ -18,8 +18,13 @@
                 </div>
             </div>
             <div class="card-body p-0">
-                <div class="card-image">
-                    <img class="w-100" :src="post.image" alt="Post" />
+                <div class="card-image d-flex">
+                    <span class="image-skeleton w-100"></span>
+                    <img
+                        class="post-image w-100"
+                        :src="post.image"
+                        alt="Post"
+                    />
                 </div>
                 <div class="post-footer py-3 px-4">
                     <div class="post-actions d-flex align-items-center">
@@ -162,8 +167,8 @@ export default {
                     .then(res => res.data)
                     .then(data => {
                         this.page++;
-                        this.posts.push(...data.data);
-                        if (data.data.length == 0) {
+                        this.posts.push(...data.data.data);
+                        if (data.data.data.length == 0) {
                             this.end = true;
                         }
                     })
@@ -212,7 +217,7 @@ export default {
                     .then(res => res.data)
                     .then(data => {
                         if (data.response_code == 201) {
-                            post.comments.push(data.comment);
+                            post.comments.push(data.data.comment);
                             post.commentsCount += 1;
                         }
                         form.querySelector(".add-comment-field").value = "";

@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -13,42 +14,36 @@ class UserController extends Controller
     {
         if (!$request->wantsJson()) return abort(404);
 
+        if (!auth()->check()) {
+            return response_unauthenticated();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'userID' => 'required|integer',
+        ], [
+            'userID.required' => __('custom_validation.userID.required'),
+            'userID.integer' => __('custom_validation.userID.integer'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
+
         $user = User::find($request->userID);
 
         if (!$user) {
-            return response()->json([
-                "response_code" => 404,
-                "error_title" => __("main.messages_title.user_delete_error"),
-                "error_message" => __("main.user_delete_error")
-            ], 404);
-        }
-
-        if (!auth()->check()) {
-            return response()->json([
-                "response_code" => 401,
-                "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login"),
-                "redirectUrl" => route("login")
-            ], 401);
+            return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
         }
 
         try {
             DB::beginTransaction();
             if (auth()->user()->follow($user)) {
-                return response()->json([
-                    "response_code" => 201,
-                    "error_title" => "",
-                    "error_message" => ""
-                ], 201);
+                return response_created();
             }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
-                "response_code" => 500,
-                "error_title" => __("main.messages_title.error"),
-                "error_message" => __('main.error')
-            ], 500);
+            return response_server_error();
         }
     }
 }

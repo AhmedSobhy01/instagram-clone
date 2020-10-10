@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SearchController extends Controller
 {
     public function users(Request $request)
     {
         if (!$request->wantsJson()) return abort(404);
+
+        $validator = Validator::make($request->all(), [
+            'q' => 'required',
+        ], [
+            'q.required' => __('custom_validation.q.required'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
 
         try {
             $q = $request->q;
@@ -30,20 +41,9 @@ class SearchController extends Controller
                     return $v;
                 });
 
-            $r = [
-                "results" => $users->toArray(),
-                "response_code" => 200,
-                "error_title" => "",
-                "error_message" => ""
-            ];
-
-            return $r;
+            return response_ok("", "", $users->toArray());
         } catch (\Exception $e) {
-            return response()->json([
-                "response_code" => 500,
-                "error_title" => __("main.messages_title.error"),
-                "error_message" => __("main.error")
-            ], 500);
+            return response_server_error();
         }
     }
 }

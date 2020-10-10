@@ -19,12 +19,7 @@ class PostController extends Controller
         if (!$request->wantsJson()) return abort(404);
 
         if (!auth()->check()) {
-            return response()->json([
-                "response_code" => 401,
-                "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login"),
-                "redirectUrl" => route("login")
-            ], 401);
+            return response_unauthenticated();
         }
 
         try {
@@ -38,39 +33,23 @@ class PostController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "response_code" => 400,
-                    "error_title" => __("main.messages_title.invalid_inputs"),
-                    "error_message" => array_values($validator->getMessageBag()->toArray())[0][0]
-                ], 400);
+                return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
             }
 
             $post = Post::find($request->postID);
 
             if (!$post) {
-                return response()->json([
-                    "response_code" => 404,
-                    "error_title" => __("main.messages_title.post_delete_error"),
-                    "error_message" => __("main.post_deleted")
-                ], 404);
+                return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_deleted"));
             }
 
             $post->like();
 
             DB::commit();
 
-            return response()->json([
-                "response_code" => 201,
-                "error_title" => "",
-                "error_message" => ""
-            ], 201);
+            return response_created();
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
-                "response_code" => 500,
-                "error_title" => __("main.messages_title.error"),
-                "error_message" => __("main.error")
-            ], 500);
+            return response_server_error();
         }
     }
 
@@ -79,12 +58,7 @@ class PostController extends Controller
         if (!$request->wantsJson()) return abort(404);
 
         if (!auth()->check()) {
-            return response()->json([
-                "response_code" => 401,
-                "error_title" => __("main.messages_title.login"),
-                "error_message" => __("main.please_login"),
-                "redirectUrl" => route("login")
-            ], 401);
+            return response_unauthenticated();
         }
 
         try {
@@ -101,21 +75,13 @@ class PostController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "response_code" => 400,
-                    "error_title" => __("main.messages_title.error"),
-                    "error_message" => array_values($validator->getMessageBag()->toArray())[0][0]
-                ], 400);
+                return response_invalid_request(null, array_values($validator->getMessageBag()->toArray())[0][0]);
             }
 
             $post = Post::find($request->postID);
 
             if (!$post) {
-                return response()->json([
-                    "response_code" => 404,
-                    "error_title" => __("main.messages_title.post_delete_error"),
-                    "error_message" => __("main.post_delete_error")
-                ], 404);
+                return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error"));
             }
 
             $commentId = $post->comment($request->comment)->id;
@@ -124,18 +90,9 @@ class PostController extends Controller
                 $q->select('id', 'username');
             }])->first();
 
-            return response()->json([
-                "response_code" => 201,
-                "error_title" => "",
-                "error_message" => "",
-                "comment" => $comment
-            ], 201);
+            return \response_created("", "", ["comment" => $comment]);
         } catch (\Exception $e) {
-            return response()->json([
-                "response_code" => 500,
-                "error_title" => __("main.messages_title.error"),
-                "error_message" => __("main.error"),
-            ], 500);
+            return response_server_error();
         }
     }
 }

@@ -2278,6 +2278,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["feedUrl", "likeUrl", "commentUrl", "authId", "endMessage"],
   data: function data() {
@@ -2310,9 +2315,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
           _this.page++;
 
-          (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data));
+          (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data.data));
 
-          if (data.data.length == 0) {
+          if (data.data.data.length == 0) {
             _this.end = true;
           }
         })["catch"](function (err) {
@@ -2354,7 +2359,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           return res.data;
         }).then(function (data) {
           if (data.response_code == 201) {
-            post.comments.push(data.comment);
+            post.comments.push(data.data.comment);
             post.commentsCount += 1;
           }
 
@@ -2500,7 +2505,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.data;
         }).then(function (data) {
-          _this.data = data.results;
+          _this.data = data.data;
 
           if (_this.data.length < 1 && _this.q !== "") {
             _this.noResult = true;
@@ -38753,9 +38758,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body p-0" }, [
-            _c("div", { staticClass: "card-image" }, [
+            _c("div", { staticClass: "card-image d-flex" }, [
+              _c("span", { staticClass: "image-skeleton w-100" }),
+              _vm._v(" "),
               _c("img", {
-                staticClass: "w-100",
+                staticClass: "post-image w-100",
                 attrs: { src: post.image, alt: "Post" }
               })
             ]),
