@@ -26,7 +26,7 @@
                         <like-button
                             :post-id="post.id"
                             :post-to="likeUrl"
-                            :likes="post.likedByUser"
+                            :likes="post.likedByCurrentUser"
                         ></like-button>
                         <div class="ml-3" style="cursor: pointer">
                             <svg

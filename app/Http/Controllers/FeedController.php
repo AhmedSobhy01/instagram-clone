@@ -32,9 +32,6 @@ class FeedController extends Controller
             ])->latest()->paginate(5);
 
             $posts->map(function ($item) {
-                $item->likedByUser = auth()->user()->likedPost(Post::find($item->id));
-                $item->likesCount = Post::find($item->id)->likes()->count();
-                $item->commentsCount = Post::find($item->id)->comments()->count();
                 $item->load(['comments' => function ($q) {
                     $q->inRandomOrder()->select('id', 'post_id', 'user_id', 'body')->with([
                         'user' => function ($q) {

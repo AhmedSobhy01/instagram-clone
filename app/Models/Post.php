@@ -8,6 +8,23 @@ class Post extends Model
 {
     protected $fillable = ['image', 'caption'];
 
+    protected $appends = ['likesCount', 'commentsCount', 'likedByCurrentUser'];
+
+    public function getLikesCountAttribute()
+    {
+        return $this->likes()->count();
+    }
+
+    public function getCommentsCountAttribute()
+    {
+        return $this->comments()->count();
+    }
+
+    public function getLikedByCurrentUserAttribute()
+    {
+        return auth()->user()->likedPost($this);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

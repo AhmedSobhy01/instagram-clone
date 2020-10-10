@@ -38770,7 +38770,7 @@ var render = function() {
                     attrs: {
                       "post-id": post.id,
                       "post-to": _vm.likeUrl,
-                      likes: post.likedByUser
+                      likes: post.likedByCurrentUser
                     }
                   }),
                   _vm._v(" "),
