@@ -29,13 +29,13 @@ class UserController extends Controller
             return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
         }
 
-        $user = User::find($request->userID);
-
-        if (!$user) {
-            return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
-        }
-
         try {
+            $user = User::find($request->userID);
+
+            if (!$user) {
+                return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
+            }
+
             DB::beginTransaction();
             if (auth()->user()->follow($user)) {
                 return response_created();

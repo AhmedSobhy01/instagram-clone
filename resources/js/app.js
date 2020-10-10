@@ -25,6 +25,8 @@ Vue.component("like-button", require("./components/LikeButton.vue").default);
 
 Vue.component("posts-feed", require("./components/PostsFeed.vue").default);
 
+Vue.component("post-right", require("./components/PostRight.vue").default);
+
 Vue.component(
     "follow-button",
     require("./components/FollowButton.vue").default

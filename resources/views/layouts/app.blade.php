@@ -35,7 +35,7 @@
                     <!-- search-->
                     <li class="nav-item d-flex align-items-center position-relative">
                         <search-bar placeholder={{ __('main.search') }} post-to={{ route('search') }}></search-bar>
-                        <i class="fa fa-search position-absolute ml-2"></i>
+                        <i class="fa fa-search position-absolute ml-2 ml-md-0 ml-md-2"></i>
                     </li>
                 </ul>
                 <!-- Right Side Of Navbar -->

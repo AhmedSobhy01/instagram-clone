@@ -10,8 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    public function upload()
+    public function index(Request $request, $post)
     {
+        $post = Post::find($post);
+        if (!$post) {
+            return $request->wantsJson() ? response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error")) : abort(404, __("main.messages_title.post_delete_error"));
+        }
+
+        $post->load([
+            'user' => function ($q) {
+                $q->select('id', 'name', 'username', 'profile_image');
+            },
+        ]);
+
+        return $request->wantsJson() ? response_ok("", "", ["post" => $post->toArray()]) : view('post', compact('post'));
     }
 
     public function like(Request $request)
@@ -22,19 +34,19 @@ class PostController extends Controller
             return response_unauthenticated();
         }
 
+        $validator = Validator::make($request->all(), [
+            'postID' => 'required|integer|max:2147483647',
+        ], [
+            'postID.required' => __('custom_validation.post_id.required'),
+            'postID.integer' => __('custom_validation.post_id.integer'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
+
         try {
             DB::beginTransaction();
-
-            $validator = Validator::make($request->all(), [
-                'postID' => 'required|integer|max:2147483647',
-            ], [
-                'postID.required' => __('custom_validation.post_id.required'),
-                'postID.integer' => __('custom_validation.post_id.integer'),
-            ]);
-
-            if ($validator->fails()) {
-                return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
-            }
 
             $post = Post::find($request->postID);
 
@@ -87,12 +99,32 @@ class PostController extends Controller
             $commentId = $post->comment($request->comment)->id;
 
             $comment = Comment::select('id', 'body', 'user_id')->where('id', $commentId)->with(['user' => function ($q) {
-                $q->select('id', 'username');
+                $q->select('id', 'username', 'profile_image');
             }])->first();
 
             return \response_created("", "", ["comment" => $comment]);
         } catch (\Exception $e) {
             return response_server_error();
         }
+    }
+
+    public function getComment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'postId' => 'required|integer|max:2147483647',
+        ], [
+            'postID.required' => __('custom_validation.post_id.required'),
+            'postID.integer' => __('custom_validation.post_id.integer'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(null, array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
+
+        $comments = Post::find($request->postId)->comments()->select('id', 'post_id', 'user_id', 'body', 'created_at')->with(['user' => function ($r) {
+            $r->select('id', 'username', 'profile_image');
+        }])->latest()->paginate(10)->toArray();
+
+        return response_ok("", "", $comments);
     }
 }

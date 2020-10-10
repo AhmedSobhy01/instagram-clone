@@ -7,7 +7,7 @@
                         <img
                             :src="post.user.profile_image"
                             alt="Profile Image"
-                            style="width: 35px;heigh: 35px;"
+                            style="width: 35px;height: 35px;"
                         />
                     </a>
                     <a
@@ -24,6 +24,7 @@
                         class="post-image w-100"
                         :src="post.image"
                         alt="Post"
+                        @load="imageLoaded($event)"
                     />
                 </div>
                 <div class="post-footer py-3 px-4">
@@ -68,23 +69,21 @@
                         <div
                             class="mb-1 view-all-comments"
                             v-if="post.commentsCount"
+                            @click="redirectToPost(post.id)"
                         >
                             View all {{ post.commentsCount }} comments
                         </div>
                         <div class="post-comments-latest">
                             <div
-                                class="d-flex align-items-center mb-1"
+                                class="d-flex mb-1 post-comment-latest"
                                 v-for="comment in post.comments"
                                 :key="comment.id"
                             >
-                                <div class="comment-autor">
-                                    <a :href="comment.user.profile_url">{{
-                                        comment.user.username
-                                    }}</a>
-                                </div>
-                                <div class="comment-body ml-1">
-                                    {{ comment.body }}
-                                </div>
+                                <a
+                                    :href="comment.user.profile_url"
+                                    v-text="comment.user.username"
+                                ></a>
+                                <span>&nbsp;{{ comment.body }}</span>
                             </div>
                             <div class="time-posted">1 hour ago</div>
                         </div>
@@ -138,7 +137,17 @@
 
 <script>
 export default {
-    props: ["feedUrl", "likeUrl", "commentUrl", "authId", "endMessage"],
+    props: [
+        "feedUrl",
+        "likeUrl",
+        "commentUrl",
+        "postUrl",
+        "authId",
+        "endMessage",
+        "commentErrorRequired",
+        "commentErrorMax",
+        "errorWord"
+    ],
 
     data: function() {
         return {
@@ -205,6 +214,40 @@ export default {
                 commentBody = form.querySelector(".add-comment-field").value;
 
             if (!this.commentLoading) {
+                if (commentBody == "") {
+                    toastr.error(this.commentErrorRequired, this.errorWord, {
+                        closeButton: true,
+                        progressBar: true,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: true,
+                        showDuration: 300,
+                        hideDuration: 1000,
+                        timeOut: 5000,
+                        extendedTimeOut: 5000,
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut"
+                    });
+                    return false;
+                } else if (commentBody.length > 255) {
+                    toastr.error(this.commentErrorMax, this.errorWord, {
+                        closeButton: true,
+                        progressBar: true,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: true,
+                        showDuration: 300,
+                        hideDuration: 1000,
+                        timeOut: 5000,
+                        extendedTimeOut: 5000,
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut"
+                    });
+                    return false;
+                }
+
                 this.commentLoading = true;
                 form.querySelector(".btn").style.display = "none";
                 form.querySelector(".comment-loader").style.display =
@@ -254,6 +297,14 @@ export default {
                         this.commentLoading = false;
                     });
             }
+        },
+        redirectToPost(postId) {
+            window.location = this.postUrl.slice(0, -1) + postId;
+        },
+        imageLoaded(e) {
+            e.target.parentElement.querySelector(
+                ".image-skeleton"
+            ).style.visibility = "hidden";
         }
     },
 

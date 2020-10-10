@@ -29,7 +29,7 @@ return [
         "max:50" => "Bio can't be more than 50 character.",
     ],
     "post_id" => [
-        "required" => "Post id must required.",
+        "required" => "Post id is required.",
         "integer" => "Post id must be an integer.",
     ],
     "comment" => [

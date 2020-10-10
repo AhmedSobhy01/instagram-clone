@@ -63,6 +63,7 @@
     margin-left: -100%;
     z-index: 100;
     min-height: 450px;
+    object-fit: contain;
 }
 
 .post-caption-author {
@@ -77,6 +78,17 @@
 .post-comments .view-all-comments {
     cursor: pointer;
     color: #8e8e8e;
+}
+
+.post-comment-latest a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 600;
+}
+
+.post-comment-latest a:hover {
+    text-decoration: underline;
+    color: #000;
 }
 
 .add-comment-field {
@@ -101,6 +113,7 @@
 
 .comment-body {
     color: #000;
+    word-break: break-word;
 }
 
 .time-posted {
