@@ -22,6 +22,7 @@ class Post extends Model
 
     public function getLikedByCurrentUserAttribute()
     {
+        if (!auth()->check()) return false;
         return auth()->user()->likedPost($this);
     }
 
