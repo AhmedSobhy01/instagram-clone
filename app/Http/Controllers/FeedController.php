@@ -18,7 +18,7 @@ class FeedController extends Controller
         try {
             $following = auth()->user()->following()->select('users.id')->get()->map(function ($item) {
                 return $item->id;
-            });
+            })->add([auth()->id()]);
 
             $posts = Post::whereIn('user_id', $following)->with([
                 'user' => function ($q) {
@@ -39,7 +39,7 @@ class FeedController extends Controller
 
             return response_ok("", "", $posts->toArray());
         } catch (\Exception $e) {
-            return response_server_error();
+            return response_server_error($e);
         }
     }
 }

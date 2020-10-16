@@ -26,9 +26,10 @@ Auth::routes();
 Route::post('/search', [SearchController::class, 'users'])->name('search');
 Route::get('/feed', [FeedController::class, 'index'])->name('feed');
 Route::post('/user/follow', [UserController::class, 'follow'])->name('follow');
+Route::get('/p/likes', [PostController::class, 'getLikes'])->name('like.index');
 Route::get('/p/{post}', [PostController::class, 'index'])->name('post.index');
-Route::post('/like', [PostController::class, 'like'])->name('like');
-Route::get('/comment', [PostController::class, 'getComment'])->name('comment.index');
+Route::post('/like', [PostController::class, 'like'])->name('like.create');
+Route::get('/comment', [PostController::class, 'getComments'])->name('comment.index');
 Route::post('/comment', [PostController::class, 'comment'])->name('comment.create');
 // #########################################
 
@@ -39,3 +40,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'profile', 'as' => 'profile.']
 
 Route::get('/', [HomeController::class, 'index'])->middleware("auth")->name('home');
 Route::get('/{username}', [ProfileController::class, 'index'])->name('profile');
+
+Route::post('/p', [PostController::class, 'upload'])->name('post.store')->middleware("auth");

@@ -128,7 +128,11 @@
                     </svg>
                 </div>
             </div>
-            <div class="post-likes mt-2" style="cursor: pointer">
+            <div
+                class="post-likes mt-2"
+                style="cursor: pointer"
+                @click="getLikes"
+            >
                 <span :id="'likes-' + post.id" v-text="post.likesCount"></span>
                 <span> likes</span>
             </div>
@@ -163,7 +167,11 @@
                     </svg>
                 </div>
             </div>
-            <div class="post-likes mt-2" style="cursor: pointer">
+            <div
+                class="post-likes mt-2"
+                style="cursor: pointer"
+                @click="getLikes"
+            >
                 <span :id="'likes-' + post.id" v-text="post.likesCount"></span>
                 <span> likes</span>
             </div>
@@ -271,6 +279,7 @@ export default {
     props: [
         "postData",
         "likeUrl",
+        "getLikesUrl",
         "commentsGetUrl",
         "commentCreateUrl",
         "commentErrorRequired",
@@ -278,9 +287,25 @@ export default {
         "errorWord"
     ],
 
+    watch: {
+        likesLoading: function() {
+            let elm = document.querySelector("#likesModal .modal-body");
+            if (this.likesLoading) {
+                elm.innerHTML += `<div class="loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"><div class="ldio-j0phwa9fshm"><div></div></div></div>`;
+            } else {
+                elm.querySelector(
+                    ".loadingio-spinner-rolling-dbisj67kqze"
+                ).remove();
+            }
+        }
+    },
+
     data: function() {
         return {
             post: this.postData,
+            likesPage: 1,
+            likesLoading: false,
+            likesEnd: false,
             comments: [],
             commentPage: 1,
             addCommentVal: "",
@@ -297,11 +322,6 @@ export default {
             if (!this.commentsLoading) {
                 this.commentsLoading = true;
 
-                let params = new URLSearchParams({
-                    postId: this.post.id,
-                    page: this.commentPage
-                }).toString();
-
                 axios
                     .get(this.commentsGetUrl, {
                         params: {
@@ -312,9 +332,8 @@ export default {
                     .then(res => res.data)
                     .then(data => {
                         if (data.response_code == 200) {
-                            console.log(data.data.data);
                             this.commentsEnd =
-                                data.data.data.length < 1 ? true : false;
+                                data.data.current_page >= data.data.last_page;
                             this.comments.unshift(...data.data.data);
                             this.commentPage++;
                         }
@@ -394,7 +413,6 @@ export default {
                     .then(res => res.data)
                     .then(data => {
                         if (data.response_code == 201) {
-                            console.log(data.data.comment);
                             this.comments.unshift(data.data.comment);
                             this.post.commentsCount++;
                         }
@@ -440,6 +458,66 @@ export default {
             } else {
                 this.mobile = false;
             }
+        },
+
+        getLikes() {
+            $("#likesModal").modal("show");
+            if (this.likesLoading || this.likesEnd) return;
+
+            this.likesLoading = true;
+            axios
+                .get(this.getLikesUrl, {
+                    params: {
+                        postId: this.post.id,
+                        page: this.likesPage
+                    }
+                })
+                .then(res => res.data)
+                .then(data => {
+                    document.querySelector(
+                        "#likesModal .modal-body"
+                    ).innerHTML += data.data.content;
+                    this.likesEnd = data.data.lastPage;
+                    this.likesPage++;
+                    this.firstLikesLoad = false;
+                })
+                .catch(err => {
+                    if (err.response.status !== 200) {
+                        toastr.error(
+                            err.response.data.error_message,
+                            err.response.data.error_title,
+                            {
+                                closeButton: true,
+                                progressBar: true,
+                                positionClass: "toast-top-right",
+                                preventDuplicates: true,
+                                showDuration: 300,
+                                hideDuration: 1000,
+                                timeOut: 5000,
+                                extendedTimeOut: 5000,
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut"
+                            }
+                        );
+                    }
+                })
+                .finally(() => {
+                    this.likesLoading = false;
+                });
+        },
+
+        enableScrollForLikes() {
+            const elm = document.querySelector("#likesModal .modal-body");
+            elm.addEventListener("scroll", e => {
+                if (
+                    elm.offsetHeight + elm.scrollTop >=
+                    elm.scrollHeight - 100
+                ) {
+                    this.getLikes();
+                }
+            });
         }
     },
 
@@ -447,6 +525,7 @@ export default {
         this.loadComments();
         this.checkScreen();
         window.addEventListener("resize", this.checkScreen);
+        this.enableScrollForLikes();
     }
 };
 </script>

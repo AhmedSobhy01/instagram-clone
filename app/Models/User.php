@@ -96,7 +96,10 @@ class User extends Authenticatable
 
     public function follow(User $user)
     {
-        return !!!$this->isFollowing($user) ? $this->following()->save($user) : $this->following()->detach($user);
+        return !!!$this->isFollowing($user) ? $this->following()->save($user, [
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]) : $this->following()->detach($user);
     }
 
     public function likedPost(Post $post)

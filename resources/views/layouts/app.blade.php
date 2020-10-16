@@ -71,6 +71,7 @@
         </main>
     </div>
     <!-- Scripts -->
+    @stack('bscripts')
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>

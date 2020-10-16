@@ -1,3 +1,16 @@
+.add-post-btn {
+    border: 2px solid #000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    background: #fff;
+    bottom: 2%;
+    right: 5%;
+    z-index: 200;
+    cursor: pointer;
+}
+
 .post {
     border-radius: 5px;
     border: 1px solid #dbdbdb;
@@ -120,4 +133,43 @@
     color: #8e8e8e;
     font-size: 13px;
     letter-spacing: 0.5px;
+}
+
+// Add Post
+.dropzone {
+    background: #fff;
+}
+
+.dropzone-preview img {
+    object-fit: contain;
+}
+
+.dropzone-t {
+    min-height: 400px;
+    border: 2px dashed #ccc;
+    cursor: pointer;
+}
+
+.dropzone-t.dragover {
+    border: 2px solid #000;
+}
+
+.caption-area {
+    height: 130px !important;
+    resize: none;
+}
+
+.reset-image-btn {
+    position: absolute;
+    top: -2.4%;
+    right: -1.5%;
+    background: #fff;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.reset-image-btn i {
+    color: #f44336;
 }

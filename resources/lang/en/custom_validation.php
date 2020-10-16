@@ -44,4 +44,13 @@ return [
     "q" => [
         "required" => "Search query is required.",
     ],
+    "image" => [
+        "required" => "Image is required.",
+        "image" => "Provided file is not an image.",
+        "max:4000" => "Image size can't exceed 4 MB.",
+    ],
+    "caption" => [
+        "string" => "Caption must be a string.",
+        "max:100" => "Caption can't be more than 100 characters.",
+    ],
 ];

@@ -11,10 +11,12 @@
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
-                    <div class="form-group row">
-                        <label for="username" class="col-md-3 ml-3 col-form-label text-md-right">{{ __('main.username') }}</label>
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="username" class="col-form-label ml-3">{{ __('main.username') }}</label>
+                        </div>
 
-                        <div class="col-md-8">
+                        <div>
                             <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
 
                             @error('username')
@@ -25,10 +27,12 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="email" class="col-md-3 ml-3 col-form-label text-md-right">{{ __('main.email') }}</label>
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="email" class="col-form-label ml-3">{{ __('main.email') }}</label>
+                        </div>
 
-                        <div class="col-md-8">
+                        <div>
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
                             @error('email')
@@ -39,10 +43,12 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="password" class="col-md-3 ml-3 col-form-label text-md-right">{{ __('main.password') }}</label>
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="password" class="col-form-label ml-3">{{ __('main.password') }}</label>
+                        </div>
 
-                        <div class="col-md-8">
+                        <div>
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                             @error('password')
@@ -53,16 +59,18 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="password-confirm" class="col-md-3 ml-3 col-form-label text-md-right">{{ __('main.confirm_password') }}</label>
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="password-confirm" class="col-form-label ml-3">{{ __('main.confirm_password') }}</label>
+                        </div>
 
-                        <div class="col-md-8">
+                        <div>
                             <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                         </div>
                     </div>
 
                     <div class="form-group row mb-0">
-                        <div class="col-md-8 offset-md-2">
+                        <div class="col-md-8 offset-md-2 my-3">
                             <button type="submit" class="btn btn-primary btn-block">
                                 {{ __('main.register') }}
                             </button>

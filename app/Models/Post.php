@@ -10,6 +10,11 @@ class Post extends Model
 
     protected $appends = ['likesCount', 'commentsCount', 'likedByCurrentUser'];
 
+    public function getImageAttribute($val)
+    {
+        return asset('storage/posts') . "/" . $val;
+    }
+
     public function getLikesCountAttribute()
     {
         return $this->likes()->count();
@@ -48,7 +53,7 @@ class Post extends Model
                 'user_id' => auth()->id()
             ]);
         } else {
-            return $this->likes()->delete(auth()->id());
+            return $this->likes()->where('user_id', auth()->id())->delete();
         }
     }
 

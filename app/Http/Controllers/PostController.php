@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    public function index(Request $request, $post)
+    public function index(Request $request, Post $post)
     {
-        $post = Post::find($post);
-        if (!$post) {
-            return $request->wantsJson() ? response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error")) : abort(404, __("main.messages_title.post_delete_error"));
-        }
 
         $post->load([
             'user' => function ($q) {
@@ -23,7 +20,7 @@ class PostController extends Controller
             },
         ]);
 
-        return $request->wantsJson() ? response_ok("", "", ["post" => $post->toArray()]) : view('post', compact('post'));
+        return view('post', compact('post'));
     }
 
     public function like(Request $request)
@@ -50,9 +47,7 @@ class PostController extends Controller
 
             $post = Post::find($request->postID);
 
-            if (!$post) {
-                return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_deleted"));
-            }
+            if (!$post) return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_deleted"));
 
             $post->like();
 
@@ -61,7 +56,7 @@ class PostController extends Controller
             return response_created();
         } catch (\Exception $e) {
             DB::rollBack();
-            return response_server_error();
+            return response_server_error($e);
         }
     }
 
@@ -92,9 +87,7 @@ class PostController extends Controller
 
             $post = Post::find($request->postID);
 
-            if (!$post) {
-                return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error"));
-            }
+            if (!$post) return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error"));
 
             $commentId = $post->comment($request->comment)->id;
 
@@ -108,8 +101,10 @@ class PostController extends Controller
         }
     }
 
-    public function getComment(Request $request)
+    public function getComments(Request $request)
     {
+        if (!$request->wantsJson()) return abort(404);
+
         $validator = Validator::make($request->all(), [
             'postId' => 'required|integer|max:2147483647',
         ], [
@@ -126,5 +121,38 @@ class PostController extends Controller
         }])->latest()->paginate(10)->toArray();
 
         return response_ok("", "", $comments);
+    }
+
+    public function getLikes(Request $request)
+    {
+        if (!$request->wantsJson()) return abort(404);
+
+        $validator = Validator::make($request->all(), [
+            'postId' => 'required|integer|max:2147483647',
+        ], [
+            'postId.required' => __('custom_validation.post_id.required'),
+            'postId.integer' => __('custom_validation.post_id.integer'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(null, array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
+
+        $post = Post::find($request->postId);
+        if (!$post) return response_not_found(__("main.messages_title.post_delete_error"), __("main.post_delete_error"));
+
+        $likes = $post->likes()->paginate(8);
+
+        return response_ok("", "", ["content" => view('partials.likes-modal', compact('likes'))->render(), "lastPage" => $likes->currentPage() >= $likes->lastPage()]);
+    }
+
+    public function upload(PostRequest $request)
+    {
+        $image = $request->image->store('public/posts');
+        auth()->user()->posts()->create([
+            'image' => substr($image, 13),
+            'caption' => $request->caption
+        ]);
+        return redirect()->route('home')->with('success', __('main.post_created_successfully'));
     }
 }

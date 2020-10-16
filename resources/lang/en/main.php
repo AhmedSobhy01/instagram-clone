@@ -53,4 +53,5 @@ return [
     "profile_updated" => 'Your profile has been updated successfully.',
     "invalid_inputs" => "The request wasn't well-formed",
     "invalid_comment" => "Comment can't be empty and no more than 255 characters.",
+    "post_created_successfully" => "Post uploaded successfully."
 ];

@@ -3,5 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/css/profile.css": "/css/profile.css",
     "/css/feed.css": "/css/feed.css",
-    "/css/post.css": "/css/post.css"
+    "/css/post.css": "/css/post.css",
+    "/js/likes.js": "/js/likes.js",
+    "/js/upload.js": "/js/upload.js"
 }

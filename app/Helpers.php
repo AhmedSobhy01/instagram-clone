@@ -1,5 +1,21 @@
 <?php
 
+if (!function_exists('saveCurrentUrl')) {
+    /**
+     *
+     * Saves the current url in the session so it can be used to redirect back to the same page after logging in or out.
+     *
+     * @param string $redirectTo
+     *
+     */
+    function saveCurrentUrl(string $redirectTo = null)
+    {
+        $redirectTo = $redirectTo  ?? url()->previous();
+        session()->put('redirectTo', $redirectTo);
+        return true;
+    }
+}
+
 if (!function_exists('response_ok')) {
     /**
      * Return a json response with 200 http code.
@@ -80,6 +96,8 @@ if (!function_exists('response_unauthenticated')) {
      */
     function response_unauthenticated(array $headers = [])
     {
+        saveCurrentUrl();
+
         return response()->json([
             "response_code" => 401,
             "error_title" => __("main.messages_title.login"),
@@ -110,7 +128,6 @@ if (!function_exists('response_not_found')) {
             ->withHeaders($headers);
     }
 }
-
 
 if (!function_exists('response_server_error')) {
     /**

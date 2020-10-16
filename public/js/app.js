@@ -2413,11 +2413,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["postData", "likeUrl", "commentsGetUrl", "commentCreateUrl", "commentErrorRequired", "commentErrorMax", "errorWord"],
+  props: ["postData", "likeUrl", "getLikesUrl", "commentsGetUrl", "commentCreateUrl", "commentErrorRequired", "commentErrorMax", "errorWord"],
+  watch: {
+    likesLoading: function likesLoading() {
+      var elm = document.querySelector("#likesModal .modal-body");
+
+      if (this.likesLoading) {
+        elm.innerHTML += "<div class=\"loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2\"><div class=\"ldio-j0phwa9fshm\"><div></div></div></div>";
+      } else {
+        elm.querySelector(".loadingio-spinner-rolling-dbisj67kqze").remove();
+      }
+    }
+  },
   data: function data() {
     return {
       post: this.postData,
+      likesPage: 1,
+      likesLoading: false,
+      likesEnd: false,
       comments: [],
       commentPage: 1,
       addCommentVal: "",
@@ -2434,10 +2456,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       if (!this.commentsLoading) {
         this.commentsLoading = true;
-        var params = new URLSearchParams({
-          postId: this.post.id,
-          page: this.commentPage
-        }).toString();
         axios.get(this.commentsGetUrl, {
           params: {
             postId: this.post.id,
@@ -2449,8 +2467,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           if (data.response_code == 200) {
             var _this$comments;
 
-            console.log(data.data.data);
-            _this.commentsEnd = data.data.data.length < 1 ? true : false;
+            _this.commentsEnd = data.data.current_page >= data.data.last_page;
 
             (_this$comments = _this.comments).unshift.apply(_this$comments, _toConsumableArray(data.data.data));
 
@@ -2527,8 +2544,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           return res.data;
         }).then(function (data) {
           if (data.response_code == 201) {
-            console.log(data.data.comment);
-
             _this2.comments.unshift(data.data.comment);
 
             _this2.post.commentsCount++;
@@ -2568,12 +2583,62 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       } else {
         this.mobile = false;
       }
+    },
+    getLikes: function getLikes() {
+      var _this3 = this;
+
+      $("#likesModal").modal("show");
+      if (this.likesLoading || this.likesEnd) return;
+      this.likesLoading = true;
+      axios.get(this.getLikesUrl, {
+        params: {
+          postId: this.post.id,
+          page: this.likesPage
+        }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        document.querySelector("#likesModal .modal-body").innerHTML += data.data.content;
+        _this3.likesEnd = data.data.lastPage;
+        _this3.likesPage++;
+        _this3.firstLikesLoad = false;
+      })["catch"](function (err) {
+        if (err.response.status !== 200) {
+          toastr.error(err.response.data.error_message, err.response.data.error_title, {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: true,
+            showDuration: 300,
+            hideDuration: 1000,
+            timeOut: 5000,
+            extendedTimeOut: 5000,
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+          });
+        }
+      })["finally"](function () {
+        _this3.likesLoading = false;
+      });
+    },
+    enableScrollForLikes: function enableScrollForLikes() {
+      var _this4 = this;
+
+      var elm = document.querySelector("#likesModal .modal-body");
+      elm.addEventListener("scroll", function (e) {
+        if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
+          _this4.getLikes();
+        }
+      });
     }
   },
   mounted: function mounted() {
     this.loadComments();
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
+    this.enableScrollForLikes();
   }
 });
 
@@ -2600,6 +2665,17 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39403,7 +39479,8 @@ var render = function() {
             "div",
             {
               staticClass: "post-likes mt-2",
-              staticStyle: { cursor: "pointer" }
+              staticStyle: { cursor: "pointer" },
+              on: { click: _vm.getLikes }
             },
             [
               _c("span", {
@@ -39475,7 +39552,8 @@ var render = function() {
             "div",
             {
               staticClass: "post-likes mt-2",
-              staticStyle: { cursor: "pointer" }
+              staticStyle: { cursor: "pointer" },
+              on: { click: _vm.getLikes }
             },
             [
               _c("span", {
@@ -39760,7 +39838,15 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "ml-3", staticStyle: { cursor: "pointer" } },
+                    {
+                      staticClass: "ml-3",
+                      staticStyle: { cursor: "pointer" },
+                      on: {
+                        click: function($event) {
+                          return _vm.redirectToPost(post.id)
+                        }
+                      }
+                    },
                     [
                       _c(
                         "svg",
@@ -39794,7 +39880,12 @@ var render = function() {
                 "div",
                 {
                   staticClass: "post-likes mt-2",
-                  staticStyle: { cursor: "pointer" }
+                  staticStyle: { cursor: "pointer" },
+                  on: {
+                    click: function($event) {
+                      return _vm.redirectToPost(post.id)
+                    }
+                  }
                 },
                 [
                   _c("span", {
@@ -39805,17 +39896,16 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "post-caption mt-2" }, [
+              _c("div", { staticClass: "post-caption mt-1" }, [
                 _c("a", {
                   staticClass: "post-caption-author",
                   attrs: { href: post.user.profile_url },
                   domProps: { textContent: _vm._s(post.user.username) }
                 }),
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(post.caption) +
-                    "\n                "
-                )
+                _vm._v(" "),
+                _c("span", { staticStyle: { "word-break": "break-all" } }, [
+                  _vm._v(_vm._s(post.caption))
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "post-comments mt-1" }, [
@@ -39942,7 +40032,8 @@ var staticRenderFns = [
       "div",
       {
         staticClass:
-          "mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
+          "mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader",
+        staticStyle: { display: "none" }
       },
       [_c("div", { staticClass: "ldio-va3amnnosd" }, [_c("div")])]
     )
@@ -40030,7 +40121,7 @@ var render = function() {
               _vm._l(_vm.data, function(item) {
                 return _c(
                   "a",
-                  { key: item.username, attrs: { href: item.profileUrl } },
+                  { key: item.username, attrs: { href: item.profile_url } },
                   [
                     _c(
                       "li",
@@ -40042,7 +40133,10 @@ var render = function() {
                         _c("div", [
                           _c("img", {
                             staticStyle: { width: "25px" },
-                            attrs: { src: item.profile_image, alt: "" }
+                            attrs: {
+                              src: item.profile_image,
+                              alt: "Profile Image"
+                            }
                           })
                         ]),
                         _vm._v(" "),

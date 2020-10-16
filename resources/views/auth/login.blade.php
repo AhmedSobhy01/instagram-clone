@@ -2,7 +2,7 @@
 @section('title', __("main.login") . " - " . config('app.name', 'Instagram Clone'))
 
 @section('content')
-<div class="row">
+<div class="row m-0">
     <div class="col-md-6 offset-md-3">
         <div class="container">
             <div class="card text-center">
@@ -10,11 +10,12 @@
                 <h2 class="card-title py-3">{{ __("main.login") }}</h2>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="email" class="col-form-label ml-3">{{ __('main.email') }}</label>
+                        </div>
 
-                    <div class="form-group row">
-                        <label for="email" class="col-md-3 ml-3 col-form-label">{{ __('main.email') }}</label>
-
-                        <div class="col-md-8">
+                        <div>
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                             @error('email')
@@ -25,10 +26,12 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="password" class="col-md-3 ml-3 col-form-label">{{ __('main.password') }}</label>
+                    <div class="form-group col-md-10 offset-md-1">
+                        <div class="row">
+                            <label for="password" class="col-form-label ml-3">{{ __('main.password') }}</label>
+                        </div>
 
-                        <div class="col-md-8">
+                        <div>
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                             @error('password')
@@ -39,7 +42,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <div class="col-md-6 offset-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>

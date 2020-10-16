@@ -38,9 +38,9 @@ class UserController extends Controller
 
             DB::beginTransaction();
             if (auth()->user()->follow($user)) {
+                DB::commit();
                 return response_created();
             }
-            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             return response_server_error();

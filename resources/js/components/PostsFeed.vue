@@ -34,7 +34,11 @@
                             :post-to="likeUrl"
                             :likes="post.likedByCurrentUser"
                         ></like-button>
-                        <div class="ml-3" style="cursor: pointer">
+                        <div
+                            class="ml-3"
+                            style="cursor: pointer"
+                            @click="redirectToPost(post.id)"
+                        >
                             <svg
                                 aria-label="Comment"
                                 fill="#262626"
@@ -50,20 +54,26 @@
                             </svg>
                         </div>
                     </div>
-                    <div class="post-likes mt-2" style="cursor: pointer">
+                    <div
+                        class="post-likes mt-2"
+                        style="cursor: pointer"
+                        @click="redirectToPost(post.id)"
+                    >
                         <span
                             :id="'likes-' + post.id"
                             v-text="post.likesCount"
                         ></span>
                         likes
                     </div>
-                    <div class="post-caption mt-2">
+                    <div class="post-caption mt-1">
                         <a
                             :href="post.user.profile_url"
                             class="post-caption-author"
                             v-text="post.user.username"
                         ></a>
-                        {{ post.caption }}
+                        <span style="word-break: break-all">{{
+                            post.caption
+                        }}</span>
                     </div>
                     <div class="post-comments mt-1">
                         <div
@@ -112,6 +122,7 @@
                     </button>
                     <div
                         class="mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
+                        style="display: none"
                     >
                         <div class="ldio-va3amnnosd">
                             <div></div>

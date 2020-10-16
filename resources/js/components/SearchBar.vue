@@ -29,7 +29,7 @@
                 <!-- Results -->
                 <li>
                     <a
-                        :href="item.profileUrl"
+                        :href="item.profile_url"
                         v-for="item in data"
                         :key="item.username"
                     >
@@ -39,7 +39,7 @@
                             <div>
                                 <img
                                     :src="item.profile_image"
-                                    alt=""
+                                    alt="Profile Image"
                                     style="width: 25px"
                                 />
                             </div>

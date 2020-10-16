@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 20)->create()->each(function ($user) {
+        factory(User::class, 50)->create()->each(function ($user) {
             $profile = factory(Profile::class)->make();
             $user->profile()->save($profile);
         });
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         $user->profile()->save(factory(Profile::class)->make());
 
         for ($i = 0; $i < 20; $i++) {
-            $user->following()->save(User::inRandomOrder()->first());
+            $user->follow(User::find($i + 1));
         }
     }
 }

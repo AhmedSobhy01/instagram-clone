@@ -40,7 +40,7 @@
             <div class="container">
                 <div class="gallery">
                     @forelse ($user->posts as $post)
-                    <div class="gallery-item" tabindex="0">
+                    <a class="gallery-item" tabindex="0" href="{{ route('post.index', $post->id) }}">
                         <img src="{{ $post->image }}" class="gallery-image" alt="Post Image">
                         <div class="gallery-item-info">
                             <ul>
@@ -48,7 +48,7 @@
                                 <li class="gallery-item-comments"><span class="visually-hidden">{{ __("main.comments") }}:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ $post->comments->count() }}</li>
                             </ul>
                         </div>
-                    </div>
+                    </a>
                     @empty
                     <div class="d-flex flex-column justify-content-center align-items-center mt-3" style="grid-column: 1/-1;">
                         <div><i class="fas fa-camera fa-7x rounded-circle border p-4 mb-3"></i></div>
