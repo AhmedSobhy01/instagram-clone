@@ -12,7 +12,7 @@
             <posts-feed post-url="{{ route('post.index', 1) }}" feed-url="{{ route('feed') }}" like-url="{{ route('like.create') }}" comment-url="{{ route('comment.create') }}" auth-id="{{ auth()->id() }}" end-message="{{ __('main.end_message') }}" comment-error-required="{{ __('custom_validation.comment.required') }}" comment-error-max="{{ __('custom_validation.comment.max:255') }}" error-word="{{ __("main.messages_title.error") }}"></posts-feed>
         </div>
     </div>
-    <div class="add-post-btn d-flex justify-content-center align-items-center" id="add-post-btn">
+    <div class="add-post-btn d-flex justify-content-center align-items-center" id="add-post-btn"  data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Add Post">
         <i class="fas fa-plus fa-2x"></i>
     </div>
 </div>
@@ -83,6 +83,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    $('[data-toggle="popover"]').popover();
+</script>
 @if(session()->has('addPostErr'))
 <script>
     $("#addPostModal").modal("show");

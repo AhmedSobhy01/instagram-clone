@@ -3,6 +3,7 @@
 return [
     "profile" => "Profile",
     "edit_profile" => "Edit Profile",
+    "account_settings" => "Account Settings",
 
     "register" => "Register",
     "login" => "Login",
@@ -11,6 +12,8 @@ return [
     "email" => "Email Address",
     "password" => "Password",
     "confirm_password" => "Confirm Password",
+    "current_password" => "Current Password",
+    "new_password" => "New Password",
     "name" => "Name",
     "username" => "Username",
     "bio" => "Bio",
@@ -23,6 +26,7 @@ return [
     "already_registered" => "Already Registered?",
     "not_registered" => "Not Registered?",
     "save_changes" => "Save Changes",
+    "save" => "Save",
 
     "search" => "Search",
 
@@ -45,13 +49,19 @@ return [
         "profile_updated" => "Profile Updated",
         "login" => "Unauthenticated",
         "invalid_inputs" => "Request Invalid",
+        "profile_image_updated_successfully" => "Profile Image Updated",
     ],
     "error" => "There has been error. Please try again.",
     "please_login" => "Please login to proceed.",
     "user_delete_error" => "Seems like the user has been deleted.",
     "post_delete_error" => "Seems like the post has been deleted.",
     "profile_updated" => 'Your profile has been updated successfully.',
+    "password_updated" => 'Your password has been changed successfully.',
     "invalid_inputs" => "The request wasn't well-formed",
     "invalid_comment" => "Comment can't be empty and no more than 255 characters.",
-    "post_created_successfully" => "Post uploaded successfully."
+    "post_created_successfully" => "Post uploaded successfully.",
+    "profile_image_updated_successfully" => "Your profile image has been updated successfully.",
+
+    "current_password_wrong" => "Your current password does not matches with the password you provided. Please try again.",
+    "new_password_same_as_current" => "New password cannot be same as your current password. Please choose a different password.",
 ];

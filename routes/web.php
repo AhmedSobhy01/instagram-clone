@@ -23,6 +23,7 @@ Auth::routes();
 
 // #########################################
 // Ajax API
+Route::patch('/profile/image', [ProfileController::class, 'changeImage'])->name('profile.changeImage');
 Route::post('/search', [SearchController::class, 'users'])->name('search');
 Route::get('/feed', [FeedController::class, 'index'])->name('feed');
 Route::post('/user/follow', [UserController::class, 'follow'])->name('follow');
@@ -36,6 +37,12 @@ Route::post('/comment', [PostController::class, 'comment'])->name('comment.creat
 Route::group(['middleware' => 'auth', 'prefix' => 'profile', 'as' => 'profile.'], function () {
     Route::patch('/', [ProfileController::class, 'update'])->name('update');
     Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+});
+
+Route::group(['middleware' => 'auth', 'as' => 'account.'], function () {
+    Route::view('/account', 'account.edit')->name('edit');
+
+    Route::patch('/account', [UserController::class, 'edit'])->name('update');
 });
 
 Route::get('/', [HomeController::class, 'index'])->middleware("auth")->name('home');

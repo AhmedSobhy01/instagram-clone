@@ -7,9 +7,34 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\AccountEdit;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function edit(AccountEdit $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            if (!(Hash::check($request->current_password, auth()->user()->password))) {
+                return redirect()->route('account.edit')->with("error", __("main.current_password_wrong"));
+            }
+
+            if (strcmp($request->current_password, $request->password) == 0) {
+                return redirect()->route('account.edit')->with("error", __("main.new_password_same_as_current"));
+            }
+
+            auth()->user()->password = Hash::make($request->password);
+            auth()->user()->save();
+
+            DB::commit();
+            return redirect()->route('account.edit')->with('success', __('main.password_updated'));
+        } catch (\Exception $e) {
+            return redirect()->route('account.edit')->with('error', __('main.error'));
+        }
+    }
+
     public function follow(Request $request)
     {
         if (!$request->wantsJson()) return abort(404);

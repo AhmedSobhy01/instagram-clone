@@ -29,7 +29,7 @@ class ProfileRequest extends FormRequest
             'username' => ['required', 'string', 'max:20', Rule::unique('users')->ignore(auth()->id())],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore(auth()->id())],
             'bio' => ['nullable', 'string', 'max:150'],
-            'website' => ['nullable', 'url', 'max:50']
+            'website' => ['nullable', 'url', 'max:100']
         ];
     }
 
@@ -55,7 +55,7 @@ class ProfileRequest extends FormRequest
             'bio.string' => __('custom_validation.bio.string'),
             'bio.max' => __('custom_validation.bio.max:150'),
             'website.url' => __('custom_validation.website.url'),
-            'website.max' => __('custom_validation.max:50'),
+            'website.max' => __('custom_validation.website.max:100'),
         ];
     }
 }

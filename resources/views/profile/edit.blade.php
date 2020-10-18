@@ -15,7 +15,7 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card">
-                <h2 class="card-title text-center my-3">Edit Profile</h2>
+                <h2 class="card-title text-center my-3">{{ __("main.edit_profile") }}</h2>
                 <div class="card-body py-md-4">
                     <form action="{{ route('profile.update') }}" method="post">
                         @csrf

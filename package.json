@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.1",
+        "cropperjs": "^1.5.9",
         "toastr": "^2.1.4"
     }
 }

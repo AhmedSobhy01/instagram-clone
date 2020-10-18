@@ -6,6 +6,7 @@
                     <a :href="post.user.profile_url">
                         <img
                             :src="post.user.profile_image"
+                            class="rounded-circle"
                             alt="Profile Image"
                             style="width: 35px;height: 35px;"
                         />
@@ -85,7 +86,7 @@
                         </div>
                         <div class="post-comments-latest">
                             <div
-                                class="d-flex mb-1 post-comment-latest"
+                                class="mb-1 post-comment-latest"
                                 v-for="comment in post.comments"
                                 :key="comment.id"
                             >
@@ -93,7 +94,9 @@
                                     :href="comment.user.profile_url"
                                     v-text="comment.user.username"
                                 ></a>
-                                <span>&nbsp;{{ comment.body }}</span>
+                                <span style="word-break: break-all"
+                                    >&nbsp;{{ comment.body }}</span
+                                >
                             </div>
                             <div class="time-posted">1 hour ago</div>
                         </div>

@@ -26,7 +26,7 @@ return [
     "website" => [
         "required" => "Website is required.",
         "url" => "Website is invalid.",
-        "max:50" => "Bio can't be more than 50 character.",
+        "max:100" => "Website can't be more than 100 character.",
     ],
     "post_id" => [
         "required" => "Post id is required.",
@@ -53,4 +53,7 @@ return [
         "string" => "Caption must be a string.",
         "max:100" => "Caption can't be more than 100 characters.",
     ],
+    "current_password" => [
+        "wrong" => "Old password is incorrect.",
+    ]
 ];

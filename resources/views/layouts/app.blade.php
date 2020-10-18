@@ -22,7 +22,7 @@
             <div class="container">
                 <a href="{{ route('home') }}" class="text-dark text-decoration-none">
                     <div class="d-flex align-items-center">
-                        <img src="https://image.flaticon.com/icons/png/512/87/87390.png" alt="Instagram Logo" style="width: 20px">
+                        <img src="{{ asset('storage/logos/instagram_logo.png') }}" alt="Instagram Logo" style="width: 20px">
                         <h4 class="m-0 d-none d-md-block">&nbsp;|&nbsp;</h4>
                         <h4 class="d-none d-md-block" style="margin: 1px 0 0 0">
                             {{ config('app.name', 'Instagram Clone') }}

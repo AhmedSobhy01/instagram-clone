@@ -3,21 +3,162 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset("css/profile.css") }}">
+{{-- Full Screen Loader --}}
+<style>
+    .full-loader {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    }
+
+    .full-loader:before {
+        content: "";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
+
+        background: -webkit-radial-gradient(
+            rgba(20, 20, 20, 0.8),
+            rgba(0, 0, 0, 0.8)
+        );
+    }
+
+    .full-loader:not(:required) {
+        font: 0/0 a;
+        color: transparent;
+        text-shadow: none;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .full-loader:not(:required):after {
+        content: "";
+        display: block;
+        font-size: 10px;
+        width: 1em;
+        height: 1em;
+        margin-top: -0.5em;
+        -webkit-animation: spinner 150ms infinite linear;
+        -moz-animation: spinner 150ms infinite linear;
+        -ms-animation: spinner 150ms infinite linear;
+        -o-animation: spinner 150ms infinite linear;
+        animation: spinner 150ms infinite linear;
+        border-radius: 0.5em;
+        -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0,
+            rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0,
+            rgba(255, 255, 255, 0.75) 0 1.5em 0 0,
+            rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0,
+            rgba(255, 255, 255, 0.75) -1.5em 0 0 0,
+            rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0,
+            rgba(255, 255, 255, 0.75) 0 -1.5em 0 0,
+            rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+        box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0,
+            rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0,
+            rgba(255, 255, 255, 0.75) 0 1.5em 0 0,
+            rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0,
+            rgba(255, 255, 255, 0.75) -1.5em 0 0 0,
+            rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0,
+            rgba(255, 255, 255, 0.75) 0 -1.5em 0 0,
+            rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+    }
+
+    @-webkit-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+    @-moz-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+    @-o-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+</style>
 @endpush
 
 @section('content')
+<div class="full-loader d-none">Loading&#8230;</div>
 <div class="row w-100 m-0" style="font-size: 10px">
     <div class="col-lg-8 offset-lg-2">
         <header>
             <div class="container">
                 <div class="profile">
-                    <div class="profile-image">
-                        <img src="{{ $user->profile_image }}" alt="Profile Picture">
+                    <div class="profile-image position-relative">
+                        <form action="{{ route('profile.changeImage') }}" method="post" id="profile-image-form">
+                            <input type="file" name="image" id="profile-image-file" class="d-none">
+                            <img src="{{ $user->profile_image }}" alt="Profile Picture">
+                            <label for="profile-image-file" class="profile-image-file-label m-0 d-flex justify-content-center align-items-center"><i class="fas fa-camera fa-2x"></i></label>
+                        </form>
                     </div>
                     <div class="profile-user-settings d-flex align-items-center">
                         <h1 class="profile-user-name m-0">{{ $user->username }}</h1>
                         @if (auth()->user() && auth()->user()->id == $user->id)
                         <a href="{{ route('profile.edit') }}" class="btn profile-edit-btn">{{ __("main.edit_profile") }}</a>
+                        <a href="{{ route('account.edit') }}" class="btn" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Account Settings"><span><i class="fas fa-cog fa-lg"></i></span></a>
                         @else
                         <follow-button post-to="{{ route("follow") }}" login-link="{{ route("login") }}" user-id="{{ $user->id }}" follows="{{auth()->user() && auth()->user()->isFollowing($user) ? true : false}}"></follow-button>
                         @endif
@@ -57,18 +198,53 @@
                         </div>
                     </div>
                     @endforelse
-
-                    {{-- <div class="gallery-item-type">
-                        <span class="visually-hidden">Video</span><i class="fas fa-video" aria-hidden="true"></i>
-                    </div>
-                    <div class="gallery-item-type">
-                        <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-                    </div> --}}
-                    {{-- <div class="loader"></div> --}}
-
                 </div>
             </div>
         </main>
     </div>
 </div>
+{{-- Profile Image Modal --}}
+<div class="modal" id="profileImageModal" tabindex="-1" aria-labelledby="profileImageModal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center">Crop Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" alt="Image" class="image-preview w-100" id="image-preview">
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                            <span class="h3">Preview:</span>
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary d-flex align-items-center mr-3 ml-auto" id="upload">
+                    <div class="loadingio-spinner-rolling-azt7iucozal mr-1 d-none">
+                        <div class="ldio-7lxobt9epcp">
+                            <div></div>
+                        </div>
+                    </div>
+                    Upload
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+    <script>
+        $('[data-toggle="popover"]').popover();
+    </script>
+    <script src="js/profile.js"></script>
+@endpush
