@@ -94,7 +94,7 @@ class UserController extends Controller
                 return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
             }
 
-            $followers = $user->followers()->paginate(8, ['username', 'profile_image']);
+            $followers = $user->followers()->paginate(config('constants.pagination.pagination_count'), ['username', 'profile_image']);
 
             $last_page = $followers->currentPage() >= $followers->lastPage() ? true : false;
 
@@ -131,7 +131,7 @@ class UserController extends Controller
                 return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
             }
 
-            $followings = $user->following()->paginate(8, ['username', 'profile_image']);
+            $followings = $user->following()->paginate(config('constants.pagination.pagination_count'), ['username', 'profile_image']);
 
             $last_page = $followings->currentPage() >= $followings->lastPage() ? true : false;
 

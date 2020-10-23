@@ -110,7 +110,7 @@ if (!function_exists('response_unauthenticated')) {
 
 if (!function_exists('response_forbidden')) {
     /**
-     * Return a json response with 401 http code. Used when user is not logged in.
+     * Return a json response with 403 http code. Used when user is not allowed in.
      *
      * @param  string  $error_title
      * @param  string  $error_message
@@ -124,10 +124,10 @@ if (!function_exists('response_forbidden')) {
         $error_message = $error_message ?? __("main.forbidden");
 
         return response()->json([
-            "response_code" => 401,
+            "response_code" => 403,
             "error_title" => $error_title,
             "error_message" => $error_message
-        ], 401)
+        ], 403)
             ->withHeaders($headers);
     }
 }
@@ -179,7 +179,7 @@ if (!function_exists('response_server_error')) {
 
 if (!function_exists('shorten_number')) {
     /**
-     * Return a json response with 500 http code.
+     * Return a simplified version of a number.
      *
      * @param  int  $number
      * @return string

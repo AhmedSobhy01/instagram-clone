@@ -152,7 +152,7 @@ class PostController extends Controller
 
         $comments = Post::find($request->postId)->comments()->select('id', 'post_id', 'user_id', 'body', 'created_at')->with(['user' => function ($r) {
             $r->select('id', 'username', 'profile_image');
-        }])->latest()->paginate(10)->toArray();
+        }])->latest()->paginate(config('constants.pagination.pagination_count'))->toArray();
 
         return response_ok("", "", $comments);
     }
@@ -177,7 +177,7 @@ class PostController extends Controller
 
         $likes = $post->likes()->select('id', 'post_id', 'user_id')->with(["user" => function ($q) {
             $q->select('id', 'username', 'profile_image');
-        }])->paginate(8);
+        }])->paginate(config('constants.pagination.pagination_count'));
 
         return response_ok("", "", $likes->toArray());
     }

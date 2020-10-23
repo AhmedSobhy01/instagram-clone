@@ -22,7 +22,7 @@ class FeedController extends Controller
                 'user' => function ($q) {
                     $q->select('id', 'name', 'username', 'profile_image');
                 },
-            ])->latest()->paginate(5);
+            ])->latest()->paginate(config('constants.pagination.pagination_count'));
 
             $posts->map(function ($item) {
                 $item->load(['comments' => function ($q) {

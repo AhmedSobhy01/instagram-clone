@@ -50,6 +50,12 @@
                             </div>
                         </a>
                     </div>
+                    <div
+                        class="loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"
+                        v-if="loading"
+                    >
+                        <div class="ldio-j0phwa9fshm"><div></div></div>
+                    </div>
                 </div>
             </div>
         </div>

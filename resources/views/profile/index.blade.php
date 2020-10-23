@@ -185,8 +185,8 @@
                         <img src="{{ $post->image }}" class="gallery-image" alt="Post Image">
                         <div class="gallery-item-info">
                             <ul>
-                                <li class="gallery-item-likes"><span class="visually-hidden">{{ __("main.likes") }}:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ $post->likes->count() }}</li>
-                                <li class="gallery-item-comments"><span class="visually-hidden">{{ __("main.comments") }}:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ $post->comments->count() }}</li>
+                                <li class="gallery-item-likes"><span class="visually-hidden">{{ __("main.likes") }}:</span><i class="fas fa-heart" aria-hidden="true"></i> {{ shorten_number($post->likes->count()) }}</li>
+                                <li class="gallery-item-comments"><span class="visually-hidden">{{ __("main.comments") }}:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ shorten_number($post->comments->count()) }}</li>
                             </ul>
                         </div>
                     </a>

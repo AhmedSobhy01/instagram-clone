@@ -2491,6 +2491,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["urls", "messages", "postId"],
   data: function data() {
@@ -50888,7 +50894,18 @@ var render = function() {
                       ]
                     )
                   ])
-                })
+                }),
+                _vm._v(" "),
+                _vm.loading
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"
+                      },
+                      [_vm._m(1)]
+                    )
+                  : _vm._e()
               ],
               2
             )
@@ -50915,6 +50932,12 @@ var staticRenderFns = [
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ldio-j0phwa9fshm" }, [_c("div")])
   }
 ]
 render._withStripped = true
