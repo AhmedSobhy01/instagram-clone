@@ -52083,7 +52083,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.showSearchResults
-        ? _c("div", [
+        ? _c("div", { staticClass: "search-results-container" }, [
             _c("ul", { staticClass: "list-group search-results" }, [
               _vm.noResult
                 ? _c(

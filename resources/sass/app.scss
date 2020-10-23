@@ -217,6 +217,11 @@ body {
 }
 
 // Search Results Dropdown
+.search-results-container {
+    position: absolute;
+    top: 100%;
+}
+
 .search-results {
     max-height: 362px;
     overflow-x: hidden;

@@ -17,7 +17,7 @@
             @blur="handleBlur"
         />
 
-        <div v-if="showSearchResults">
+        <div class="search-results-container" v-if="showSearchResults">
             <ul class="list-group search-results">
                 <!-- No Results -->
                 <li
