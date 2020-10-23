@@ -1,7 +1,9 @@
 <template>
     <div class="posts">
         <div class="post card mb-4" v-for="post in posts" :key="post.id">
-            <div class="card-header post-user">
+            <div
+                class="card-header post-user d-flex justify-content-between align-items-center"
+            >
                 <div class="d-flex align-items-center">
                     <a :href="post.user.profile_url">
                         <img
@@ -14,8 +16,30 @@
                     <a
                         :href="post.user.profile_url"
                         class="post-author-username h6"
-                        >{{ post.user.username }}</a
                     >
+                        {{ post.user.username }}
+                    </a>
+                </div>
+                <div v-if="$user.id == post.user.id">
+                    <a
+                        data-toggle="dropdown"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        class="text-dark"
+                        href="#"
+                    >
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button
+                            class="dropdown-item delete-post-btn"
+                            :data-post-id="post.id"
+                            @click="deletePost($event)"
+                        >
+                            {{ messages.words.delete }}
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="card-body p-0">
@@ -32,7 +56,7 @@
                     <div class="post-actions d-flex align-items-center">
                         <like-button
                             :post-id="post.id"
-                            :post-to="likeUrl"
+                            :urls="urls"
                             :likes="post.likedByCurrentUser"
                         ></like-button>
                         <div
@@ -60,21 +84,21 @@
                         style="cursor: pointer"
                         @click="redirectToPost(post.id)"
                     >
-                        <span
-                            :id="'likes-' + post.id"
-                            v-text="post.likesCount"
-                        ></span>
-                        likes
+                        <span :id="'likes-' + post.id">
+                            {{ post.likesCount.toLocaleString() }}
+                        </span>
+                        {{ messages.words.likes.toLowerCase() }}
                     </div>
                     <div class="post-caption mt-1">
                         <a
                             :href="post.user.profile_url"
                             class="post-caption-author"
-                            v-text="post.user.username"
-                        ></a>
-                        <span style="word-break: break-all">{{
-                            post.caption
-                        }}</span>
+                        >
+                            {{ post.user.username }}
+                        </a>
+                        <span style="word-break: break-all">
+                            {{ post.caption }}
+                        </span>
                     </div>
                     <div class="post-comments mt-1">
                         <div
@@ -82,7 +106,9 @@
                             v-if="post.commentsCount"
                             @click="redirectToPost(post.id)"
                         >
-                            View all {{ post.commentsCount }} comments
+                            {{ messages.words.view_all }}
+                            {{ post.commentsCount.toLocaleString() }}
+                            {{ messages.words.comments.toLowerCase() }}
                         </div>
                         <div class="post-comments-latest">
                             <div
@@ -90,15 +116,21 @@
                                 v-for="comment in post.comments"
                                 :key="comment.id"
                             >
-                                <a
-                                    :href="comment.user.profile_url"
-                                    v-text="comment.user.username"
-                                ></a>
-                                <span style="word-break: break-all"
-                                    >&nbsp;{{ comment.body }}</span
-                                >
+                                <a :href="comment.user.profile_url">
+                                    {{ comment.user.username }}
+                                </a>
+                                <span style="word-break: break-all">
+                                    {{ comment.body }}
+                                </span>
                             </div>
-                            <div class="time-posted">1 hour ago</div>
+                            <div class="time-posted">
+                                {{
+                                    timeAgo.format(
+                                        new Date(post.created_at),
+                                        "round"
+                                    )
+                                }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -121,7 +153,7 @@
                         :disabled="commentLoading"
                         :style="[commentLoading ? { cursor: 'no-drop' } : '']"
                     >
-                        Post
+                        {{ messages.words.post }}
                     </button>
                     <div
                         class="mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
@@ -137,7 +169,7 @@
         <div
             class="h2 text-center m-0 py-3"
             v-if="end"
-            v-html="endMessage"
+            v-html="messages.end_of_page.title"
         ></div>
         <div
             class="h2 text-center m-0 py-3 text-danger"
@@ -151,20 +183,11 @@
 
 <script>
 export default {
-    props: [
-        "feedUrl",
-        "likeUrl",
-        "commentUrl",
-        "postUrl",
-        "authId",
-        "endMessage",
-        "commentErrorRequired",
-        "commentErrorMax",
-        "errorWord"
-    ],
+    props: ["urls", "messages"],
 
     data: function() {
         return {
+            timeAgo: window.timeAgo,
             posts: [],
             page: 1,
             busy: false,
@@ -179,152 +202,155 @@ export default {
 
     methods: {
         getPosts() {
-            if (!this.busy && !this.end) {
-                this.busy = true;
-                axios
-                    .get(this.feedUrl, {
-                        params: {
-                            page: this.page
-                        }
-                    })
-                    .then(res => res.data)
-                    .then(data => {
-                        this.page++;
-                        this.posts.push(...data.data.data);
-                        if (data.data.data.length == 0) {
-                            this.end = true;
-                        }
-                    })
-                    .catch(err => {
-                        if (err.response.status == 401) {
-                            window.location = err.response.data.redirectUrl;
-                        } else {
-                            this.error.status = true;
-                            this.error.message =
-                                err.response.data.error_message ||
-                                "There has been an error. Please try again.";
-                        }
-                    })
-                    .finally(() => {
-                        this.busy = false;
-                    });
-            }
+            if (this.busy || this.end) return;
+            this.busy = true;
+            axios
+                .get(this.urls.feed.index, {
+                    params: {
+                        page: this.page
+                    }
+                })
+                .then(res => res.data)
+                .then(data => {
+                    this.page++;
+                    this.posts.push(...data.data.data);
+                    this.end = data.data.data.length == 0 ? true : false;
+                })
+                .catch(err => {
+                    if (err.response.status == 401) {
+                        window.location = err.response.data.redirectUrl;
+                    } else {
+                        this.error.status = true;
+                        this.error.message =
+                            err.response.data.error_message ||
+                            "There has been an error. Please try again.";
+                    }
+                })
+                .finally(() => {
+                    this.busy = false;
+                });
         },
-        scroll() {
-            window.addEventListener("scroll", e => {
-                if (
-                    window.innerHeight + window.scrollY >=
-                    document.body.offsetHeight - 1000
-                ) {
-                    this.getPosts();
-                }
-            });
-        },
+
         addComment(e, post) {
-            let form = e.target,
+            if (this.commentLoading) return;
+
+            const form = e.target,
                 postId = form
                     .querySelector(".add-comment-field")
                     .id.split("-")[1],
                 commentBody = form.querySelector(".add-comment-field").value;
 
-            if (!this.commentLoading) {
-                if (commentBody == "") {
-                    toastr.error(this.commentErrorRequired, this.errorWord, {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right",
-                        preventDuplicates: true,
-                        showDuration: 300,
-                        hideDuration: 1000,
-                        timeOut: 5000,
-                        extendedTimeOut: 5000,
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut"
-                    });
-                    return false;
-                } else if (commentBody.length > 255) {
-                    toastr.error(this.commentErrorMax, this.errorWord, {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right",
-                        preventDuplicates: true,
-                        showDuration: 300,
-                        hideDuration: 1000,
-                        timeOut: 5000,
-                        extendedTimeOut: 5000,
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut"
-                    });
-                    return false;
-                }
-
-                this.commentLoading = true;
-                form.querySelector(".btn").style.display = "none";
-                form.querySelector(".comment-loader").style.display =
-                    "inline-block";
-                axios
-                    .post(this.commentUrl, {
-                        postID: postId,
-                        comment: commentBody
-                    })
-                    .then(res => res.data)
-                    .then(data => {
-                        if (data.response_code == 201) {
-                            post.comments.push(data.data.comment);
-                            post.commentsCount += 1;
-                        }
-                        form.querySelector(".add-comment-field").value = "";
-                    })
-                    .catch(err => {
-                        if (err.response.status == 401) {
-                            window.location = err.response.data.redirectUrl;
-                        } else {
-                            toastr.error(
-                                err.response.data.error_message,
-                                err.response.data.error_title,
-                                {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: "toast-top-right",
-                                    preventDuplicates: true,
-                                    showDuration: 300,
-                                    hideDuration: 1000,
-                                    timeOut: 5000,
-                                    extendedTimeOut: 5000,
-                                    showEasing: "swing",
-                                    hideEasing: "linear",
-                                    showMethod: "fadeIn",
-                                    hideMethod: "fadeOut"
-                                }
-                            );
-                        }
-                    })
-                    .finally(() => {
-                        form.querySelector(".comment-loader").style.display =
-                            "none";
-                        form.querySelector(".btn").style.display =
-                            "inline-block";
-                        this.commentLoading = false;
-                    });
+            if (commentBody == "") {
+                show_error(
+                    this.messages.comment_errors.required.title,
+                    this.messages.comment_errors.required.message
+                );
+                return false;
+            } else if (commentBody.length > 255) {
+                show_error(
+                    this.messages.comment_errors.max.title,
+                    this.messages.comment_errors.max.message
+                );
+                return false;
             }
+
+            this.commentLoading = true;
+            form.querySelector(".btn").style.display = "none";
+            form.querySelector(".comment-loader").style.display =
+                "inline-block";
+
+            axios
+                .post(this.urls.comment.store, {
+                    postId: postId,
+                    comment: commentBody
+                })
+                .then(res => res.data)
+                .then(data => {
+                    post.comments.push(data.data.comment);
+                    post.commentsCount++;
+                    form.querySelector(".add-comment-field").value = "";
+                })
+                .catch(err => {
+                    if (err.response.status == 401) {
+                        window.location = err.response.data.redirectUrl;
+                    } else {
+                        show_err(
+                            err.response.data.error_title,
+                            err.response.data.error_message
+                        );
+                    }
+                })
+                .finally(() => {
+                    form.querySelector(".comment-loader").style.display =
+                        "none";
+                    form.querySelector(".btn").style.display = "inline-block";
+                    this.commentLoading = false;
+                });
         },
+
         redirectToPost(postId) {
-            window.location = this.postUrl.slice(0, -1) + postId;
+            window.location = this.urls.post.index.slice(0, -1) + postId;
         },
+
         imageLoaded(e) {
             e.target.parentElement.querySelector(
                 ".image-skeleton"
             ).style.visibility = "hidden";
+        },
+
+        deletePost(e) {
+            const postId = parseInt(e.target.dataset.postId);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+                showLoaderOnConfirm: true,
+                preConfirm: del => {
+                    return axios
+                        .delete(this.urls.post.delete, {
+                            data: {
+                                postId: postId
+                            }
+                        })
+                        .then(res => res.data)
+                        .then(data => {
+                            Swal.close();
+
+                            this.posts = this.posts.filter(
+                                v => v.id !== postId
+                            );
+
+                            show_success(data.error_title, data.error_message);
+                        })
+                        .catch(err => {
+                            Swal.close();
+                            show_error(
+                                err.response.data.error_title,
+                                err.response.data.error_message
+                            );
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         }
     },
 
     mounted() {
         this.getPosts();
-        this.scroll();
+
+        window.addEventListener("scroll", e => {
+            if (
+                window.innerHeight + window.scrollY >=
+                document.body.offsetHeight - 1000
+            ) {
+                this.getPosts();
+            }
+        });
     }
 };
 </script>

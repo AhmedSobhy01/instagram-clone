@@ -33,10 +33,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="search-box navbar-nav mr-auto position-relative" style="margin-left: 25%">
                     <!-- search-->
-                    <li class="nav-item d-flex align-items-center position-relative">
-                        <search-bar placeholder={{ __('main.search') }} post-to={{ route('search') }}></search-bar>
-                        <i class="fa fa-search position-absolute ml-2 ml-md-0 ml-md-2"></i>
-                    </li>
+                    <search-bar placeholder={{ __('main.search') }} :urls="{{ json_encode(["search" => ["index" => route('search')]]) }}" :messages="{{ json_encode(["words" => ["no_results_found" => __("main.no_results_found")]]) }}"></search-bar>
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -59,8 +56,15 @@
                         </div>
                     </li>
                     @else
-                        <a href="{{ route("login") }}" class="btn btn-primary  mr-2">{{ __('main.login') }}</a>
-                        <a href="{{ route("register") }}" class="btn btn-link">{{ __('main.register') }}</a>
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false"  aria-haspopup="true">
+                            <i class="fas fa-user mr-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a href="{{ route('login') }}" class="dropdown-item">{{ __("main.login") }}</a>
+                            <a href="{{ route('register') }}" class="dropdown-item" >{{ __('main.register') }}</a>
+                        </div>
+                    </li>
                     @endauth
                 </ul>
 
@@ -72,7 +76,21 @@
     </div>
     <!-- Scripts -->
     @stack('bscripts')
+
+    @if (auth()->check())
+    <script>
+        window.User = {
+            id: {{ auth()->id() }}
+        }
+    </script>
+    @else
+    <script>
+        window.User = {}
+    </script>
+    @endif
+
     <script src="{{ asset('js/app.js') }}"></script>
+
     @stack('scripts')
 </body>
 </html>

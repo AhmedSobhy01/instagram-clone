@@ -8,20 +8,6 @@ img {
   display: block;
 }
 
-/* .btn {
-    display: inline-block;
-    font: inherit;
-    background: none;
-    border: none;
-    color: inherit;
-    padding: 0;
-    cursor: pointer;
-} */
-
-/* .btn:focus {
-    outline: 0.5em auto #4d90fe;
-} */
-
 .visually-hidden {
   position: absolute !important;
   height: 1px;
@@ -54,12 +40,12 @@ img {
 .profile-image-file-label {
   cursor: pointer;
   background: #fff;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 50%;
-  padding: 9px 10px;
   position: absolute;
-  bottom: -10%;
-  right: 25%;
+  bottom: -5%;
+  right: 10%;
   cursor: pointer;
 }
 

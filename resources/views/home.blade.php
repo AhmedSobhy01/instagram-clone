@@ -9,10 +9,10 @@
 <div class="row w-100 m-0">
     <div class="col-md-6 offset-md-3 px-0">
         <div class="container">
-            <posts-feed post-url="{{ route('post.index', 1) }}" feed-url="{{ route('feed') }}" like-url="{{ route('like.create') }}" comment-url="{{ route('comment.create') }}" auth-id="{{ auth()->id() }}" end-message="{{ __('main.end_message') }}" comment-error-required="{{ __('custom_validation.comment.required') }}" comment-error-max="{{ __('custom_validation.comment.max:255') }}" error-word="{{ __("main.messages_title.error") }}"></posts-feed>
+            <posts-feed :urls="{{ $urls }}" :messages="{{ $messages }}"></posts-feed>
         </div>
     </div>
-    <div class="add-post-btn d-flex justify-content-center align-items-center" id="add-post-btn"  data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Add Post">
+    <div class="add-post-btn d-flex justify-content-center align-items-center" id="add-post-btn"  data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ __("main.add_post") }}">
         <i class="fas fa-plus fa-2x"></i>
     </div>
 </div>
@@ -57,9 +57,6 @@
                     <div class="form-group my-3">
                         <label for="caption" class="h6">Caption:</label>
                         <textarea type="text" class="form-control caption-area" id="caption" name="caption">{{ old('caption') }}</textarea>
-                        <span class="invalid-feedback" id="caption-err" role="alert">
-                            <strong>Caption is required</strong>
-                        </span>
                         <span class="invalid-feedback" id="caption-err-max" role="alert">
                             <strong>Caption can't be more than 100 characters.</strong>
                         </span>

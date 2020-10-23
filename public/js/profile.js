@@ -99,12 +99,18 @@ var profileImgForm = document.getElementById("profile-image-form"),
     imagePreview = document.getElementById("image-preview"),
     uploadBtn = document.getElementById("upload");
 var cropper, reader;
+var maxImageSize = 10,
+    // In MB
+allowedExtensions = ["image/png", "image/jpeg"];
+profileImgFileElm.accept = allowedExtensions.join(",");
+profileImgFileElm.multiple = false;
 profileImgFileElm.addEventListener("change", function (e) {
   e.preventDefault();
   e.stopPropagation();
 
   if (e.target.files && e.target.files.length > 0) {
     var img = e.target.files[0];
+    if (!validateFile(img)) return;
     loaderStatus(true);
     reader = new FileReader();
     reader.addEventListener("load", function (e) {
@@ -197,6 +203,34 @@ function loaderStatus(status) {
   } else {
     document.querySelector(".full-loader").classList.add("d-none");
   }
+}
+
+function showErr(message) {
+  toastr.error(message, "Image Invalid!", {
+    closeButton: true,
+    newestOnTop: true,
+    progressBar: true,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "5000",
+    extendedTimeOut: "5000"
+  });
+}
+
+function validateFile(file) {
+  if (!file) return;
+
+  if (!allowedExtensions.includes(file.type)) {
+    showErr("Invalid file type.");
+    return false;
+  }
+
+  if (file.size >= maxImageSize * 1000 * 1000) {
+    showErr("Maximum image size is ".concat(maxImageSize, " MB."));
+    return false;
+  }
+
+  return true;
 }
 
 /***/ }),

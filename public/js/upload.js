@@ -238,7 +238,6 @@ function reverseStateOfElms() {
 
 function validateForm() {
   var imageErr = false,
-      captionErr = false,
       captionErrMax = false;
 
   if (imageElm.files.length !== 1) {
@@ -249,14 +248,6 @@ function validateForm() {
     imageErr = false;
   }
 
-  if (document.getElementById("caption").value == "") {
-    document.getElementById("caption-err").style.display = "block";
-    captionErr = true;
-  } else {
-    document.getElementById("caption-err").style.display = "none";
-    captionErr = false;
-  }
-
   if (document.getElementById("caption").value.length > 100) {
     document.getElementById("caption-err-max").style.display = "block";
     captionErrMax = true;
@@ -265,7 +256,7 @@ function validateForm() {
     captionErrMax = false;
   }
 
-  if (!imageErr && !captionErr && !captionErrMax) {
+  if (!imageErr && !captionErrMax) {
     uploadBtn.disabled = true;
     uploadBtn.querySelector("div").classList.remove("d-none");
     uploadBtn.style.cursor = "no-drop";

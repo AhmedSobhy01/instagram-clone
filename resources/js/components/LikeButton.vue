@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    props: ["postTo", "postId", "likes"],
+    props: ["urls", "postId", "likes"],
 
     watch: {
         status: function() {
@@ -61,7 +61,7 @@ export default {
             if (this.busy) return;
             this.busy = true;
             axios
-                .post(this.postTo, {
+                .post(this.urls.like.store, {
                     postID: this.postId
                 })
                 .then(res => res.data)
@@ -71,44 +71,10 @@ export default {
                 .catch(err => {
                     if (err.response.status == 401) {
                         window.location = err.response.data.redirectUrl;
-                    } else if (err.response.status == 404) {
-                        toastr.error(
-                            err.response.data.error_message,
-                            err.response.data.error_title,
-                            {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: "toast-top-right",
-                                preventDuplicates: true,
-                                showDuration: 300,
-                                hideDuration: 1000,
-                                timeOut: 5000,
-                                extendedTimeOut: 5000,
-                                showEasing: "swing",
-                                hideEasing: "linear",
-                                showMethod: "fadeIn",
-                                hideMethod: "fadeOut"
-                            }
-                        );
                     } else {
-                        toastr.error(
-                            err.response.data.error_message ||
-                                "There has been error. Please try again",
-                            err.response.data.error_title || "Error",
-                            {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: "toast-top-right",
-                                preventDuplicates: true,
-                                showDuration: 300,
-                                hideDuration: 1000,
-                                timeOut: 5000,
-                                extendedTimeOut: 5000,
-                                showEasing: "swing",
-                                hideEasing: "linear",
-                                showMethod: "fadeIn",
-                                hideMethod: "fadeOut"
-                            }
+                        show_error(
+                            err.response.data.error_title,
+                            err.response.data.error_message
                         );
                     }
                 })

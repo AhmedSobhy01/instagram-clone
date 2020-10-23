@@ -108,6 +108,30 @@ if (!function_exists('response_unauthenticated')) {
     }
 }
 
+if (!function_exists('response_forbidden')) {
+    /**
+     * Return a json response with 401 http code. Used when user is not logged in.
+     *
+     * @param  string  $error_title
+     * @param  string  $error_message
+     * @param  array  $headers
+     * @return \Illuminate\Http\JsonResponse
+     *
+     */
+    function response_forbidden(string $error_title = null, string $error_message = null, array $headers = [])
+    {
+        $error_title = $error_title ?? __("main.messages_title.forbidden");
+        $error_message = $error_message ?? __("main.forbidden");
+
+        return response()->json([
+            "response_code" => 401,
+            "error_title" => $error_title,
+            "error_message" => $error_message
+        ], 401)
+            ->withHeaders($headers);
+    }
+}
+
 if (!function_exists('response_not_found')) {
     /**
      * Return a json response with 404 http code. Used when a resource is not found.
@@ -150,5 +174,27 @@ if (!function_exists('response_server_error')) {
             "error_message" => $error_message,
         ], 500)
             ->withHeaders($headers);
+    }
+}
+
+if (!function_exists('shorten_number')) {
+    /**
+     * Return a json response with 500 http code.
+     *
+     * @param  int  $number
+     * @return string
+     *
+     */
+    function shorten_number(int $number)
+    {
+        $suffix = ["", "K", "M", "B"];
+        $precision = 2;
+        for ($i = 0; $i < count($suffix); $i++) {
+            $divide = $number / pow(1000, $i);
+            if ($divide < 1000) {
+                return round($divide, $precision) . $suffix[$i];
+                break;
+            }
+        }
     }
 }

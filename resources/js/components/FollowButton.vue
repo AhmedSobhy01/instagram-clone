@@ -16,27 +16,29 @@
                 </div>
             </div>
 
-            <span v-text="buttonText"></span>
+            <span>{{ buttonText }}</span>
         </button>
     </div>
 </template>
 
 <script>
 export default {
-    props: ["userId", "follows", "postTo"],
+    props: ["userId", "follows", "urls", "messages"],
 
     watch: {
         status: function() {
             if (!this.loading) {
-                this.buttonText = this.status ? "Unfollow" : "Follow";
+                this.buttonText = this.status
+                    ? this.messages.words.unfollow
+                    : this.messages.words.follow;
             }
         },
         loading: function() {
             this.buttonText = this.loading
-                ? "Loading"
+                ? this.messages.words.loading
                 : this.status
-                ? "Unfollow"
-                : "Follow";
+                ? this.messages.words.unfollow
+                : this.messages.words.follow;
         }
     },
 
@@ -52,7 +54,7 @@ export default {
         followUser() {
             this.loading = true;
             axios
-                .post(this.postTo, {
+                .post(this.urls.follow.store, {
                     userID: this.userId
                 })
                 .then(response => response.data)

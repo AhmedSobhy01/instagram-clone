@@ -45,3 +45,12 @@ window.toastr = require("toastr");
 
 // Cropper JS
 window.Cropper = require("cropperjs");
+
+// SweetAlert
+window.Swal = require("sweetalert2");
+
+// TimeAgo
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+TimeAgo.addDefaultLocale(en);
+window.timeAgo = new TimeAgo("en-US");

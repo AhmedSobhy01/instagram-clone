@@ -31,6 +31,7 @@ class UserSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             $user->follow(User::find($i + 1));
+            User::find($i + 1)->follow($user);
         }
     }
 }

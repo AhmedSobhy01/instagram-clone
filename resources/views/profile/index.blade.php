@@ -147,8 +147,8 @@
         <header>
             <div class="container">
                 <div class="profile">
-                    <div class="profile-image position-relative">
-                        <form action="{{ route('profile.changeImage') }}" method="post" id="profile-image-form">
+                    <div class="profile-image">
+                        <form action="{{ route('profile.changeImage') }}" method="post" class="position-relative" id="profile-image-form">
                             <input type="file" name="image" id="profile-image-file" class="d-none">
                             <img src="{{ $user->profile_image }}" alt="Profile Picture">
                             <label for="profile-image-file" class="profile-image-file-label m-0 d-flex justify-content-center align-items-center"><i class="fas fa-camera fa-2x"></i></label>
@@ -158,16 +158,16 @@
                         <h1 class="profile-user-name m-0">{{ $user->username }}</h1>
                         @if (auth()->user() && auth()->user()->id == $user->id)
                         <a href="{{ route('profile.edit') }}" class="btn profile-edit-btn">{{ __("main.edit_profile") }}</a>
-                        <a href="{{ route('account.edit') }}" class="btn" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Account Settings"><span><i class="fas fa-cog fa-lg"></i></span></a>
+                        <a href="{{ route('account.edit') }}" class="btn" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ __("main.account_settings") }}"><span><i class="fas fa-cog fa-lg"></i></span></a>
                         @else
-                        <follow-button post-to="{{ route("follow") }}" login-link="{{ route("login") }}" user-id="{{ $user->id }}" follows="{{auth()->user() && auth()->user()->isFollowing($user) ? true : false}}"></follow-button>
+                        <follow-button :urls="{{ $urls }}" :messages="{{ json_encode(["words" => ["follow" => __("main.follow"), "unfollow" => __("main.unfollow"), "loading" => __("main.loading")]]) }}" user-id="{{ $user->id }}" follows="{{auth()->check() && auth()->user()->isFollowing($user) ? true : false}}"></follow-button>
                         @endif
                     </div>
                     <div class="profile-stats my-3">
                         <ul class="pl-0 m-0">
-                            <li><span class="profile-stat-count" id="posts-count">{{ $user->posts->count() }}</span> {{ strtolower(__("main.posts")) }}</li>
-                            <li><span class="profile-stat-count" id="followers-count">{{ $user->followers->count() }}</span> {{ strtolower(__("main.followers")) }}</li>
-                            <li><span class="profile-stat-count" id="following-count">{{ $user->following->count() }}</span> {{ strtolower(__("main.following")) }}</li>
+                            <li><span class="profile-stat-count" id="posts-count">{{ number_format($user->posts->count()) }}</span> {{ strtolower(__("main.posts")) }}</li>
+                            <li><span class="profile-stat-count" id="followers-count">{{ shorten_number($user->followers->count()) }}</span> {{ strtolower(__("main.followers")) }}</li>
+                            <li><span class="profile-stat-count" id="following-count">{{ shorten_number($user->following->count()) }}</span> {{ strtolower(__("main.following")) }}</li>
                         </ul>
                     </div>
                     <div class="profile-bio">
@@ -203,6 +203,7 @@
         </main>
     </div>
 </div>
+
 {{-- Profile Image Modal --}}
 <div class="modal" id="profileImageModal" tabindex="-1" aria-labelledby="profileImageModal" aria-hidden="true" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -216,7 +217,7 @@
             <div class="modal-body">
                 <div class="img-container">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-8 p-0">
                             <img src="" alt="Image" class="image-preview w-100" id="image-preview">
                         </div>
                         <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
@@ -240,11 +241,16 @@
         </div>
     </div>
 </div>
+
+<followers-modal :urls="{{ $urls }}" :messages="{{ json_encode(["words" => ["followers" => __("main.followers"), "nothing_found" => __("main.nothing_found")]]) }}" user-id={{ $user->id }}></followers-modal>
+<followings-modal :urls="{{ $urls }}" :messages="{{ json_encode(["words" => ["following" => __("main.following"), "nothing_found" => __("main.nothing_found")]]) }}" user-id={{ $user->id }}></followings-modal>
 @endsection
 
 @push('scripts')
     <script>
         $('[data-toggle="popover"]').popover();
+        document.getElementById("followers-count").parentElement.addEventListener("click", () => {$("#followersModal").modal("show");});
+        document.getElementById("following-count").parentElement.addEventListener("click", () => {$("#followingsModal").modal("show");});
     </script>
     <script src="js/profile.js"></script>
 @endpush

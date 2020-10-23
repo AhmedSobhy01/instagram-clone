@@ -28,12 +28,19 @@ return [
     "save_changes" => "Save Changes",
     "save" => "Save",
 
+    "nothing_found" => "Nothing Found",
+    "no_comments" => "No Comments",
+
     "search" => "Search",
+    "delete" => "Delete",
 
     "user_not_found" => "User Not Found",
     "end_message" => "Looks like the end. &#128549;<br />Follow more people for more posts.",
 
+    "no_results_found" => "No results found",
+
     "posts" => "Posts",
+    "like" => "Like",
     "likes" => "Likes",
     "comments" => "Comments",
 
@@ -41,6 +48,8 @@ return [
     "following" => "Following",
     "follow" => "Follow",
     "unfollow" => "Unfollow",
+
+    "loading" => "Loading",
 
     "messages_title" => [
         "error" => "Error",
@@ -50,6 +59,8 @@ return [
         "login" => "Unauthenticated",
         "invalid_inputs" => "Request Invalid",
         "profile_image_updated_successfully" => "Profile Image Updated",
+        "post_deleted_successfully" => "Post Deleted",
+        "forbidden" => "Forbidden",
     ],
     "error" => "There has been error. Please try again.",
     "please_login" => "Please login to proceed.",
@@ -61,6 +72,12 @@ return [
     "invalid_comment" => "Comment can't be empty and no more than 255 characters.",
     "post_created_successfully" => "Post uploaded successfully.",
     "profile_image_updated_successfully" => "Your profile image has been updated successfully.",
+    "post_deleted_successfully" => "The post has been deleted.",
+    "forbidden" => "You dont have the rights to perform this action",
+    "post" => "Post",
+    "add_post" => "Add Post",
+    "view_all" => "View all",
+    "account_settings" => "Account Settings",
 
     "current_password_wrong" => "Your current password does not matches with the password you provided. Please try again.",
     "new_password_same_as_current" => "New password cannot be same as your current password. Please choose a different password.",

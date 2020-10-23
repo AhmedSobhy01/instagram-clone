@@ -1932,15 +1932,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["userId", "follows", "postTo"],
+  props: ["userId", "follows", "urls", "messages"],
   watch: {
     status: function status() {
       if (!this.loading) {
-        this.buttonText = this.status ? "Unfollow" : "Follow";
+        this.buttonText = this.status ? this.messages.words.unfollow : this.messages.words.follow;
       }
     },
     loading: function loading() {
-      this.buttonText = this.loading ? "Loading" : this.status ? "Unfollow" : "Follow";
+      this.buttonText = this.loading ? this.messages.words.loading : this.status ? this.messages.words.unfollow : this.messages.words.follow;
     }
   },
   data: function data() {
@@ -1955,7 +1955,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
-      axios.post(this.postTo, {
+      axios.post(this.urls.follow.store, {
         userID: this.userId
       }).then(function (response) {
         return response.data;
@@ -2014,6 +2014,322 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowersModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowersModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["urls", "messages", "userId"],
+  data: function data() {
+    return {
+      followers: [],
+      page: 1,
+      loading: false,
+      end: false
+    };
+  },
+  methods: {
+    getFollowers: function getFollowers() {
+      var _this = this;
+
+      if (this.loading || this.end) return;
+      this.loading = true;
+      axios.post(this.urls.followers.index, {
+        userID: this.userId
+      }, {
+        params: {
+          page: this.page
+        }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        var _this$followers;
+
+        (_this$followers = _this.followers).push.apply(_this$followers, _toConsumableArray(data.data.followers));
+
+        _this.page++;
+        _this.end = data.data.last_page ? true : false;
+      })["catch"](function (err) {
+        toastr.error(err.response.data.error_message, err.response.data.error_title, {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-top-right",
+          preventDuplicates: true,
+          showDuration: 300,
+          hideDuration: 1000,
+          timeOut: 5000,
+          extendedTimeOut: 5000,
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut"
+        });
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this.getFollowers(); // Enable Lazy Loading (Scroll Load)
+
+    var elm = document.querySelector("#followersModal .modal-body");
+    elm.addEventListener("scroll", function (e) {
+      if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
+        _this2.getFollowers();
+      }
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["urls", "messages", "userId"],
+  data: function data() {
+    return {
+      followings: [],
+      page: 1,
+      loading: false,
+      end: false
+    };
+  },
+  methods: {
+    getFollowings: function getFollowings() {
+      var _this = this;
+
+      if (this.loading || this.end) return;
+      this.loading = true;
+      axios.post(this.urls.followings.index, {
+        userID: this.userId
+      }, {
+        params: {
+          page: this.page
+        }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        var _this$followings;
+
+        (_this$followings = _this.followings).push.apply(_this$followings, _toConsumableArray(data.data.followings));
+
+        _this.page++;
+        _this.end = data.data.last_page ? true : false;
+      })["catch"](function (err) {
+        toastr.error(err.response.data.error_message, err.response.data.error_title, {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-top-right",
+          preventDuplicates: true,
+          showDuration: 300,
+          hideDuration: 1000,
+          timeOut: 5000,
+          extendedTimeOut: 5000,
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut"
+        });
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this.getFollowings(); // Enable Lazy Loading (Scroll Load)
+
+    var elm = document.querySelector("#followingsModal .modal-body");
+    elm.addEventListener("scroll", function (e) {
+      if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
+        _this2.getFollowings();
+      }
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LikeButton.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LikeButton.vue?vue&type=script&lang=js& ***!
@@ -2053,7 +2369,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["postTo", "postId", "likes"],
+  props: ["urls", "postId", "likes"],
   watch: {
     status: function status() {
       if (this.status) {
@@ -2075,7 +2391,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.busy) return;
       this.busy = true;
-      axios.post(this.postTo, {
+      axios.post(this.urls.like.store, {
         postID: this.postId
       }).then(function (res) {
         return res.data;
@@ -2084,41 +2400,146 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         if (err.response.status == 401) {
           window.location = err.response.data.redirectUrl;
-        } else if (err.response.status == 404) {
-          toastr.error(err.response.data.error_message, err.response.data.error_title, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
         } else {
-          toastr.error(err.response.data.error_message || "There has been error. Please try again", err.response.data.error_title || "Error", {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
+          show_error(err.response.data.error_title, err.response.data.error_message);
         }
       })["finally"](function () {
         return _this.busy = false;
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LikesModal.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LikesModal.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["urls", "messages", "postId"],
+  data: function data() {
+    return {
+      likes: [],
+      page: 1,
+      loading: false,
+      end: false
+    };
+  },
+  methods: {
+    getLikes: function getLikes() {
+      var _this = this;
+
+      if (this.loading || this.end) return;
+      this.loading = true;
+      axios.post(this.urls.like.index, {
+        postId: this.postId
+      }, {
+        params: {
+          page: this.page
+        }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        var _this$likes;
+
+        (_this$likes = _this.likes).push.apply(_this$likes, _toConsumableArray(data.data.data));
+
+        _this.page++;
+        _this.end = data.data.current_page >= data.data.last_page ? true : false;
+      })["catch"](function (err) {
+        show_error(err.response.data.error_title, err.response.data.error_message);
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this.getLikes(); // Enable Lazy Loading (Scroll Load)
+
+    var elm = document.querySelector("#likesModal .modal-body");
+    elm.addEventListener("scroll", function (e) {
+      if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
+        _this2.getLikes();
+      }
+    });
   }
 });
 
@@ -2421,13 +2842,92 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["postData", "likeUrl", "getLikesUrl", "commentsGetUrl", "commentCreateUrl", "commentErrorRequired", "commentErrorMax", "errorWord"],
+  props: ["postData", "urls", "messages"],
   watch: {
-    likesLoading: function likesLoading() {
+    "likes.loading": function likesLoading() {
       var elm = document.querySelector("#likesModal .modal-body");
 
-      if (this.likesLoading) {
+      if (this.likes.loading) {
         elm.innerHTML += "<div class=\"loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2\"><div class=\"ldio-j0phwa9fshm\"><div></div></div></div>";
       } else {
         elm.querySelector(".loadingio-spinner-rolling-dbisj67kqze").remove();
@@ -2436,143 +2936,128 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
+      timeAgo: window.timeAgo,
       post: this.postData,
-      likesPage: 1,
-      likesLoading: false,
-      likesEnd: false,
-      comments: [],
-      commentPage: 1,
-      addCommentVal: "",
-      firstCommentsLoad: false,
-      commentsLoading: false,
-      commentAdding: false,
-      commentsEnd: false,
-      mobile: false
+      mobile: false,
+      likes: {
+        page: 1,
+        loading: false,
+        end: false
+      },
+      comments: {
+        data: [],
+        page: 1,
+        loading: false,
+        end: false,
+        addCommentVal: "",
+        firstCommentsLoad: false,
+        addingComment: false
+      }
     };
   },
   methods: {
     loadComments: function loadComments() {
       var _this = this;
 
-      if (!this.commentsLoading) {
-        this.commentsLoading = true;
-        axios.get(this.commentsGetUrl, {
-          params: {
-            postId: this.post.id,
-            page: this.commentPage
-          }
-        }).then(function (res) {
-          return res.data;
-        }).then(function (data) {
-          if (data.response_code == 200) {
-            var _this$comments;
+      if (this.comments.loading) return;
+      this.comments.loading = true;
+      axios.get(this.urls.comment.index, {
+        params: {
+          postId: this.post.id,
+          page: this.comments.page
+        }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        if (data.response_code == 200) {
+          var _this$comments$data;
 
-            _this.commentsEnd = data.data.current_page >= data.data.last_page;
+          _this.comments.end = data.data.current_page >= data.data.last_page;
 
-            (_this$comments = _this.comments).unshift.apply(_this$comments, _toConsumableArray(data.data.data));
+          (_this$comments$data = _this.comments.data).unshift.apply(_this$comments$data, _toConsumableArray(data.data.data));
 
-            _this.commentPage++;
-          }
-        })["catch"](function (err) {
-          if (err.response.status == 401) {
-            window.location = err.response.data.redirectUrl;
-          } else {
-            toastr.error(err.response.data.error_message, err.response.data.error_title, {
-              closeButton: true,
-              progressBar: true,
-              positionClass: "toast-top-right",
-              preventDuplicates: true,
-              showDuration: 300,
-              hideDuration: 1000,
-              timeOut: 5000,
-              extendedTimeOut: 5000,
-              showEasing: "swing",
-              hideEasing: "linear",
-              showMethod: "fadeIn",
-              hideMethod: "fadeOut"
-            });
-          }
-        })["finally"](function () {
-          _this.commentsLoading = false;
-          _this.firstCommentsLoad = false;
-        });
-      }
+          _this.comments.page++;
+        }
+      })["catch"](function (err) {
+        show_error(err.response.data.error_title, err.response.data.error_message);
+      })["finally"](function () {
+        _this.comments.loading = false;
+        _this.comments.firstCommentsLoad = false;
+      });
     },
     addComment: function addComment() {
       var _this2 = this;
 
-      if (!this.commentAdding) {
-        if (this.addCommentVal == "") {
-          toastr.error(this.commentErrorRequired, this.errorWord, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
+      if (!this.comments.addingComment) {
+        if (this.comments.addCommentVal == "") {
+          show_error(this.messages.comment_errors.required.title, this.messages.comment_errors.required.message);
           return false;
-        } else if (this.addCommentVal.length > 255) {
-          toastr.error(this.commentErrorMax, this.errorWord, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
+        } else if (this.comments.addCommentVal.length > 255) {
+          show_error(this.messages.comment_errors.max.title, this.messages.comment_errors.max.message);
           return false;
         }
 
-        this.commentAdding = true;
-        axios.post(this.commentCreateUrl, {
-          postID: this.post.id,
-          comment: this.addCommentVal
+        this.comments.addingComment = true;
+        axios.post(this.urls.comment.store, {
+          postId: this.post.id,
+          comment: this.comments.addCommentVal
         }).then(function (res) {
           return res.data;
         }).then(function (data) {
           if (data.response_code == 201) {
-            _this2.comments.unshift(data.data.comment);
+            _this2.comments.data.unshift(data.data.comment);
 
             _this2.post.commentsCount++;
           }
 
-          _this2.addCommentVal = "";
+          _this2.comments.addCommentVal = "";
         })["catch"](function (err) {
           if (err.response.status == 401) {
             window.location = err.response.data.redirectUrl;
           } else {
-            toastr.error(err.response.data.error_message, err.response.data.error_title, {
-              closeButton: true,
-              progressBar: true,
-              positionClass: "toast-top-right",
-              preventDuplicates: true,
-              showDuration: 300,
-              hideDuration: 1000,
-              timeOut: 5000,
-              extendedTimeOut: 5000,
-              showEasing: "swing",
-              hideEasing: "linear",
-              showMethod: "fadeIn",
-              hideMethod: "fadeOut"
-            });
+            show_error(err.response.data.error_title, err.response.data.error_message);
           }
         })["finally"](function () {
-          _this2.commentAdding = false;
+          _this2.comments.addingComment = false;
         });
       }
+    },
+    deletePost: function deletePost(e) {
+      var _this3 = this;
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm(del) {
+          return axios["delete"](_this3.urls.post["delete"], {
+            data: {
+              postId: _this3.post.id
+            }
+          }).then(function (res) {
+            return res.data;
+          }).then(function (data) {
+            return data;
+          })["catch"](function (err) {
+            Swal.close();
+            show_error(err.response.data.error_title, err.response.data.error_message);
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      }).then(function (r) {
+        if (r.isConfirmed) {
+          Swal.fire(r.value.error_title, r.value.error_message, "success").then(function () {
+            return window.location.href = _this3.urls.home.index;
+          });
+        }
+      });
     },
     focusAddComment: function focusAddComment() {
       this.$refs.addCommentField.focus();
@@ -2583,62 +3068,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       } else {
         this.mobile = false;
       }
-    },
-    getLikes: function getLikes() {
-      var _this3 = this;
-
-      $("#likesModal").modal("show");
-      if (this.likesLoading || this.likesEnd) return;
-      this.likesLoading = true;
-      axios.get(this.getLikesUrl, {
-        params: {
-          postId: this.post.id,
-          page: this.likesPage
-        }
-      }).then(function (res) {
-        return res.data;
-      }).then(function (data) {
-        document.querySelector("#likesModal .modal-body").innerHTML += data.data.content;
-        _this3.likesEnd = data.data.lastPage;
-        _this3.likesPage++;
-        _this3.firstLikesLoad = false;
-      })["catch"](function (err) {
-        if (err.response.status !== 200) {
-          toastr.error(err.response.data.error_message, err.response.data.error_title, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
-        }
-      })["finally"](function () {
-        _this3.likesLoading = false;
-      });
-    },
-    enableScrollForLikes: function enableScrollForLikes() {
-      var _this4 = this;
-
-      var elm = document.querySelector("#likesModal .modal-body");
-      elm.addEventListener("scroll", function (e) {
-        if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
-          _this4.getLikes();
-        }
-      });
     }
   },
   mounted: function mounted() {
     this.loadComments();
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
-    this.enableScrollForLikes();
   }
 });
 
@@ -2816,10 +3251,43 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["feedUrl", "likeUrl", "commentUrl", "postUrl", "authId", "endMessage", "commentErrorRequired", "commentErrorMax", "errorWord"],
+  props: ["urls", "messages"],
   data: function data() {
     return {
+      timeAgo: window.timeAgo,
       posts: [],
       page: 1,
       busy: false,
@@ -2835,138 +3303,125 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     getPosts: function getPosts() {
       var _this = this;
 
-      if (!this.busy && !this.end) {
-        this.busy = true;
-        axios.get(this.feedUrl, {
-          params: {
-            page: this.page
-          }
-        }).then(function (res) {
-          return res.data;
-        }).then(function (data) {
-          var _this$posts;
-
-          _this.page++;
-
-          (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data.data));
-
-          if (data.data.data.length == 0) {
-            _this.end = true;
-          }
-        })["catch"](function (err) {
-          if (err.response.status == 401) {
-            window.location = err.response.data.redirectUrl;
-          } else {
-            _this.error.status = true;
-            _this.error.message = err.response.data.error_message || "There has been an error. Please try again.";
-          }
-        })["finally"](function () {
-          _this.busy = false;
-        });
-      }
-    },
-    scroll: function scroll() {
-      var _this2 = this;
-
-      window.addEventListener("scroll", function (e) {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
-          _this2.getPosts();
+      if (this.busy || this.end) return;
+      this.busy = true;
+      axios.get(this.urls.feed.index, {
+        params: {
+          page: this.page
         }
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        var _this$posts;
+
+        _this.page++;
+
+        (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(data.data.data));
+
+        _this.end = data.data.data.length == 0 ? true : false;
+      })["catch"](function (err) {
+        if (err.response.status == 401) {
+          window.location = err.response.data.redirectUrl;
+        } else {
+          _this.error.status = true;
+          _this.error.message = err.response.data.error_message || "There has been an error. Please try again.";
+        }
+      })["finally"](function () {
+        _this.busy = false;
       });
     },
     addComment: function addComment(e, post) {
-      var _this3 = this;
+      var _this2 = this;
 
+      if (this.commentLoading) return;
       var form = e.target,
           postId = form.querySelector(".add-comment-field").id.split("-")[1],
           commentBody = form.querySelector(".add-comment-field").value;
 
-      if (!this.commentLoading) {
-        if (commentBody == "") {
-          toastr.error(this.commentErrorRequired, this.errorWord, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
-          return false;
-        } else if (commentBody.length > 255) {
-          toastr.error(this.commentErrorMax, this.errorWord, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            showDuration: 300,
-            hideDuration: 1000,
-            timeOut: 5000,
-            extendedTimeOut: 5000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          });
-          return false;
-        }
-
-        this.commentLoading = true;
-        form.querySelector(".btn").style.display = "none";
-        form.querySelector(".comment-loader").style.display = "inline-block";
-        axios.post(this.commentUrl, {
-          postID: postId,
-          comment: commentBody
-        }).then(function (res) {
-          return res.data;
-        }).then(function (data) {
-          if (data.response_code == 201) {
-            post.comments.push(data.data.comment);
-            post.commentsCount += 1;
-          }
-
-          form.querySelector(".add-comment-field").value = "";
-        })["catch"](function (err) {
-          if (err.response.status == 401) {
-            window.location = err.response.data.redirectUrl;
-          } else {
-            toastr.error(err.response.data.error_message, err.response.data.error_title, {
-              closeButton: true,
-              progressBar: true,
-              positionClass: "toast-top-right",
-              preventDuplicates: true,
-              showDuration: 300,
-              hideDuration: 1000,
-              timeOut: 5000,
-              extendedTimeOut: 5000,
-              showEasing: "swing",
-              hideEasing: "linear",
-              showMethod: "fadeIn",
-              hideMethod: "fadeOut"
-            });
-          }
-        })["finally"](function () {
-          form.querySelector(".comment-loader").style.display = "none";
-          form.querySelector(".btn").style.display = "inline-block";
-          _this3.commentLoading = false;
-        });
+      if (commentBody == "") {
+        show_error(this.messages.comment_errors.required.title, this.messages.comment_errors.required.message);
+        return false;
+      } else if (commentBody.length > 255) {
+        show_error(this.messages.comment_errors.max.title, this.messages.comment_errors.max.message);
+        return false;
       }
+
+      this.commentLoading = true;
+      form.querySelector(".btn").style.display = "none";
+      form.querySelector(".comment-loader").style.display = "inline-block";
+      axios.post(this.urls.comment.store, {
+        postId: postId,
+        comment: commentBody
+      }).then(function (res) {
+        return res.data;
+      }).then(function (data) {
+        post.comments.push(data.data.comment);
+        post.commentsCount++;
+        form.querySelector(".add-comment-field").value = "";
+      })["catch"](function (err) {
+        if (err.response.status == 401) {
+          window.location = err.response.data.redirectUrl;
+        } else {
+          show_err(err.response.data.error_title, err.response.data.error_message);
+        }
+      })["finally"](function () {
+        form.querySelector(".comment-loader").style.display = "none";
+        form.querySelector(".btn").style.display = "inline-block";
+        _this2.commentLoading = false;
+      });
     },
     redirectToPost: function redirectToPost(postId) {
-      window.location = this.postUrl.slice(0, -1) + postId;
+      window.location = this.urls.post.index.slice(0, -1) + postId;
     },
     imageLoaded: function imageLoaded(e) {
       e.target.parentElement.querySelector(".image-skeleton").style.visibility = "hidden";
+    },
+    deletePost: function deletePost(e) {
+      var _this3 = this;
+
+      var postId = parseInt(e.target.dataset.postId);
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm(del) {
+          return axios["delete"](_this3.urls.post["delete"], {
+            data: {
+              postId: postId
+            }
+          }).then(function (res) {
+            return res.data;
+          }).then(function (data) {
+            Swal.close();
+            _this3.posts = _this3.posts.filter(function (v) {
+              return v.id !== postId;
+            });
+            show_success(data.error_title, data.error_message);
+          })["catch"](function (err) {
+            Swal.close();
+            show_error(err.response.data.error_title, err.response.data.error_message);
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      });
     }
   },
   mounted: function mounted() {
+    var _this4 = this;
+
     this.getPosts();
-    this.scroll();
+    window.addEventListener("scroll", function (e) {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+        _this4.getPosts();
+      }
+    });
   }
 });
 
@@ -3042,8 +3497,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["placeholder", "postTo"],
+  props: ["urls", "messages", "placeholder"],
   data: function data() {
     return {
       q: "",
@@ -3070,10 +3530,11 @@ __webpack_require__.r(__webpack_exports__);
     doSearch: function doSearch() {
       var _this = this;
 
+      if (this.busy) return;
       this.busy = true;
       clearTimeout(this.searchTimeout);
       this.searchTimeout = setTimeout(function () {
-        axios.post(_this.postTo, {
+        axios.post(_this.urls.search.index, {
           q: _this.q
         }).then(function (res) {
           return res.data;
@@ -3108,6 +3569,13 @@ __webpack_require__.r(__webpack_exports__);
       this.showSearchResultsTimeout = setTimeout(function () {
         _this2.showSearchResults = false;
       }, 150);
+    },
+    checkScreen: function checkScreen() {
+      if (window.matchMedia("screen and (max-width: 768px)").matches) {
+        this.mobile = true;
+      } else {
+        this.mobile = false;
+      }
     }
   }
 });
@@ -11165,6 +11633,2611 @@ __webpack_require__.r(__webpack_exports__);
 
 })));
 
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/index.js":
+/*!***************************************************!*\
+  !*** ./node_modules/javascript-time-ago/index.js ***!
+  \***************************************************/
+/*! exports provided: default, intlDateTimeFormatSupported, intlDateTimeFormatSupportedLocale */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_TimeAgo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/TimeAgo */ "./node_modules/javascript-time-ago/modules/TimeAgo.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _modules_TimeAgo__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _modules_locale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/locale */ "./node_modules/javascript-time-ago/modules/locale.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "intlDateTimeFormatSupported", function() { return _modules_locale__WEBPACK_IMPORTED_MODULE_1__["intlDateTimeFormatSupported"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "intlDateTimeFormatSupportedLocale", function() { return _modules_locale__WEBPACK_IMPORTED_MODULE_1__["intlDateTimeFormatSupportedLocale"]; });
+
+
+
+// I guess these two are deprecated.
+
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/locale/en.json":
+/*!*********************************************************!*\
+  !*** ./node_modules/javascript-time-ago/locale/en.json ***!
+  \*********************************************************/
+/*! exports provided: locale, long, short, narrow, now, mini, short-time, long-time, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"locale\":\"en\",\"long\":{\"year\":{\"previous\":\"last year\",\"current\":\"this year\",\"next\":\"next year\",\"past\":{\"one\":\"{0} year ago\",\"other\":\"{0} years ago\"},\"future\":{\"one\":\"in {0} year\",\"other\":\"in {0} years\"}},\"quarter\":{\"previous\":\"last quarter\",\"current\":\"this quarter\",\"next\":\"next quarter\",\"past\":{\"one\":\"{0} quarter ago\",\"other\":\"{0} quarters ago\"},\"future\":{\"one\":\"in {0} quarter\",\"other\":\"in {0} quarters\"}},\"month\":{\"previous\":\"last month\",\"current\":\"this month\",\"next\":\"next month\",\"past\":{\"one\":\"{0} month ago\",\"other\":\"{0} months ago\"},\"future\":{\"one\":\"in {0} month\",\"other\":\"in {0} months\"}},\"week\":{\"previous\":\"last week\",\"current\":\"this week\",\"next\":\"next week\",\"past\":{\"one\":\"{0} week ago\",\"other\":\"{0} weeks ago\"},\"future\":{\"one\":\"in {0} week\",\"other\":\"in {0} weeks\"}},\"day\":{\"previous\":\"yesterday\",\"current\":\"today\",\"next\":\"tomorrow\",\"past\":{\"one\":\"{0} day ago\",\"other\":\"{0} days ago\"},\"future\":{\"one\":\"in {0} day\",\"other\":\"in {0} days\"}},\"hour\":{\"current\":\"this hour\",\"past\":{\"one\":\"{0} hour ago\",\"other\":\"{0} hours ago\"},\"future\":{\"one\":\"in {0} hour\",\"other\":\"in {0} hours\"}},\"minute\":{\"current\":\"this minute\",\"past\":{\"one\":\"{0} minute ago\",\"other\":\"{0} minutes ago\"},\"future\":{\"one\":\"in {0} minute\",\"other\":\"in {0} minutes\"}},\"second\":{\"current\":\"now\",\"past\":{\"one\":\"{0} second ago\",\"other\":\"{0} seconds ago\"},\"future\":{\"one\":\"in {0} second\",\"other\":\"in {0} seconds\"}}},\"short\":{\"year\":{\"previous\":\"last yr.\",\"current\":\"this yr.\",\"next\":\"next yr.\",\"past\":\"{0} yr. ago\",\"future\":\"in {0} yr.\"},\"quarter\":{\"previous\":\"last qtr.\",\"current\":\"this qtr.\",\"next\":\"next qtr.\",\"past\":{\"one\":\"{0} qtr. ago\",\"other\":\"{0} qtrs. ago\"},\"future\":{\"one\":\"in {0} qtr.\",\"other\":\"in {0} qtrs.\"}},\"month\":{\"previous\":\"last mo.\",\"current\":\"this mo.\",\"next\":\"next mo.\",\"past\":\"{0} mo. ago\",\"future\":\"in {0} mo.\"},\"week\":{\"previous\":\"last wk.\",\"current\":\"this wk.\",\"next\":\"next wk.\",\"past\":\"{0} wk. ago\",\"future\":\"in {0} wk.\"},\"day\":{\"previous\":\"yesterday\",\"current\":\"today\",\"next\":\"tomorrow\",\"past\":{\"one\":\"{0} day ago\",\"other\":\"{0} days ago\"},\"future\":{\"one\":\"in {0} day\",\"other\":\"in {0} days\"}},\"hour\":{\"current\":\"this hour\",\"past\":\"{0} hr. ago\",\"future\":\"in {0} hr.\"},\"minute\":{\"current\":\"this minute\",\"past\":\"{0} min. ago\",\"future\":\"in {0} min.\"},\"second\":{\"current\":\"now\",\"past\":\"{0} sec. ago\",\"future\":\"in {0} sec.\"}},\"narrow\":{\"year\":{\"previous\":\"last yr.\",\"current\":\"this yr.\",\"next\":\"next yr.\",\"past\":\"{0} yr. ago\",\"future\":\"in {0} yr.\"},\"quarter\":{\"previous\":\"last qtr.\",\"current\":\"this qtr.\",\"next\":\"next qtr.\",\"past\":{\"one\":\"{0} qtr. ago\",\"other\":\"{0} qtrs. ago\"},\"future\":{\"one\":\"in {0} qtr.\",\"other\":\"in {0} qtrs.\"}},\"month\":{\"previous\":\"last mo.\",\"current\":\"this mo.\",\"next\":\"next mo.\",\"past\":\"{0} mo. ago\",\"future\":\"in {0} mo.\"},\"week\":{\"previous\":\"last wk.\",\"current\":\"this wk.\",\"next\":\"next wk.\",\"past\":\"{0} wk. ago\",\"future\":\"in {0} wk.\"},\"day\":{\"previous\":\"yesterday\",\"current\":\"today\",\"next\":\"tomorrow\",\"past\":{\"one\":\"{0} day ago\",\"other\":\"{0} days ago\"},\"future\":{\"one\":\"in {0} day\",\"other\":\"in {0} days\"}},\"hour\":{\"current\":\"this hour\",\"past\":\"{0} hr. ago\",\"future\":\"in {0} hr.\"},\"minute\":{\"current\":\"this minute\",\"past\":\"{0} min. ago\",\"future\":\"in {0} min.\"},\"second\":{\"current\":\"now\",\"past\":\"{0} sec. ago\",\"future\":\"in {0} sec.\"}},\"now\":{\"now\":{\"current\":\"now\",\"future\":\"in a moment\",\"past\":\"just now\"}},\"mini\":{\"year\":\"{0}yr\",\"month\":\"{0}mo\",\"week\":\"{0}wk\",\"day\":\"{0}d\",\"hour\":\"{0}h\",\"minute\":\"{0}m\",\"second\":\"{0}s\",\"now\":\"now\"},\"short-time\":{\"year\":\"{0} yr.\",\"month\":\"{0} mo.\",\"week\":\"{0} wk.\",\"day\":{\"one\":\"{0} day\",\"other\":\"{0} days\"},\"hour\":\"{0} hr.\",\"minute\":\"{0} min.\",\"second\":\"{0} sec.\"},\"long-time\":{\"year\":{\"one\":\"{0} year\",\"other\":\"{0} years\"},\"month\":{\"one\":\"{0} month\",\"other\":\"{0} months\"},\"week\":{\"one\":\"{0} week\",\"other\":\"{0} weeks\"},\"day\":{\"one\":\"{0} day\",\"other\":\"{0} days\"},\"hour\":{\"one\":\"{0} hour\",\"other\":\"{0} hours\"},\"minute\":{\"one\":\"{0} minute\",\"other\":\"{0} minutes\"},\"second\":{\"one\":\"{0} second\",\"other\":\"{0} seconds\"}}}");
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/LocaleDataStore.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/LocaleDataStore.js ***!
+  \*********************************************************************/
+/*! exports provided: getLocaleData, addLocaleData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocaleData", function() { return getLocaleData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLocaleData", function() { return addLocaleData; });
+// For all locales added
+// their relative time formatter messages will be stored here.
+var localesData = {};
+function getLocaleData(locale) {
+  return localesData[locale];
+}
+function addLocaleData(localeData) {
+  if (!localeData) {
+    throw new Error('[javascript-time-ago] No locale data passed.');
+  } // This locale data is stored in a global variable
+  // and later used when calling `.format(time)`.
+
+
+  localesData[localeData.locale] = localeData;
+}
+//# sourceMappingURL=LocaleDataStore.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/TimeAgo.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/TimeAgo.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TimeAgo; });
+/* harmony import */ var relative_time_format__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! relative-time-format */ "./node_modules/relative-time-format/index.js");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cache */ "./node_modules/javascript-time-ago/modules/cache.js");
+/* harmony import */ var _locale__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./locale */ "./node_modules/javascript-time-ago/modules/locale.js");
+/* harmony import */ var _steps_getStep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./steps/getStep */ "./node_modules/javascript-time-ago/modules/steps/getStep.js");
+/* harmony import */ var _steps_getStepDenominator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./steps/getStepDenominator */ "./node_modules/javascript-time-ago/modules/steps/getStepDenominator.js");
+/* harmony import */ var _steps_getTimeToNextUpdate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./steps/getTimeToNextUpdate */ "./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdate.js");
+/* harmony import */ var _LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./LocaleDataStore */ "./node_modules/javascript-time-ago/modules/LocaleDataStore.js");
+/* harmony import */ var _style_approximate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./style/approximate */ "./node_modules/javascript-time-ago/modules/style/approximate.js");
+/* harmony import */ var _style_getStyleByName__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./style/getStyleByName */ "./node_modules/javascript-time-ago/modules/style/getStyleByName.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./round */ "./node_modules/javascript-time-ago/modules/round.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
+
+ // For historical reasons, "approximate" is the default style.
+
+
+
+ // Valid time units.
+
+var UNITS = ['now', // The rest are the same as in `Intl.RelativeTimeFormat`.
+'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
+
+var TimeAgo =
+/*#__PURE__*/
+function () {
+  /**
+   * @param {(string|string[])} locales=[] - Preferred locales (or locale).
+   * @param {boolean} [polyfill] — Pass `false` to use native `Intl.RelativeTimeFormat` and `Intl.PluralRules` instead of the polyfills.
+   */
+  function TimeAgo() {
+    var locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        polyfill = _ref.polyfill;
+
+    _classCallCheck(this, TimeAgo);
+
+    // Convert `locales` to an array.
+    if (typeof locales === 'string') {
+      locales = [locales];
+    } // Choose the most appropriate locale
+    // from the list of `locales` added by the user.
+    // For example, new TimeAgo("en-US") -> "en".
+
+
+    this.locale = Object(_locale__WEBPACK_IMPORTED_MODULE_2__["default"])(locales.concat(TimeAgo.getDefaultLocale()), _LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"]);
+
+    if (typeof Intl !== 'undefined') {
+      // Use `Intl.NumberFormat` for formatting numbers (when available).
+      if (Intl.NumberFormat) {
+        this.numberFormat = new Intl.NumberFormat(this.locale);
+      }
+    } // Some people have requested the ability to use native
+    // `Intl.RelativeTimeFormat` and `Intl.PluralRules`
+    // instead of the polyfills.
+    // https://github.com/catamphetamine/javascript-time-ago/issues/21
+
+
+    if (polyfill === false) {
+      this.IntlRelativeTimeFormat = Intl.RelativeTimeFormat;
+      this.IntlPluralRules = Intl.PluralRules;
+    } else {
+      this.IntlRelativeTimeFormat = relative_time_format__WEBPACK_IMPORTED_MODULE_0__["default"];
+      this.IntlPluralRules = relative_time_format__WEBPACK_IMPORTED_MODULE_0__["default"].PluralRules;
+    } // Cache `Intl.RelativeTimeFormat` instance.
+
+
+    this.relativeTimeFormatCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"](); // Cache `Intl.PluralRules` instance.
+
+    this.pluralRulesCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  }
+  /**
+   * Formats relative date/time.
+   *
+   * @param {number} [options.now] - Sets the current date timestamp.
+   *
+   * @param  {boolean} [options.future] — Tells how to format value `0`:
+   *         as "future" (`true`) or "past" (`false`).
+   *         Is `false` by default, but should have been `true` actually,
+   *         in order to correspond to `Intl.RelativeTimeFormat`
+   *         that uses `future` formatting for `0` unless `-0` is passed.
+   *
+   * @param {string} [options.round] — Rounding method. Overrides the style's one.
+   *
+   * @param {boolean} [options.getTimeToNextUpdate] — Pass `true` to return `[formattedDate, timeToNextUpdate]` instead of just `formattedDate`.
+   *
+   * @return {string} The formatted relative date/time. If no eligible `step` is found, then an empty string is returned.
+   */
+
+
+  _createClass(TimeAgo, [{
+    key: "format",
+    value: function format(input) {
+      var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _style_approximate__WEBPACK_IMPORTED_MODULE_7__["default"];
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      if (typeof style === 'string') {
+        style = Object(_style_getStyleByName__WEBPACK_IMPORTED_MODULE_8__["default"])(style);
+      }
+
+      var timestamp = getTimestamp(input); // Get locale messages for this type of labels.
+      // "flavour" is a legacy name for "labels".
+
+      var _this$getLabels = this.getLabels(style.flavour || style.labels),
+          labels = _this$getLabels.labels,
+          labelsType = _this$getLabels.labelsType;
+
+      var now; // Can pass a custom `now`, e.g. for testing purposes.
+      //
+      // Legacy way was passing `now` in `style`.
+      // That way is deprecated.
+
+      if (style.now !== undefined) {
+        now = style.now;
+      } // The new way is passing `now` option to `.format()`.
+
+
+      if (now === undefined && options.now !== undefined) {
+        now = options.now;
+      }
+
+      if (now === undefined) {
+        now = Date.now();
+      } // how much time has passed (in seconds)
+
+
+      var secondsPassed = (now - timestamp) / 1000; // in seconds
+
+      var future = options.future || secondsPassed < 0;
+      var nowLabel = getNowLabel(labels, Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"])(this.locale).now, Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"])(this.locale).long, future); // `custom` – A function of `{ elapsed, time, date, now, locale }`.
+      //
+      // Looks like `custom` function is deprecated and will be removed
+      // in the next major version.
+      //
+      // If this function returns a value, then the `.format()` call will return that value.
+      // Otherwise the relative date/time is formatted as usual.
+      // This feature is currently not used anywhere and is here
+      // just for providing the ultimate customization point
+      // in case anyone would ever need that. Prefer using
+      // `steps[step].format(value, locale)` instead.
+      //
+
+      if (style.custom) {
+        var custom = style.custom({
+          now: now,
+          date: new Date(timestamp),
+          time: timestamp,
+          elapsed: secondsPassed,
+          locale: this.locale
+        });
+
+        if (custom !== undefined) {
+          // Won't return `timeToNextUpdate` here
+          // because `custom()` seems deprecated.
+          return custom;
+        }
+      } // Get the list of available time interval units.
+
+
+      var units = getTimeIntervalMeasurementUnits( // Controlling `style.steps` through `style.units` seems to be deprecated:
+      // create a new custom `style` instead.
+      style.units, labels, nowLabel); // // If no available time unit is suitable, just output an empty string.
+      // if (units.length === 0) {
+      // 	console.error(`None of the "${units.join(', ')}" time units have been found in "${labelsType}" labels for "${this.locale}" locale.`)
+      // 	return ''
+      // }
+
+      var round = options.round || style.round; // Choose the appropriate time measurement unit
+      // and get the corresponding rounded time amount.
+
+      var _getStep = Object(_steps_getStep__WEBPACK_IMPORTED_MODULE_3__["default"])( // "gradation" is a legacy name for "steps".
+      // For historical reasons, "approximate" steps are used by default.
+      // In the next major version, there'll be no default for `steps`.
+      style.gradation || style.steps || _style_approximate__WEBPACK_IMPORTED_MODULE_7__["default"].gradation, secondsPassed, {
+        now: now,
+        units: units,
+        round: round,
+        future: future,
+        getNextStep: true
+      }),
+          _getStep2 = _slicedToArray(_getStep, 3),
+          prevStep = _getStep2[0],
+          step = _getStep2[1],
+          nextStep = _getStep2[2];
+
+      var formattedDate = this.formatDateForStep(timestamp, step, secondsPassed, {
+        labels: labels,
+        labelsType: labelsType,
+        nowLabel: nowLabel,
+        now: now,
+        future: future,
+        round: round
+      }) || '';
+
+      if (options.getTimeToNextUpdate) {
+        var timeToNextUpdate = Object(_steps_getTimeToNextUpdate__WEBPACK_IMPORTED_MODULE_5__["default"])(timestamp, step, {
+          nextStep: nextStep,
+          prevStep: prevStep,
+          now: now,
+          future: future,
+          round: round
+        });
+        return [formattedDate, timeToNextUpdate];
+      }
+
+      return formattedDate;
+    }
+  }, {
+    key: "formatDateForStep",
+    value: function formatDateForStep(timestamp, step, secondsPassed, _ref2) {
+      var _this = this;
+
+      var labels = _ref2.labels,
+          labelsType = _ref2.labelsType,
+          nowLabel = _ref2.nowLabel,
+          now = _ref2.now,
+          future = _ref2.future,
+          round = _ref2.round;
+
+      // If no step matches, then output an empty string.
+      if (!step) {
+        return;
+      }
+
+      if (step.format) {
+        return step.format(timestamp, this.locale, {
+          formatAs: function formatAs(unit, value) {
+            // Mimicks `Intl.RelativeTimeFormat.format()`.
+            return _this.formatValue(value, unit, {
+              labels: labels,
+              future: future
+            });
+          },
+          now: now,
+          future: future
+        });
+      } // "unit" is now called "formatAs".
+
+
+      var unit = step.unit || step.formatAs;
+
+      if (!unit) {
+        throw new Error("[javascript-time-ago] Each step must define either `formatAs` or `format()`. Step: ".concat(JSON.stringify(step)));
+      } // `Intl.RelativeTimeFormat` doesn't operate in "now" units.
+      // Therefore, threat "now" as a special case.
+
+
+      if (unit === 'now') {
+        return nowLabel;
+      } // Amount in units.
+
+
+      var amount = Math.abs(secondsPassed) / Object(_steps_getStepDenominator__WEBPACK_IMPORTED_MODULE_4__["default"])(step); // Apply granularity to the time amount
+      // (and fallback to the previous step
+      //  if the first level of granularity
+      //  isn't met by this amount)
+      //
+      // `granularity` — (advanced) Time interval value "granularity".
+      // For example, it could be set to `5` for minutes to allow only 5-minute increments
+      // when formatting time intervals: `0 minutes`, `5 minutes`, `10 minutes`, etc.
+      // Perhaps this feature will be removed because there seem to be no use cases
+      // of it in the real world.
+      //
+
+      if (step.granularity) {
+        // Recalculate the amount of seconds passed based on granularity
+        amount = Object(_round__WEBPACK_IMPORTED_MODULE_9__["getRoundFunction"])(round)(amount / step.granularity) * step.granularity;
+      }
+
+      var valueForFormatting = -1 * Math.sign(secondsPassed) * Object(_round__WEBPACK_IMPORTED_MODULE_9__["getRoundFunction"])(round)(amount); // By default, this library formats a `0` in "past" mode,
+      // unless `future: true` option is passed.
+      // This is different to `relative-time-format`'s behavior
+      // which formats a `0` in "future" mode by default, unless it's a `-0`.
+      // So, convert `0` to `-0` if `future: true` option wasn't passed.
+      // `=== 0` matches both `0` and `-0`.
+
+      if (valueForFormatting === 0) {
+        if (future) {
+          valueForFormatting = 0;
+        } else {
+          valueForFormatting = -0;
+        }
+      }
+
+      switch (labelsType) {
+        case 'long':
+        case 'short':
+        case 'narrow':
+          // Format the amount using `Intl.RelativeTimeFormat`.
+          return this.getFormatter(labelsType).format(valueForFormatting, unit);
+
+        default:
+          // Format the amount.
+          // (mimicks `Intl.RelativeTimeFormat` behavior for other time label styles)
+          return this.formatValue(valueForFormatting, unit, {
+            labels: labels,
+            future: future
+          });
+      }
+    }
+    /**
+     * Mimicks what `Intl.RelativeTimeFormat` does for additional locale styles.
+     * @param  {number} value
+     * @param  {string} unit
+     * @param  {object} options.labels — Relative time labels.
+     * @param  {boolean} [options.future] — Tells how to format value `0`: as "future" (`true`) or "past" (`false`). Is `false` by default, but should have been `true` actually.
+     * @return {string}
+     */
+
+  }, {
+    key: "formatValue",
+    value: function formatValue(value, unit, _ref3) {
+      var labels = _ref3.labels,
+          future = _ref3.future;
+      return this.getFormattingRule(labels, unit, value, {
+        future: future
+      }).replace('{0}', this.formatNumber(Math.abs(value)));
+    }
+    /**
+     * Returns formatting rule for `value` in `units` (either in past or in future).
+     * @param {object} formattingRules — Relative time labels for different units.
+     * @param {string} unit - Time interval measurement unit.
+     * @param {number} value - Time interval value.
+     * @param  {boolean} [options.future] — Tells how to format value `0`: as "future" (`true`) or "past" (`false`). Is `false` by default.
+     * @return {string}
+     * @example
+     * // Returns "{0} days ago"
+     * getFormattingRule(en.long, "day", -2, 'en')
+     */
+
+  }, {
+    key: "getFormattingRule",
+    value: function getFormattingRule(formattingRules, unit, value, _ref4) {
+      var future = _ref4.future;
+      // Passing the language is required in order to
+      // be able to correctly classify the `value` as a number.
+      var locale = this.locale;
+      formattingRules = formattingRules[unit]; // Check for a special "compacted" rules case:
+      // if formatting rules are the same for "past" and "future",
+      // and also for all possible `value`s, then those rules are
+      // stored as a single string.
+
+      if (typeof formattingRules === 'string') {
+        return formattingRules;
+      } // Choose either "past" or "future" based on time `value` sign.
+      // If "past" is same as "future" then they're stored as "other".
+      // If there's only "other" then it's being collapsed.
+
+
+      var pastOrFuture = value === 0 ? future ? 'future' : 'past' : value < 0 ? 'past' : 'future';
+      var quantifierRules = formattingRules[pastOrFuture] || formattingRules; // Bundle size optimization technique.
+
+      if (typeof quantifierRules === 'string') {
+        return quantifierRules;
+      } // Quantify `value`.
+
+
+      var quantifier = this.getPluralRules().select(Math.abs(value)); // "other" rule is supposed to always be present.
+      // If only "other" rule is present then "rules" is not an object and is a string.
+
+      return quantifierRules[quantifier] || quantifierRules.other;
+    }
+    /**
+     * Formats a number into a string.
+     * Uses `Intl.NumberFormat` when available.
+     * @param  {number} number
+     * @return {string}
+     */
+
+  }, {
+    key: "formatNumber",
+    value: function formatNumber(number) {
+      return this.numberFormat ? this.numberFormat.format(number) : String(number);
+    }
+    /**
+     * Returns an `Intl.RelativeTimeFormat` for a given `labelsType`.
+     * @param {string} labelsType
+     * @return {object} `Intl.RelativeTimeFormat` instance
+     */
+
+  }, {
+    key: "getFormatter",
+    value: function getFormatter(labelsType) {
+      // `Intl.RelativeTimeFormat` instance creation is (hypothetically) assumed
+      // a lengthy operation so the instances are cached and reused.
+      return this.relativeTimeFormatCache.get(this.locale, labelsType) || this.relativeTimeFormatCache.put(this.locale, labelsType, new this.IntlRelativeTimeFormat(this.locale, {
+        style: labelsType
+      }));
+    }
+    /**
+     * Returns an `Intl.PluralRules` instance.
+     * @return {object} `Intl.PluralRules` instance
+     */
+
+  }, {
+    key: "getPluralRules",
+    value: function getPluralRules() {
+      // `Intl.PluralRules` instance creation is (hypothetically) assumed
+      // a lengthy operation so the instances are cached and reused.
+      return this.pluralRulesCache.get(this.locale) || this.pluralRulesCache.put(this.locale, new this.IntlPluralRules(this.locale));
+    }
+    /**
+     * Gets localized labels for this type of labels.
+     *
+     * @param {(string|string[])} labelsType - Relative date/time labels type.
+     *                                     If it's an array then all label types are tried
+     *                                     until a suitable one is found.
+     *
+     * @returns {Object} Returns an object of shape { labelsType, labels }
+     */
+
+  }, {
+    key: "getLabels",
+    value: function getLabels() {
+      var labelsType = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+      // Convert `labels` to an array.
+      if (typeof labelsType === 'string') {
+        labelsType = [labelsType];
+      } // Supports legacy "tiny" and "mini-time" label styles.
+
+
+      labelsType = labelsType.map(function (labelsType) {
+        switch (labelsType) {
+          case 'tiny':
+          case 'mini-time':
+            return 'mini';
+
+          default:
+            return labelsType;
+        }
+      }); // "long" labels type is the default one.
+      // (it's always present for all languages)
+
+      labelsType = labelsType.concat('long'); // Find a suitable labels type.
+
+      var localeData = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"])(this.locale);
+
+      for (var _iterator = labelsType, _isArray = Array.isArray(_iterator), _i2 = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+        var _ref5;
+
+        if (_isArray) {
+          if (_i2 >= _iterator.length) break;
+          _ref5 = _iterator[_i2++];
+        } else {
+          _i2 = _iterator.next();
+          if (_i2.done) break;
+          _ref5 = _i2.value;
+        }
+
+        var _labelsType = _ref5;
+
+        if (localeData[_labelsType]) {
+          return {
+            labelsType: _labelsType,
+            labels: localeData[_labelsType]
+          };
+        }
+      }
+    }
+  }]);
+
+  return TimeAgo;
+}();
+/**
+ * Default locale global variable.
+ */
+
+
+
+var defaultLocale = 'en';
+/**
+ * Gets default locale.
+ * @return  {string} locale
+ */
+
+TimeAgo.getDefaultLocale = function () {
+  return defaultLocale;
+};
+/**
+ * Sets default locale.
+ * @param  {string} locale
+ */
+
+
+TimeAgo.setDefaultLocale = function (locale) {
+  return defaultLocale = locale;
+};
+/**
+ * Adds locale data for a specific locale.
+ * @param {Object} localeData
+ */
+
+
+TimeAgo.addDefaultLocale = function (localeData) {
+  if (defaultLocaleHasBeenSpecified) {
+    throw new Error('[javascript-time-ago] `TimeAgo.addDefaultLocale()` can only be called once. To add other locales, use `TimeAgo.addLocale()`.');
+  }
+
+  defaultLocaleHasBeenSpecified = true;
+  TimeAgo.setDefaultLocale(localeData.locale);
+  TimeAgo.addLocale(localeData);
+};
+
+var defaultLocaleHasBeenSpecified;
+/**
+ * Adds locale data for a specific locale.
+ * @param {Object} localeData
+ */
+
+TimeAgo.addLocale = function (localeData) {
+  Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["addLocaleData"])(localeData);
+  relative_time_format__WEBPACK_IMPORTED_MODULE_0__["default"].addLocale(localeData);
+};
+/**
+ * (legacy alias)
+ * Adds locale data for a specific locale.
+ * @param {Object} localeData
+ * @deprecated
+ */
+
+
+TimeAgo.locale = TimeAgo.addLocale;
+/**
+ * Adds custom labels to locale data.
+ * @param {string} locale
+ * @param {string} name
+ * @param {object} labels
+ */
+
+TimeAgo.addLabels = function (locale, name, labels) {
+  var localeData = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"])(locale);
+
+  if (!localeData) {
+    Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["addLocaleData"])({
+      locale: locale
+    });
+    localeData = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_6__["getLocaleData"])(locale); // throw new Error(`[javascript-time-ago] No data for locale "${locale}"`)
+  }
+
+  localeData[name] = labels;
+}; // Normalizes `.format()` `time` argument.
+
+
+function getTimestamp(input) {
+  if (input.constructor === Date || isMockedDate(input)) {
+    return input.getTime();
+  }
+
+  if (typeof input === 'number') {
+    return input;
+  } // For some weird reason istanbul doesn't see this `throw` covered.
+
+  /* istanbul ignore next */
+
+
+  throw new Error("Unsupported relative time formatter input: ".concat(_typeof(input), ", ").concat(input));
+} // During testing via some testing libraries `Date`s aren't actually `Date`s.
+// https://github.com/catamphetamine/javascript-time-ago/issues/22
+
+
+function isMockedDate(object) {
+  return _typeof(object) === 'object' && typeof object.getTime === 'function';
+} // Get available time interval measurement units.
+
+
+function getTimeIntervalMeasurementUnits(allowedUnits, labels, nowLabel) {
+  // Get all time interval measurement units that're available
+  // in locale data for a given time labels style.
+  var units = Object.keys(labels); // `now` unit is handled separately and is shipped in its own `now.json` file.
+  // `now.json` isn't present for all locales, so it could be substituted with
+  // ".second.current".
+  // Add `now` unit if it's available in locale data.
+
+  if (nowLabel) {
+    units.push('now');
+  } // If only a specific set of available time measurement units can be used
+  // then only those units are allowed (if they're present in locale data).
+
+
+  if (allowedUnits) {
+    units = allowedUnits.filter(function (unit) {
+      return unit === 'now' || units.indexOf(unit) >= 0;
+    });
+  }
+
+  return units;
+}
+
+function getNowLabel(labels, nowLabels, longLabels, future) {
+  var nowLabel = labels.now || nowLabels && nowLabels.now; // Specific "now" message form extended locale data (if present).
+
+  if (nowLabel) {
+    // Bundle size optimization technique.
+    if (typeof nowLabel === 'string') {
+      return nowLabel;
+    } // Not handling `value === 0` as `localeData.now.current` here
+    // because it wouldn't make sense: "now" is a moment,
+    // so one can't possibly differentiate between a
+    // "previous" moment, a "current" moment and a "next moment".
+    // It can only be differentiated between "past" and "future".
+
+
+    if (future) {
+      return nowLabel.future;
+    } else {
+      return nowLabel.past;
+    }
+  } // Use ".second.current" as "now" message.
+
+
+  if (longLabels && longLabels.second && longLabels.second.current) {
+    return longLabels.second.current;
+  }
+}
+//# sourceMappingURL=TimeAgo.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/cache.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/cache.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Cache; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * A basic in-memory cache.
+ *
+ * import Cache from 'javascript-time-ago/Cache'
+ * const cache = new Cache()
+ * const object = cache.get('key1', 'key2', ...) || cache.put('key1', 'key2', ..., createObject())
+ */
+var Cache =
+/*#__PURE__*/
+function () {
+  function Cache() {
+    _classCallCheck(this, Cache);
+
+    _defineProperty(this, "cache", {});
+  }
+
+  _createClass(Cache, [{
+    key: "get",
+    value: function get() {
+      var cache = this.cache;
+
+      for (var _len = arguments.length, keys = new Array(_len), _key = 0; _key < _len; _key++) {
+        keys[_key] = arguments[_key];
+      }
+
+      for (var _i = 0; _i < keys.length; _i++) {
+        var key = keys[_i];
+
+        if (_typeof(cache) !== 'object') {
+          return;
+        }
+
+        cache = cache[key];
+      }
+
+      return cache;
+    }
+  }, {
+    key: "put",
+    value: function put() {
+      for (var _len2 = arguments.length, keys = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        keys[_key2] = arguments[_key2];
+      }
+
+      var value = keys.pop();
+      var lastKey = keys.pop();
+      var cache = this.cache;
+
+      for (var _i2 = 0; _i2 < keys.length; _i2++) {
+        var key = keys[_i2];
+
+        if (_typeof(cache[key]) !== 'object') {
+          cache[key] = {};
+        }
+
+        cache = cache[key];
+      }
+
+      return cache[lastKey] = value;
+    }
+  }]);
+
+  return Cache;
+}();
+
+
+//# sourceMappingURL=cache.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/locale.js":
+/*!************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/locale.js ***!
+  \************************************************************/
+/*! exports provided: default, intlDateTimeFormatSupportedLocale, intlDateTimeFormatSupported */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return chooseLocale; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "intlDateTimeFormatSupportedLocale", function() { return intlDateTimeFormatSupportedLocale; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "intlDateTimeFormatSupported", function() { return intlDateTimeFormatSupported; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/**
+ * Chooses the most appropriate locale
+ * (one of the registered ones)
+ * based on the list of preferred `locales` supplied by the user.
+ *
+ * @param {string[]} locales - the list of preferable locales (in [IETF format](https://en.wikipedia.org/wiki/IETF_language_tag)).
+ * @param {Function} isLocaleDataAvailable - tests if a locale is available.
+ *
+ * @returns {string} The most suitable locale.
+ *
+ * @example
+ * // Returns 'en'
+ * chooseLocale(['en-US'], undefined, (locale) => locale === 'ru' || locale === 'en')
+ */
+function chooseLocale(locales, isLocaleDataAvailable) {
+  // This is not an intelligent algorithm,
+  // but it will do for this library's case.
+  // `sr-Cyrl-BA` -> `sr-Cyrl` -> `sr`.
+  for (var _iterator = locales, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var locale = _ref;
+
+    if (isLocaleDataAvailable(locale)) {
+      return locale;
+    }
+
+    var parts = locale.split('-');
+
+    while (parts.length > 1) {
+      parts.pop();
+      locale = parts.join('-');
+
+      if (isLocaleDataAvailable(locale)) {
+        return locale;
+      }
+    }
+  }
+
+  throw new Error("No locale data has been registered for any of the locales: ".concat(locales.join(', ')));
+}
+/**
+ * Whether can use `Intl.DateTimeFormat` for these `locales`.
+ * Returns the first suitable one.
+ * @param  {(string|string[])} locales
+ * @return {?string} The first locale that can be used.
+ */
+
+function intlDateTimeFormatSupportedLocale(locales) {
+  /* istanbul ignore else */
+  if (intlDateTimeFormatSupported()) {
+    return Intl.DateTimeFormat.supportedLocalesOf(locales)[0];
+  }
+}
+/**
+ * Whether can use `Intl.DateTimeFormat`.
+ * @return {boolean}
+ */
+
+function intlDateTimeFormatSupported() {
+  // Babel transforms `typeof` into some "branches"
+  // so istanbul will show this as "branch not covered".
+
+  /* istanbul ignore next */
+  var isIntlAvailable = (typeof Intl === "undefined" ? "undefined" : _typeof(Intl)) === 'object';
+  return isIntlAvailable && typeof Intl.DateTimeFormat === 'function';
+}
+//# sourceMappingURL=locale.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/round.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/round.js ***!
+  \***********************************************************/
+/*! exports provided: getRoundFunction, getDiffRatioToNextRoundedNumber */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRoundFunction", function() { return getRoundFunction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDiffRatioToNextRoundedNumber", function() { return getDiffRatioToNextRoundedNumber; });
+function getRoundFunction(round) {
+  switch (round) {
+    case 'floor':
+      return Math.floor;
+
+    default:
+      return Math.round;
+  }
+} // For non-negative numbers.
+
+function getDiffRatioToNextRoundedNumber(round) {
+  switch (round) {
+    case 'floor':
+      // Math.floor(x) = x
+      // Math.floor(x + 1) = x + 1
+      return 1;
+
+    default:
+      // Math.round(x) = x
+      // Math.round(x + 0.5) = x + 1
+      return 0.5;
+  }
+}
+//# sourceMappingURL=round.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/approximate.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/approximate.js ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _units__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+ // "factor" is a legacy property.
+// Developers shouldn't need to use it in their custom steps.
+// "threshold" is a legacy name of "min".
+// Developers should use "min" property name instead of "threshold".
+// "threshold_for_idOrUnit: value" is a legacy way of specifying "min: { id: value }".
+// Developers should use "min" property instead of "threshold".
+// just now
+// 1 minute ago
+// 2 minutes ago
+// 5 minutes ago
+// 10 minutes ago
+// 15 minutes ago
+// 20 minutes ago
+// …
+// 50 minutes ago
+// an hour ago
+// 2 hours ago
+// …
+// 20 hours ago
+// a day ago
+// 2 days ago
+// 5 days ago
+// a week ago
+// 2 weeks ago
+// 3 weeks ago
+// a month ago
+// 2 months ago
+// 4 months ago
+// a year ago
+// 2 years ago
+// …
+
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  // This step returns the amount of seconds
+  // by dividing the amount of seconds by `1`.
+  factor: 1,
+  // "now" labels are used for formatting the output.
+  unit: 'now'
+}, {
+  // When the language doesn't support `now` unit,
+  // the first step is ignored, and it uses this `second` unit.
+  threshold: 1,
+  // `threshold_for_now` should be the same as `threshold` on minutes.
+  threshold_for_now: 45.5,
+  // This step returns the amount of seconds
+  // by dividing the amount of seconds by `1`.
+  factor: 1,
+  // "second" labels are used for formatting the output.
+  unit: 'second'
+}, {
+  // `threshold` should be the same as `threshold_for_now` on seconds.
+  threshold: 45.5,
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a minute.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  // "minute" labels are used for formatting the output.
+  unit: 'minute'
+}, {
+  // This step is effective starting from 2.5 minutes.
+  threshold: 2.5 * _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  // Allow only 5-minute increments of minutes starting from 2.5 minutes.
+  // `granularity` — (advanced) Time interval value "granularity".
+  // For example, it could be set to `5` for minutes to allow only 5-minute increments
+  // when formatting time intervals: `0 minutes`, `5 minutes`, `10 minutes`, etc.
+  // Perhaps this feature will be removed because there seem to be no use cases
+  // of it in the real world.
+  granularity: 5,
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a minute.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  // "minute" labels are used for formatting the output.
+  unit: 'minute'
+}, {
+  // This step is effective starting from 22.5 minutes.
+  threshold: 22.5 * _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in  half-an-hour.
+  factor: 0.5 * _units__WEBPACK_IMPORTED_MODULE_0__["hour"],
+  // "half-hour" labels are used for formatting the output.
+  // (if available, which is no longer the case)
+  unit: 'half-hour'
+}, {
+  // This step is effective starting from 42.5 minutes.
+  threshold: 42.5 * _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  threshold_for_minute: 52.5 * _units__WEBPACK_IMPORTED_MODULE_0__["minute"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in an hour.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["hour"],
+  // "hour" labels are used for formatting the output.
+  unit: 'hour'
+}, {
+  // This step is effective starting from 20.5 hours.
+  threshold: 20.5 / 24 * _units__WEBPACK_IMPORTED_MODULE_0__["day"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a day.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["day"],
+  // "day" labels are used for formatting the output.
+  unit: 'day'
+}, {
+  // This step is effective starting from 5.5 days.
+  threshold: 5.5 * _units__WEBPACK_IMPORTED_MODULE_0__["day"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a week.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["week"],
+  // "week" labels are used for formatting the output.
+  unit: 'week'
+}, {
+  // This step is effective starting from 3.5 weeks.
+  threshold: 3.5 * _units__WEBPACK_IMPORTED_MODULE_0__["week"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a month.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["month"],
+  // "month" labels are used for formatting the output.
+  unit: 'month'
+}, {
+  // This step is effective starting from 10.5 months.
+  threshold: 10.5 * _units__WEBPACK_IMPORTED_MODULE_0__["month"],
+  // Return the amount of minutes by dividing the amount
+  // of seconds by the amount of seconds in a year.
+  factor: _units__WEBPACK_IMPORTED_MODULE_0__["year"],
+  // "year" labels are used for formatting the output.
+  unit: 'year'
+}]);
+//# sourceMappingURL=approximate.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/getStep.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/getStep.js ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getStep; });
+/* harmony import */ var _getStepDenominator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getStepDenominator */ "./node_modules/javascript-time-ago/modules/steps/getStepDenominator.js");
+/* harmony import */ var _getStepMinTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getStepMinTime */ "./node_modules/javascript-time-ago/modules/steps/getStepMinTime.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../round */ "./node_modules/javascript-time-ago/modules/round.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+/**
+ * Finds an appropriate `step` of `steps` for the time interval (in seconds).
+ *
+ * @param {Object[]} steps - Time formatting steps.
+ *
+ * @param {number} secondsPassed - Time interval (in seconds).
+ *                                 `< 0` for past dates and `> 0` for future dates.
+ *
+ * @param {number} options.now - Current timestamp.
+ *
+ * @param {boolean} [options.future] - Whether the date should be formatted as a future one
+ *                                     instead of a past one.
+ *
+ * @param {string} [options.round] - (undocumented) Rounding mechanism.
+ *
+ * @param {string[]} [options.units] - A list of allowed time units.
+ *                                     (Example: ['second', 'minute', 'hour', …])
+ *
+ * @param {boolean} [options.getNextStep] - Pass true to return `[step, nextStep]` instead of just `step`.
+ *
+ * @return {Object|Object[]} [step] — Either a `step` or `[prevStep, step, nextStep]`.
+ */
+
+function getStep(steps, secondsPassed, _ref) {
+  var now = _ref.now,
+      future = _ref.future,
+      round = _ref.round,
+      units = _ref.units,
+      getNextStep = _ref.getNextStep;
+  // Ignore steps having not-supported time units in `formatAs`.
+  steps = filterStepsByUnits(steps, units);
+
+  var step = _getStep(steps, secondsPassed, {
+    now: now,
+    future: future,
+    round: round
+  });
+
+  if (getNextStep) {
+    if (step) {
+      var prevStep = steps[steps.indexOf(step) - 1];
+      var nextStep = steps[steps.indexOf(step) + 1];
+      return [prevStep, step, nextStep];
+    }
+
+    return [undefined, undefined, steps[0]];
+  }
+
+  return step;
+}
+
+function _getStep(steps, secondsPassed, _ref2) {
+  var now = _ref2.now,
+      future = _ref2.future,
+      round = _ref2.round;
+
+  // If no steps fit the conditions then return nothing.
+  if (steps.length === 0) {
+    return;
+  } // Find the most appropriate step.
+
+
+  var i = getStepIndex(steps, secondsPassed, {
+    now: now,
+    future: future || secondsPassed < 0,
+    round: round
+  }); // If no step is applicable the return nothing.
+
+  if (i === -1) {
+    return;
+  }
+
+  var step = steps[i]; // Apply granularity to the time amount
+  // (and fall back to the previous step
+  //  if the first level of granularity
+  //  isn't met by this amount)
+
+  if (step.granularity) {
+    // Recalculate the amount of seconds passed based on `granularity`.
+    var secondsPassedGranular = Object(_round__WEBPACK_IMPORTED_MODULE_2__["getRoundFunction"])(round)(Math.abs(secondsPassed) / Object(_getStepDenominator__WEBPACK_IMPORTED_MODULE_0__["default"])(step) / step.granularity) * step.granularity; // If the granularity for this step is too high,
+    // then fall back to the previous step.
+    // (if there is any previous step)
+
+    if (secondsPassedGranular === 0 && i > 0) {
+      return steps[i - 1];
+    }
+  }
+
+  return step;
+}
+/**
+ * Iterates through steps until it finds the maximum one satisfying the `minTime` threshold.
+ * @param  {Object} steps - Steps.
+ * @param  {number} secondsPassed - How much seconds have passed since the date till `now`.
+ * @param  {number} options.now - Current timestamp.
+ * @param  {boolean} options.future - Whether the time interval should be formatted as a future one.
+ * @param  {number} [i] - Gradation step currently being tested.
+ * @return {number} Gradation step index.
+ */
+
+
+function getStepIndex(steps, secondsPassed, options) {
+  var i = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+  var minTime = Object(_getStepMinTime__WEBPACK_IMPORTED_MODULE_1__["default"])(steps[i], _objectSpread({
+    prevStep: steps[i - 1],
+    timestamp: options.now - secondsPassed * 1000
+  }, options)); // If `minTime` isn't defined or deduceable for this step, then stop.
+
+  if (minTime === undefined) {
+    return i - 1;
+  } // If the `minTime` threshold for moving from previous step
+  // to this step is too high then return the previous step.
+
+
+  if (Math.abs(secondsPassed) < minTime) {
+    return i - 1;
+  } // If it's the last step then return it.
+
+
+  if (i === steps.length - 1) {
+    return i;
+  } // Move to the next step.
+
+
+  return getStepIndex(steps, secondsPassed, options, i + 1);
+}
+/**
+ * Leaves only allowed steps.
+ * @param  {Object[]} steps
+ * @param  {string[]} units - Allowed time units.
+ * @return {Object[]}
+ */
+
+
+function filterStepsByUnits(steps, units) {
+  return steps.filter(function (_ref3) {
+    var unit = _ref3.unit,
+        formatAs = _ref3.formatAs;
+    // "unit" is now called "formatAs".
+    unit = unit || formatAs; // If this step has a `unit` defined
+    // then this `unit` must be in the list of allowed `units`.
+
+    if (unit) {
+      return units.indexOf(unit) >= 0;
+    } // A step is not required to specify a `unit`:
+    // alternatively, it could specify `format()`.
+    // (see "twitter" style for an example)
+
+
+    return true;
+  });
+}
+//# sourceMappingURL=getStep.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/getStepDenominator.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/getStepDenominator.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getStepDenominator; });
+/* harmony import */ var _units__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+
+function getStepDenominator(step) {
+  // `factor` is a legacy property.
+  if (step.factor !== undefined) {
+    return step.factor;
+  } // "unit" is now called "formatAs".
+
+
+  return Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(step.unit || step.formatAs) || 1;
+}
+//# sourceMappingURL=getStepDenominator.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/getStepMinTime.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/getStepMinTime.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getStepMinTime; });
+/* harmony import */ var _units__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../round */ "./node_modules/javascript-time-ago/modules/round.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+function getStepMinTime(step, _ref) {
+  var prevStep = _ref.prevStep,
+      timestamp = _ref.timestamp,
+      now = _ref.now,
+      future = _ref.future,
+      round = _ref.round;
+  var minTime; // "threshold_for_xxx" is a legacy property.
+
+  if (prevStep) {
+    if (prevStep.id || prevStep.unit) {
+      minTime = step["threshold_for_".concat(prevStep.id || prevStep.unit)];
+    }
+  }
+
+  if (minTime === undefined) {
+    // "threshold" is a legacy property.
+    if (step.threshold !== undefined) {
+      // "threshold" is a legacy name for "minTime".
+      minTime = step.threshold; // "threshold" function is deprecated.
+
+      if (typeof minTime === 'function') {
+        minTime = minTime(now, future);
+      }
+    }
+  }
+
+  if (minTime === undefined) {
+    minTime = step.minTime;
+  } // A deprecated way of specifying a different threshold
+  // depending on the previous step's unit.
+
+
+  if (_typeof(minTime) === 'object') {
+    if (prevStep && prevStep.id && minTime[prevStep.id] !== undefined) {
+      minTime = minTime[prevStep.id];
+    } else {
+      minTime = minTime.default;
+    }
+  }
+
+  if (typeof minTime === 'function') {
+    minTime = minTime(timestamp, {
+      future: future,
+      getMinTimeForUnit: function getMinTimeForUnit(toUnit, fromUnit) {
+        return _getMinTimeForUnit(toUnit, fromUnit || prevStep && prevStep.formatAs, {
+          round: round
+        });
+      }
+    });
+  } // Evaluate the `test()` function.
+  // `test()` function is deprecated.
+
+
+  if (minTime === undefined) {
+    if (step.test) {
+      if (step.test(timestamp, {
+        now: now,
+        future: future
+      })) {
+        // `0` threshold always passes.
+        minTime = 0;
+      } else {
+        // `MAX_SAFE_INTEGER` threshold won't ever pass in real life.
+        minTime = 9007199254740991; // Number.MAX_SAFE_INTEGER
+      }
+    }
+  }
+
+  if (minTime === undefined) {
+    if (prevStep) {
+      if (step.formatAs && prevStep.formatAs) {
+        minTime = _getMinTimeForUnit(step.formatAs, prevStep.formatAs, {
+          round: round
+        });
+      }
+    } else {
+      // The first step's `minTime` is `0` by default.
+      minTime = 0;
+    }
+  } // Warn if no `minTime` was defined or could be deduced.
+
+
+  if (minTime === undefined) {
+    console.warn('[javascript-time-ago] A step should specify `minTime`:\n' + JSON.stringify(step, null, 2));
+  }
+
+  return minTime;
+}
+
+function _getMinTimeForUnit(toUnit, fromUnit, _ref2) {
+  var round = _ref2.round;
+  var toUnitAmount = Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(toUnit); // if (!fromUnit) {
+  // 	return toUnitAmount;
+  // }
+  // if (!fromUnit) {
+  // 	fromUnit = getPreviousUnitFor(toUnit)
+  // }
+
+  var fromUnitAmount;
+
+  if (fromUnit === 'now') {
+    fromUnitAmount = Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(toUnit);
+  } else {
+    fromUnitAmount = Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(fromUnit);
+  }
+
+  if (toUnitAmount !== undefined && fromUnitAmount !== undefined) {
+    return toUnitAmount - fromUnitAmount * (1 - Object(_round__WEBPACK_IMPORTED_MODULE_1__["getDiffRatioToNextRoundedNumber"])(round));
+  }
+}
+//# sourceMappingURL=getStepMinTime.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdate.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdate.js ***!
+  \*******************************************************************************/
+/*! exports provided: INFINITY, default, getStepChangesAt, getTimeToStepChange */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INFINITY", function() { return INFINITY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getTimeToNextUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStepChangesAt", function() { return getStepChangesAt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimeToStepChange", function() { return getTimeToStepChange; });
+/* harmony import */ var _getTimeToNextUpdateForUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getTimeToNextUpdateForUnit */ "./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdateForUnit.js");
+/* harmony import */ var _getStepMinTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getStepMinTime */ "./node_modules/javascript-time-ago/modules/steps/getStepMinTime.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../round */ "./node_modules/javascript-time-ago/modules/round.js");
+
+
+ // A thousand years is practically a metaphor for "infinity".
+
+var YEAR = 365 * 24 * 60 * 60 * 1000;
+var INFINITY = 1000 * YEAR;
+/**
+ * Gets the time to next update for a date and a step.
+ * @param  {number} date — The date passed to `.format()`, converted to a timestamp.
+ * @param  {object} step
+ * @param  {object} [options.previousStep]
+ * @param  {object} [options.nextStep]
+ * @param  {number} options.now
+ * @param  {boolean} options.future
+ * @param  {string} [options.round] - (undocumented) Rounding mechanism.
+ * @return {number} [timeToNextUpdate]
+ */
+
+function getTimeToNextUpdate(date, step, _ref) {
+  var prevStep = _ref.prevStep,
+      nextStep = _ref.nextStep,
+      now = _ref.now,
+      future = _ref.future,
+      round = _ref.round;
+  var timestamp = date.getTime ? date.getTime() : date;
+
+  var getTimeToNextUpdateForUnit = function getTimeToNextUpdateForUnit(unit) {
+    return Object(_getTimeToNextUpdateForUnit__WEBPACK_IMPORTED_MODULE_0__["default"])(unit, timestamp, {
+      now: now,
+      round: round
+    });
+  }; // For future dates, steps move from the last one to the first one,
+  // while for past dates, steps move from the first one to the last one,
+  // due to the fact that time flows in one direction,
+  // and future dates' interval naturally becomes smaller
+  // while past dates' interval naturally grows larger.
+  //
+  // For future dates, it's the transition
+  // from the current step to the previous step,
+  // therefore check the `minTime` of the current step.
+  //
+  // For past dates, it's the transition
+  // from the current step to the next step,
+  // therefore check the `minTime` of the next step.
+  //
+
+
+  var timeToStepChange = getTimeToStepChange(future ? step : nextStep, timestamp, {
+    future: future,
+    now: now,
+    round: round,
+    prevStep: future ? prevStep : step // isFirstStep: future && isFirstStep
+
+  });
+
+  if (timeToStepChange === undefined) {
+    // Can't reliably determine "time to next update"
+    // if not all of the steps provide `minTime`.
+    return;
+  }
+
+  var timeToNextUpdate;
+
+  if (step) {
+    if (step.getTimeToNextUpdate) {
+      timeToNextUpdate = step.getTimeToNextUpdate(timestamp, {
+        getTimeToNextUpdateForUnit: getTimeToNextUpdateForUnit,
+        getRoundFunction: _round__WEBPACK_IMPORTED_MODULE_2__["getRoundFunction"],
+        now: now,
+        future: future,
+        round: round
+      });
+    }
+
+    if (timeToNextUpdate === undefined) {
+      // "unit" is now called "formatAs".
+      var unit = step.unit || step.formatAs;
+
+      if (unit) {
+        // For some units, like "now", there's no defined amount of seconds in them.
+        // In such cases, `getTimeToNextUpdateForUnit()` returns `undefined`,
+        // and the next step's `minTime` could be used to calculate the update interval:
+        // it will just assume that the label never changes for this step.
+        timeToNextUpdate = getTimeToNextUpdateForUnit(unit);
+      }
+    }
+  }
+
+  if (timeToNextUpdate === undefined) {
+    return timeToStepChange;
+  }
+
+  return Math.min(timeToNextUpdate, timeToStepChange);
+}
+function getStepChangesAt(currentOrNextStep, timestamp, _ref2) {
+  var now = _ref2.now,
+      future = _ref2.future,
+      round = _ref2.round,
+      prevStep = _ref2.prevStep;
+  // The first step's `minTime` is `0` by default.
+  // It doesn't "change" steps at zero point
+  // but it does change the wording when switching
+  // from "future" to "past": "in ..." -> "... ago".
+  // Therefore, the label should be updated at zero-point too.
+  var minTime = Object(_getStepMinTime__WEBPACK_IMPORTED_MODULE_1__["default"])(currentOrNextStep, {
+    timestamp: timestamp,
+    now: now,
+    future: future,
+    round: round,
+    prevStep: prevStep
+  });
+
+  if (minTime === undefined) {
+    return;
+  }
+
+  if (future) {
+    // The step changes to the previous step
+    // as soon as `timestamp - now` becomes
+    // less than the `minTime` of the current step:
+    // `timestamp - now === minTime - 1`
+    // => `now === timestamp - minTime + 1`.
+    return timestamp - minTime * 1000 + 1;
+  } else {
+    // The step changes to the next step
+    // as soon as `now - timestamp` becomes
+    // equal to `minTime` of the next step:
+    // `now - timestamp === minTime`
+    // => `now === timestamp + minTime`.
+    // This is a special case when double-update could be skipped.
+    if (minTime === 0 && timestamp === now) {
+      return INFINITY;
+    }
+
+    return timestamp + minTime * 1000;
+  }
+}
+function getTimeToStepChange(step, timestamp, _ref3) {
+  var now = _ref3.now,
+      future = _ref3.future,
+      round = _ref3.round,
+      prevStep = _ref3.prevStep;
+
+  if (step) {
+    var stepChangesAt = getStepChangesAt(step, timestamp, {
+      now: now,
+      future: future,
+      round: round,
+      prevStep: prevStep
+    });
+
+    if (stepChangesAt === undefined) {
+      return;
+    }
+
+    return stepChangesAt - now;
+  } else {
+    if (future) {
+      // No step.
+      // Update right after zero point, when it changes from "future" to "past".
+      return timestamp - now + 1;
+    } else {
+      // The last step doesn't ever change when `date` is in the past.
+      return INFINITY;
+    }
+  }
+}
+//# sourceMappingURL=getTimeToNextUpdate.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdateForUnit.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/getTimeToNextUpdateForUnit.js ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getTimeToNextUpdateForUnit; });
+/* harmony import */ var _units__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../round */ "./node_modules/javascript-time-ago/modules/round.js");
+
+
+/**
+ * Gets the time to next update for a step with a time unit defined.
+ * @param  {string} unit
+ * @param  {number} date — The date passed to `.format()`, converted to a timestamp.
+ * @param  {number} options.now
+ * @param  {string} [options.round] — (undocumented) Rounding mechanism.
+ * @return {number} [timeToNextUpdate]
+ */
+
+function getTimeToNextUpdateForUnit(unit, timestamp, _ref) {
+  var now = _ref.now,
+      round = _ref.round;
+
+  // For some units, like "now", there's no defined amount of seconds in them.
+  if (!Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(unit)) {
+    // If there's no amount of seconds defined for this unit
+    // then the update interval can't be determined reliably.
+    return;
+  }
+
+  var unitDenominator = Object(_units__WEBPACK_IMPORTED_MODULE_0__["getSecondsInUnit"])(unit) * 1000;
+  var future = timestamp > now;
+  var preciseAmount = Math.abs(timestamp - now);
+  var roundedAmount = Object(_round__WEBPACK_IMPORTED_MODULE_1__["getRoundFunction"])(round)(preciseAmount / unitDenominator) * unitDenominator;
+
+  if (future) {
+    if (roundedAmount > 0) {
+      // Amount decreases with time.
+      return preciseAmount - roundedAmount + getDiffToPreviousRoundedNumber(round, unitDenominator);
+    } else {
+      // Refresh right after the zero point,
+      // when "future" changes to "past".
+      return preciseAmount - roundedAmount + 1;
+    }
+  } // Amount increases with time.
+
+
+  return -(preciseAmount - roundedAmount) + getDiffToNextRoundedNumber(round, unitDenominator);
+}
+
+function getDiffToNextRoundedNumber(round, unitDenominator) {
+  return Object(_round__WEBPACK_IMPORTED_MODULE_1__["getDiffRatioToNextRoundedNumber"])(round) * unitDenominator;
+}
+
+function getDiffToPreviousRoundedNumber(round, unitDenominator) {
+  return (1 - Object(_round__WEBPACK_IMPORTED_MODULE_1__["getDiffRatioToNextRoundedNumber"])(round)) * unitDenominator + 1;
+}
+//# sourceMappingURL=getTimeToNextUpdateForUnit.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/helpers.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/helpers.js ***!
+  \*******************************************************************/
+/*! exports provided: getDate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDate", function() { return getDate; });
+// Looks like this one's deprecated.
+// /**
+//  * Returns a step corresponding to the unit.
+//  * @param  {Object[]} steps
+//  * @param  {string} unit
+//  * @return {?Object}
+//  */
+// export function getStepForUnit(steps, unit) {
+// 	for (const step of steps) {
+// 		if (step.unit === unit) {
+// 			return step
+// 		}
+// 	}
+// }
+// Looks like this one won't be used in the next major version.
+
+/**
+ * Converts value to a `Date`
+ * @param {(number|Date)} value
+ * @return {Date}
+ */
+function getDate(value) {
+  return value instanceof Date ? value : new Date(value);
+}
+//# sourceMappingURL=helpers.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/index.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/index.js ***!
+  \*****************************************************************/
+/*! exports provided: approximate, convenient, round, canonical, minute, hour, day, week, month, year, getDate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _approximate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./approximate */ "./node_modules/javascript-time-ago/modules/steps/approximate.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "approximate", function() { return _approximate__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "convenient", function() { return _approximate__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./round */ "./node_modules/javascript-time-ago/modules/steps/round.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "round", function() { return _round__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "canonical", function() { return _round__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _units__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "minute", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["minute"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hour", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["hour"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "day", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["day"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "week", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["week"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "month", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["month"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "year", function() { return _units__WEBPACK_IMPORTED_MODULE_2__["year"]; });
+
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers */ "./node_modules/javascript-time-ago/modules/steps/helpers.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDate", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["getDate"]; });
+
+// "convenient" is a legacy name of "approximate" steps.
+ // "canonical" is a legacy name of "round" steps.
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/renameLegacyProperties.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/renameLegacyProperties.js ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// This function is only used for backwards compatibility
+// with legacy code that uses the older versions of this library.
+/* harmony default export */ __webpack_exports__["default"] = (function (step_) {
+  var step = _objectSpread({}, step_);
+
+  if (step.minTime !== undefined) {
+    if (_typeof(step.minTime) === 'object') {
+      var _arr = Object.keys(step.minTime);
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var key = _arr[_i];
+
+        if (key === 'default') {
+          step.threshold = step.minTime.default;
+        } else {
+          step["threshold_for_".concat(key)] = step.minTime[key];
+        }
+      }
+    } else {
+      step.threshold = step.minTime;
+    }
+
+    delete step.minTime;
+  }
+
+  if (step.formatAs) {
+    step.unit = step.formatAs;
+    delete step.formatAs;
+  }
+
+  return step;
+});
+//# sourceMappingURL=renameLegacyProperties.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/round.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/round.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// just now
+// 1 second ago
+// 2 seconds ago
+// …
+// 59 seconds ago
+// 1 minute ago
+// 2 minutes ago
+// …
+// 59 minutes ago
+// 1 hour ago
+// 2 hours ago
+// …
+// 24 hours ago
+// 1 day ago
+// 2 days ago
+// …
+// 6 days ago
+// 1 week ago
+// 2 weeks ago
+// …
+// 3 weeks ago
+// 1 month ago
+// 2 months ago
+// …
+// 11 months ago
+// 1 year ago
+// 2 years ago
+// …
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  formatAs: 'now'
+}, {
+  formatAs: 'second'
+}, {
+  formatAs: 'minute'
+}, {
+  formatAs: 'hour'
+}, {
+  formatAs: 'day'
+}, {
+  formatAs: 'week'
+}, {
+  formatAs: 'month'
+}, {
+  formatAs: 'year'
+}]);
+//# sourceMappingURL=round.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/steps/units.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/steps/units.js ***!
+  \*****************************************************************/
+/*! exports provided: minute, hour, day, week, month, year, getSecondsInUnit */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minute", function() { return minute; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hour", function() { return hour; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "day", function() { return day; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "week", function() { return week; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "month", function() { return month; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "year", function() { return year; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSecondsInUnit", function() { return getSecondsInUnit; });
+var minute = 60; // in seconds
+
+var hour = 60 * minute; // in seconds
+
+var day = 24 * hour; // in seconds
+
+var week = 7 * day; // in seconds
+// https://www.quora.com/What-is-the-average-number-of-days-in-a-month
+
+var month = 30.44 * day; // in seconds
+// "400 years have 146097 days (taking into account leap year rules)"
+
+var year = 146097 / 400 * day; // in seconds
+
+function getSecondsInUnit(unit) {
+  switch (unit) {
+    case 'second':
+      return 1;
+
+    case 'minute':
+      return minute;
+
+    case 'hour':
+      return hour;
+
+    case 'day':
+      return day;
+
+    case 'week':
+      return week;
+
+    case 'month':
+      return month;
+
+    case 'year':
+      return year;
+  }
+} // export function getPreviousUnitFor(unit) {
+// 	switch (unit) {
+// 		case 'second':
+// 			return 'now'
+// 		case 'minute':
+// 			return 'second'
+// 		case 'hour':
+// 			return 'minute'
+// 		case 'day':
+// 			return 'hour'
+// 		case 'week':
+// 			return 'day'
+// 		case 'month':
+// 			return 'week'
+// 		case 'year':
+// 			return 'month'
+// 	}
+// }
+//# sourceMappingURL=units.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/approximate.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/approximate.js ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps_approximate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps/approximate */ "./node_modules/javascript-time-ago/modules/steps/approximate.js");
+ // "gradation" is a legacy name for "steps".
+// It's here just for legacy compatibility.
+// Use "steps" name instead.
+// "flavour" is a legacy name for "labels".
+// It's here just for legacy compatibility.
+// Use "labels" name instead.
+// "units" is a legacy property.
+// It's here just for legacy compatibility.
+// Developers shouldn't need to use it in their custom styles.
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  gradation: _steps_approximate__WEBPACK_IMPORTED_MODULE_0__["default"],
+  flavour: 'long',
+  units: ['now', 'minute', 'hour', 'day', 'week', 'month', 'year']
+});
+//# sourceMappingURL=approximate.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/approximateTime.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/approximateTime.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps_approximate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps/approximate */ "./node_modules/javascript-time-ago/modules/steps/approximate.js");
+ // "gradation" is a legacy name for "steps".
+// It's here just for legacy compatibility.
+// Use "steps" name instead.
+// "flavour" is a legacy name for "labels".
+// It's here just for legacy compatibility.
+// Use "labels" name instead.
+// "units" is a legacy property.
+// It's here just for legacy compatibility.
+// Developers shouldn't need to use it in their custom styles.
+// Similar to the default style but with "ago" omitted.
+//
+// just now
+// 5 minutes
+// 10 minutes
+// 15 minutes
+// 20 minutes
+// an hour
+// 2 hours
+// …
+// 20 hours
+// 1 day
+// 2 days
+// a week
+// 2 weeks
+// 3 weeks
+// a month
+// 2 months
+// 3 months
+// 4 months
+// a year
+// 2 years
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  gradation: _steps_approximate__WEBPACK_IMPORTED_MODULE_0__["default"],
+  flavour: 'long-time',
+  units: ['now', 'minute', 'hour', 'day', 'week', 'month', 'year']
+});
+//# sourceMappingURL=approximateTime.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/getStyleByName.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/getStyleByName.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getStyleByName; });
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./node_modules/javascript-time-ago/modules/style/round.js");
+/* harmony import */ var _roundMinute__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./roundMinute */ "./node_modules/javascript-time-ago/modules/style/roundMinute.js");
+/* harmony import */ var _approximate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./approximate */ "./node_modules/javascript-time-ago/modules/style/approximate.js");
+/* harmony import */ var _approximateTime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./approximateTime */ "./node_modules/javascript-time-ago/modules/style/approximateTime.js");
+/* harmony import */ var _twitter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./twitter */ "./node_modules/javascript-time-ago/modules/style/twitter.js");
+/* harmony import */ var _twitterNow__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./twitterNow */ "./node_modules/javascript-time-ago/modules/style/twitterNow.js");
+/* harmony import */ var _twitterMinute__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./twitterMinute */ "./node_modules/javascript-time-ago/modules/style/twitterMinute.js");
+/* harmony import */ var _twitterMinuteNow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./twitterMinuteNow */ "./node_modules/javascript-time-ago/modules/style/twitterMinuteNow.js");
+/* harmony import */ var _twitterFirstMinute__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./twitterFirstMinute */ "./node_modules/javascript-time-ago/modules/style/twitterFirstMinute.js");
+/* harmony import */ var _mini__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./mini */ "./node_modules/javascript-time-ago/modules/style/mini.js");
+/* harmony import */ var _miniNow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./miniNow */ "./node_modules/javascript-time-ago/modules/style/miniNow.js");
+/* harmony import */ var _miniMinute__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./miniMinute */ "./node_modules/javascript-time-ago/modules/style/miniMinute.js");
+/* harmony import */ var _miniMinuteNow__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./miniMinuteNow */ "./node_modules/javascript-time-ago/modules/style/miniMinuteNow.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getStyleByName(style) {
+  switch (style) {
+    // "default" style name is deprecated.
+    case 'default':
+    case 'round':
+      return _round__WEBPACK_IMPORTED_MODULE_0__["default"];
+
+    case 'round-minute':
+      return _roundMinute__WEBPACK_IMPORTED_MODULE_1__["default"];
+
+    case 'approximate':
+      return _approximate__WEBPACK_IMPORTED_MODULE_2__["default"];
+    // "time" style name is deprecated.
+
+    case 'time':
+    case 'approximate-time':
+      return _approximateTime__WEBPACK_IMPORTED_MODULE_3__["default"];
+
+    case 'mini':
+      return _mini__WEBPACK_IMPORTED_MODULE_9__["default"];
+
+    case 'mini-now':
+      return _miniNow__WEBPACK_IMPORTED_MODULE_10__["default"];
+
+    case 'mini-minute':
+      return _miniMinute__WEBPACK_IMPORTED_MODULE_11__["default"];
+
+    case 'mini-minute-now':
+      return _miniMinuteNow__WEBPACK_IMPORTED_MODULE_12__["default"];
+
+    case 'twitter':
+      return _twitter__WEBPACK_IMPORTED_MODULE_4__["default"];
+
+    case 'twitter-now':
+      return _twitterNow__WEBPACK_IMPORTED_MODULE_5__["default"];
+
+    case 'twitter-minute':
+      return _twitterMinute__WEBPACK_IMPORTED_MODULE_6__["default"];
+
+    case 'twitter-minute-now':
+      return _twitterMinuteNow__WEBPACK_IMPORTED_MODULE_7__["default"];
+
+    case 'twitter-first-minute':
+      return _twitterFirstMinute__WEBPACK_IMPORTED_MODULE_8__["default"];
+
+    default:
+      // For historical reasons, the default style is "approximate".
+      return _approximate__WEBPACK_IMPORTED_MODULE_2__["default"];
+  }
+}
+//# sourceMappingURL=getStyleByName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/mini.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/mini.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  steps: [{
+    formatAs: 'second'
+  }, {
+    formatAs: 'minute'
+  }, {
+    formatAs: 'hour'
+  }, {
+    formatAs: 'day'
+  }, {
+    formatAs: 'month'
+  }, {
+    formatAs: 'year'
+  }],
+  labels: [// "mini" labels are only defined for a few languages.
+  'mini', // "short-time" labels are only defined for a few languages.
+  'short-time', // "narrow" and "short" labels are defined for all languages.
+  // "narrow" labels can sometimes be weird (like "+5d."),
+  // but "short" labels have the " ago" part, so "narrow" seem
+  // more appropriate.
+  // "short" labels would have been more appropriate if they
+  // didn't have the " ago" part, hence the "short-time" above.
+  'narrow', // Since "narrow" labels are always present, "short" element
+  // of this array can be removed.
+  'short']
+});
+//# sourceMappingURL=mini.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/miniMinute.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/miniMinute.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mini */ "./node_modules/javascript-time-ago/modules/style/mini.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _mini__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Skip "seconds".
+  steps: _mini__WEBPACK_IMPORTED_MODULE_0__["default"].steps.filter(function (step) {
+    return step.formatAs !== 'second';
+  })
+}));
+//# sourceMappingURL=miniMinute.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/miniMinuteNow.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/miniMinuteNow.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _miniMinute__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./miniMinute */ "./node_modules/javascript-time-ago/modules/style/miniMinute.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _miniMinute__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Add "now".
+  steps: [{
+    formatAs: 'now'
+  }].concat(_miniMinute__WEBPACK_IMPORTED_MODULE_0__["default"].steps)
+}));
+//# sourceMappingURL=miniMinuteNow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/miniNow.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/miniNow.js ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mini */ "./node_modules/javascript-time-ago/modules/style/mini.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _mini__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Add "now".
+  steps: [{
+    formatAs: 'now'
+  }].concat(_mini__WEBPACK_IMPORTED_MODULE_0__["default"].steps)
+}));
+//# sourceMappingURL=miniNow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/renameLegacyProperties.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/renameLegacyProperties.js ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps_renameLegacyProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps/renameLegacyProperties */ "./node_modules/javascript-time-ago/modules/steps/renameLegacyProperties.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+ // This function is only used for backwards compatibility
+// with legacy code that uses the older versions of this library.
+
+/* harmony default export */ __webpack_exports__["default"] = (function (style_) {
+  var style = _objectSpread({}, style_);
+
+  if (style.steps) {
+    style.gradation = style.steps.map(_steps_renameLegacyProperties__WEBPACK_IMPORTED_MODULE_0__["default"]);
+    delete style.steps;
+  }
+
+  if (style.labels) {
+    style.flavour = style.labels;
+    delete style.labels;
+  }
+
+  return style;
+});
+//# sourceMappingURL=renameLegacyProperties.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/round.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/round.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps_round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps/round */ "./node_modules/javascript-time-ago/modules/steps/round.js");
+ // just now
+// 1 second ago
+// 2 seconds ago
+// …
+// 59 seconds ago
+// 1 minute ago
+// 2 minutes ago
+// …
+// 59 minutes ago
+// 1 minute ago
+// 2 minutes ago
+// …
+// 59 minutes ago
+// 1 hour ago
+// 2 hours ago
+// …
+// 24 hours ago
+// 1 day ago
+// 2 days ago
+// …
+// 6 days ago
+// 1 week ago
+// 2 weeks ago
+// 3 weeks ago
+// 4 weeks ago
+// 1 month ago
+// 2 months ago
+// …
+// 11 months ago
+// 1 year ago
+// 2 years ago
+// …
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  steps: _steps_round__WEBPACK_IMPORTED_MODULE_0__["default"],
+  labels: 'long'
+});
+//# sourceMappingURL=round.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/roundMinute.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/roundMinute.js ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./node_modules/javascript-time-ago/modules/style/round.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+ // just now
+// 1 minute ago
+// 2 minutes ago
+// …
+// 59 minutes ago
+// 1 minute ago
+// 2 minutes ago
+// …
+// 59 minutes ago
+// 1 hour ago
+// 2 hours ago
+// …
+// 24 hours ago
+// 1 day ago
+// 2 days ago
+// …
+// 6 days ago
+// 1 week ago
+// 2 weeks ago
+// 3 weeks ago
+// 4 weeks ago
+// 1 month ago
+// 2 months ago
+// …
+// 11 months ago
+// 1 year ago
+// 2 years ago
+// …
+//
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _round__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Skip "seconds".
+  steps: _round__WEBPACK_IMPORTED_MODULE_0__["default"].steps.filter(function (step) {
+    return step.formatAs !== 'second';
+  })
+}));
+//# sourceMappingURL=roundMinute.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/twitter.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/twitter.js ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps */ "./node_modules/javascript-time-ago/modules/steps/index.js");
+/* harmony import */ var _locale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../locale */ "./node_modules/javascript-time-ago/modules/locale.js");
+/* harmony import */ var _renameLegacyProperties__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./renameLegacyProperties */ "./node_modules/javascript-time-ago/modules/style/renameLegacyProperties.js");
+
+ // For compatibility with the old versions of this library.
+
+ // Twitter-style relative date/time formatting.
+// ("1m", "2h", "Mar 3", "Apr 4, 2012").
+//
+// Seconds, minutes or hours are shown for shorter intervals,
+// and longer intervals are formatted using full date format.
+
+var steps = [{
+  formatAs: 'second'
+}, {
+  formatAs: 'minute'
+}, {
+  formatAs: 'hour'
+}]; // A cache for `Intl.DateTimeFormat` formatters
+// for various locales (is a global variable).
+
+var formatters = {}; // Starting from day intervals, output month and day.
+
+var monthAndDay = {
+  minTime: function minTime(timestamp, _ref) {
+    var future = _ref.future,
+        getMinTimeForUnit = _ref.getMinTimeForUnit;
+    // Returns `23.5 * 60 * 60` when `round` is "round",
+    // and `24 * 60 * 60` when `round` is "floor".
+    return getMinTimeForUnit('day');
+  },
+  format: function format(value, locale) {
+    /* istanbul ignore else */
+    if (!formatters[locale]) {
+      formatters[locale] = {};
+    }
+    /* istanbul ignore else */
+
+
+    if (!formatters[locale].dayMonth) {
+      // "Apr 11" (MMMd)
+      formatters[locale].dayMonth = new Intl.DateTimeFormat(locale, {
+        month: 'short',
+        day: 'numeric'
+      });
+    } // Output month and day.
+
+
+    return formatters[locale].dayMonth.format(Object(_steps__WEBPACK_IMPORTED_MODULE_0__["getDate"])(value));
+  }
+}; // If the `date` happened/happens outside of current year,
+// then output day, month and year.
+// The interval should be such that the `date` lies outside of the current year.
+
+var yearMonthAndDay = {
+  minTime: function minTime(timestamp, _ref2) {
+    var future = _ref2.future;
+
+    if (future) {
+      // January 1, 00:00, of the `date`'s year is right after
+      // the maximum `now` for formatting a future date:
+      // When `now` is before that date, the `date` is formatted as "day/month/year" (this step),
+      // When `now` is equal to or after that date, the `date` is formatted as "day/month" (another step).
+      // After that, it's hours, minutes, seconds, and after that it's no longer `future`.
+      // The date is right after the maximum `now` for formatting a future date,
+      // so subtract 1 millisecond from it.
+      var maxFittingNow = new Date(new Date(timestamp).getFullYear(), 0).getTime() - 1; // Return `minTime` (in seconds).
+
+      return (timestamp - maxFittingNow) / 1000;
+    } else {
+      // January 1, 00:00, of the year following the `date`'s year
+      // is the minimum `now` for formatting a past date:
+      // When `now` is before that date, the `date` is formatted as "day/month" (another step),
+      // When `now` is equal to or after that date, the `date` is formatted as "day/month/year" (this step).
+      // After that, it's hours, minutes, seconds, and after that it's no longer `future`.
+      var minFittingNow = new Date(new Date(timestamp).getFullYear() + 1, 0).getTime(); // Return `minTime` (in seconds).
+
+      return (minFittingNow - timestamp) / 1000;
+    }
+  },
+  format: function format(value, locale) {
+    /* istanbul ignore if */
+    if (!formatters[locale]) {
+      formatters[locale] = {};
+    }
+    /* istanbul ignore else */
+
+
+    if (!formatters[locale].dayMonthYear) {
+      // "Apr 11, 2017" (yMMMd)
+      formatters[locale].dayMonthYear = new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } // Output day, month and year.
+
+
+    return formatters[locale].dayMonthYear.format(Object(_steps__WEBPACK_IMPORTED_MODULE_0__["getDate"])(value));
+  }
+}; // If `Intl.DateTimeFormat` is supported,
+// then longer time intervals will be formatted as dates.
+
+/* istanbul ignore else */
+
+if (Object(_locale__WEBPACK_IMPORTED_MODULE_1__["intlDateTimeFormatSupported"])()) {
+  steps.push(monthAndDay, yearMonthAndDay);
+} // Otherwise, if `Intl.DateTimeFormat` is not supported,
+// which could be the case when using Internet Explorer,
+// then simply mimick "round" steps.
+else {
+    steps.push({
+      formatAs: 'day'
+    }, {
+      formatAs: 'week'
+    }, {
+      formatAs: 'month'
+    }, {
+      formatAs: 'year'
+    });
+  }
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  steps: steps,
+  labels: [// "mini" labels are only defined for a few languages.
+  'mini', // "short-time" labels are only defined for a few languages.
+  'short-time', // "narrow" and "short" labels are defined for all languages.
+  // "narrow" labels can sometimes be weird (like "+5d."),
+  // but "short" labels have the " ago" part, so "narrow" seem
+  // more appropriate.
+  // "short" labels would have been more appropriate if they
+  // didn't have the " ago" part, hence the "short-time" above.
+  'narrow', // Since "narrow" labels are always present, "short" element
+  // of this array can be removed.
+  'short']
+});
+//# sourceMappingURL=twitter.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/twitterFirstMinute.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/twitterFirstMinute.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _steps_units__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../steps/units */ "./node_modules/javascript-time-ago/modules/steps/units.js");
+/* harmony import */ var _twitter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twitter */ "./node_modules/javascript-time-ago/modules/style/twitter.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _twitter__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  // Skip "seconds".
+  steps: _twitter__WEBPACK_IMPORTED_MODULE_1__["default"].steps.filter(function (step) {
+    return step.formatAs !== 'second';
+  }) // Start showing `1m` from the first minute.
+  .map(function (step) {
+    return step.formatAs === 'minute' ? _objectSpread({}, step, {
+      minTime: _steps_units__WEBPACK_IMPORTED_MODULE_0__["minute"]
+    }) : step;
+  })
+}));
+//# sourceMappingURL=twitterFirstMinute.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/twitterMinute.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/twitterMinute.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _twitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twitter */ "./node_modules/javascript-time-ago/modules/style/twitter.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _twitter__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Skip "seconds".
+  steps: _twitter__WEBPACK_IMPORTED_MODULE_0__["default"].steps.filter(function (step) {
+    return step.formatAs !== 'second';
+  })
+}));
+//# sourceMappingURL=twitterMinute.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/twitterMinuteNow.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/twitterMinuteNow.js ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _twitterMinute__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twitterMinute */ "./node_modules/javascript-time-ago/modules/style/twitterMinute.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _twitterMinute__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Add "now".
+  steps: [{
+    formatAs: 'now'
+  }].concat(_twitterMinute__WEBPACK_IMPORTED_MODULE_0__["default"].steps)
+}));
+//# sourceMappingURL=twitterMinuteNow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/javascript-time-ago/modules/style/twitterNow.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/javascript-time-ago/modules/style/twitterNow.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _twitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twitter */ "./node_modules/javascript-time-ago/modules/style/twitter.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, _twitter__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  // Add "now".
+  steps: [{
+    formatAs: 'now'
+  }].concat(_twitter__WEBPACK_IMPORTED_MODULE_0__["default"].steps)
+}));
+//# sourceMappingURL=twitterNow.js.map
 
 /***/ }),
 
@@ -42042,6 +45115,1089 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/relative-time-format/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/relative-time-format/index.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_RelativeTimeFormat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/RelativeTimeFormat */ "./node_modules/relative-time-format/modules/RelativeTimeFormat.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _modules_RelativeTimeFormat__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/LocaleDataStore.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/LocaleDataStore.js ***!
+  \**********************************************************************/
+/*! exports provided: getDefaultLocale, setDefaultLocale, getLocaleData, addLocaleData, resolveLocale */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultLocale", function() { return getDefaultLocale; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setDefaultLocale", function() { return setDefaultLocale; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocaleData", function() { return getLocaleData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLocaleData", function() { return addLocaleData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resolveLocale", function() { return resolveLocale; });
+// Fallback locale.
+// (when not a single one of the supplied "preferred" locales is available)
+var defaultLocale = 'en'; // For all locales added
+// their relative time formatter messages will be stored here.
+
+var localesData = {}; // According to the spec BCP 47 language tags are case-insensitive.
+// https://tools.ietf.org/html/rfc5646
+
+var lowercaseLocaleLookup = {};
+function getDefaultLocale() {
+  return defaultLocale;
+}
+function setDefaultLocale(locale) {
+  defaultLocale = locale;
+}
+/**
+ * Gets locale data previously added by `addLocaleData()`.
+ * @return  {object} [localeData]
+ */
+
+function getLocaleData(locale) {
+  return localesData[locale];
+}
+/**
+ * Adds locale data.
+ * Is called by `RelativeTimeFormat.addLocale(...)`.
+ * @param  {object} localeData
+ */
+
+function addLocaleData(localeData) {
+  if (!localeData) {
+    throw new Error('No locale data passed');
+  } // This locale data is stored in a global variable
+  // and later used when calling `.format(time)`.
+
+
+  localesData[localeData.locale] = localeData;
+  lowercaseLocaleLookup[localeData.locale.toLowerCase()] = localeData.locale;
+}
+/**
+ * Returns a locale for which locale data has been added
+ * via `RelativeTimeFormat.addLocale(...)`.
+ * @param  {string} locale
+ * @return {string} [locale]
+ */
+
+function resolveLocale(locale) {
+  if (localesData[locale]) {
+    return locale;
+  }
+
+  if (lowercaseLocaleLookup[locale.toLowerCase()]) {
+    return lowercaseLocaleLookup[locale.toLowerCase()];
+  }
+}
+//# sourceMappingURL=LocaleDataStore.js.map
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/PluralRuleFunctions.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/PluralRuleFunctions.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// (this file was autogenerated by `generate-locales`)
+// "plural rules" functions are not stored in locale JSON files because they're not strings.
+// This file isn't big — it's about 5 kilobytes in size (minified).
+// Alternatively, the pluralization rules for each locale could be stored
+// in their JSON files in a non-parsed form and later parsed via `make-plural` library.
+// But `make-plural` library itself is relatively big in size:
+// `make-plural.min.js` is about 6 kilobytes (https://unpkg.com/make-plural/).
+// So, it's more practical to bypass runtime `make-plural` pluralization rules compilation
+// and just include the already compiled pluarlization rules for all locales in the library code.
+var $ = {
+  af: function classify(n) {
+    return n == 1 ? 'one' : 'other';
+  },
+  am: function classify(n) {
+    return n >= 0 && n <= 1 ? 'one' : 'other';
+  },
+  ar: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n,
+        n100 = t0 && s[0].slice(-2);
+    return n == 0 ? 'zero' : n == 1 ? 'one' : n == 2 ? 'two' : n100 >= 3 && n100 <= 10 ? 'few' : n100 >= 11 && n100 <= 99 ? 'many' : 'other';
+  },
+  ast: function classify(n) {
+    var s = String(n).split('.'),
+        v0 = !s[1];
+    return n == 1 && v0 ? 'one' : 'other';
+  },
+  be: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n,
+        n10 = t0 && s[0].slice(-1),
+        n100 = t0 && s[0].slice(-2);
+    return n10 == 1 && n100 != 11 ? 'one' : n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14) ? 'few' : t0 && n10 == 0 || n10 >= 5 && n10 <= 9 || n100 >= 11 && n100 <= 14 ? 'many' : 'other';
+  },
+  br: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n,
+        n10 = t0 && s[0].slice(-1),
+        n100 = t0 && s[0].slice(-2),
+        n1000000 = t0 && s[0].slice(-6);
+    return n10 == 1 && n100 != 11 && n100 != 71 && n100 != 91 ? 'one' : n10 == 2 && n100 != 12 && n100 != 72 && n100 != 92 ? 'two' : (n10 == 3 || n10 == 4 || n10 == 9) && (n100 < 10 || n100 > 19) && (n100 < 70 || n100 > 79) && (n100 < 90 || n100 > 99) ? 'few' : n != 0 && t0 && n1000000 == 0 ? 'many' : 'other';
+  },
+  bs: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        f = s[1] || '',
+        v0 = !s[1],
+        i10 = i.slice(-1),
+        i100 = i.slice(-2),
+        f10 = f.slice(-1),
+        f100 = f.slice(-2);
+    return v0 && i10 == 1 && i100 != 11 || f10 == 1 && f100 != 11 ? 'one' : v0 && i10 >= 2 && i10 <= 4 && (i100 < 12 || i100 > 14) || f10 >= 2 && f10 <= 4 && (f100 < 12 || f100 > 14) ? 'few' : 'other';
+  },
+  cs: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        v0 = !s[1];
+    return n == 1 && v0 ? 'one' : i >= 2 && i <= 4 && v0 ? 'few' : !v0 ? 'many' : 'other';
+  },
+  cy: function classify(n) {
+    return n == 0 ? 'zero' : n == 1 ? 'one' : n == 2 ? 'two' : n == 3 ? 'few' : n == 6 ? 'many' : 'other';
+  },
+  da: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        t0 = Number(s[0]) == n;
+    return n == 1 || !t0 && (i == 0 || i == 1) ? 'one' : 'other';
+  },
+  dsb: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        f = s[1] || '',
+        v0 = !s[1],
+        i100 = i.slice(-2),
+        f100 = f.slice(-2);
+    return v0 && i100 == 1 || f100 == 1 ? 'one' : v0 && i100 == 2 || f100 == 2 ? 'two' : v0 && (i100 == 3 || i100 == 4) || f100 == 3 || f100 == 4 ? 'few' : 'other';
+  },
+  dz: function classify(n) {
+    return 'other';
+  },
+  fil: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        f = s[1] || '',
+        v0 = !s[1],
+        i10 = i.slice(-1),
+        f10 = f.slice(-1);
+    return v0 && (i == 1 || i == 2 || i == 3) || v0 && i10 != 4 && i10 != 6 && i10 != 9 || !v0 && f10 != 4 && f10 != 6 && f10 != 9 ? 'one' : 'other';
+  },
+  fr: function classify(n) {
+    return n >= 0 && n < 2 ? 'one' : 'other';
+  },
+  ga: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n;
+    return n == 1 ? 'one' : n == 2 ? 'two' : t0 && n >= 3 && n <= 6 ? 'few' : t0 && n >= 7 && n <= 10 ? 'many' : 'other';
+  },
+  gd: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n;
+    return n == 1 || n == 11 ? 'one' : n == 2 || n == 12 ? 'two' : t0 && n >= 3 && n <= 10 || t0 && n >= 13 && n <= 19 ? 'few' : 'other';
+  },
+  he: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        v0 = !s[1],
+        t0 = Number(s[0]) == n,
+        n10 = t0 && s[0].slice(-1);
+    return n == 1 && v0 ? 'one' : i == 2 && v0 ? 'two' : v0 && (n < 0 || n > 10) && t0 && n10 == 0 ? 'many' : 'other';
+  },
+  is: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        t0 = Number(s[0]) == n,
+        i10 = i.slice(-1),
+        i100 = i.slice(-2);
+    return t0 && i10 == 1 && i100 != 11 || !t0 ? 'one' : 'other';
+  },
+  ksh: function classify(n) {
+    return n == 0 ? 'zero' : n == 1 ? 'one' : 'other';
+  },
+  lt: function classify(n) {
+    var s = String(n).split('.'),
+        f = s[1] || '',
+        t0 = Number(s[0]) == n,
+        n10 = t0 && s[0].slice(-1),
+        n100 = t0 && s[0].slice(-2);
+    return n10 == 1 && (n100 < 11 || n100 > 19) ? 'one' : n10 >= 2 && n10 <= 9 && (n100 < 11 || n100 > 19) ? 'few' : f != 0 ? 'many' : 'other';
+  },
+  lv: function classify(n) {
+    var s = String(n).split('.'),
+        f = s[1] || '',
+        v = f.length,
+        t0 = Number(s[0]) == n,
+        n10 = t0 && s[0].slice(-1),
+        n100 = t0 && s[0].slice(-2),
+        f100 = f.slice(-2),
+        f10 = f.slice(-1);
+    return t0 && n10 == 0 || n100 >= 11 && n100 <= 19 || v == 2 && f100 >= 11 && f100 <= 19 ? 'zero' : n10 == 1 && n100 != 11 || v == 2 && f10 == 1 && f100 != 11 || v != 2 && f10 == 1 ? 'one' : 'other';
+  },
+  mk: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        f = s[1] || '',
+        v0 = !s[1],
+        i10 = i.slice(-1),
+        i100 = i.slice(-2),
+        f10 = f.slice(-1),
+        f100 = f.slice(-2);
+    return v0 && i10 == 1 && i100 != 11 || f10 == 1 && f100 != 11 ? 'one' : 'other';
+  },
+  mt: function classify(n) {
+    var s = String(n).split('.'),
+        t0 = Number(s[0]) == n,
+        n100 = t0 && s[0].slice(-2);
+    return n == 1 ? 'one' : n == 0 || n100 >= 2 && n100 <= 10 ? 'few' : n100 >= 11 && n100 <= 19 ? 'many' : 'other';
+  },
+  pa: function classify(n) {
+    return n == 0 || n == 1 ? 'one' : 'other';
+  },
+  pl: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        v0 = !s[1],
+        i10 = i.slice(-1),
+        i100 = i.slice(-2);
+    return n == 1 && v0 ? 'one' : v0 && i10 >= 2 && i10 <= 4 && (i100 < 12 || i100 > 14) ? 'few' : v0 && i != 1 && (i10 == 0 || i10 == 1) || v0 && i10 >= 5 && i10 <= 9 || v0 && i100 >= 12 && i100 <= 14 ? 'many' : 'other';
+  },
+  pt: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0];
+    return i == 0 || i == 1 ? 'one' : 'other';
+  },
+  ro: function classify(n) {
+    var s = String(n).split('.'),
+        v0 = !s[1],
+        t0 = Number(s[0]) == n,
+        n100 = t0 && s[0].slice(-2);
+    return n == 1 && v0 ? 'one' : !v0 || n == 0 || n != 1 && n100 >= 1 && n100 <= 19 ? 'few' : 'other';
+  },
+  ru: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        v0 = !s[1],
+        i10 = i.slice(-1),
+        i100 = i.slice(-2);
+    return v0 && i10 == 1 && i100 != 11 ? 'one' : v0 && i10 >= 2 && i10 <= 4 && (i100 < 12 || i100 > 14) ? 'few' : v0 && i10 == 0 || v0 && i10 >= 5 && i10 <= 9 || v0 && i100 >= 11 && i100 <= 14 ? 'many' : 'other';
+  },
+  se: function classify(n) {
+    return n == 1 ? 'one' : n == 2 ? 'two' : 'other';
+  },
+  si: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        f = s[1] || '';
+    return n == 0 || n == 1 || i == 0 && f == 1 ? 'one' : 'other';
+  },
+  sl: function classify(n) {
+    var s = String(n).split('.'),
+        i = s[0],
+        v0 = !s[1],
+        i100 = i.slice(-2);
+    return v0 && i100 == 1 ? 'one' : v0 && i100 == 2 ? 'two' : v0 && (i100 == 3 || i100 == 4) || !v0 ? 'few' : 'other';
+  }
+};
+$.as = $.am;
+$.az = $.af;
+$.bg = $.af;
+$.bn = $.am;
+$.ca = $.ast;
+$.ce = $.af;
+$.chr = $.af;
+$.de = $.ast;
+$.ee = $.af;
+$.el = $.af;
+$.en = $.ast;
+$.es = $.af;
+$.et = $.ast;
+$.eu = $.af;
+$.fa = $.am;
+$.fi = $.ast;
+$.fo = $.af;
+$.fur = $.af;
+$.fy = $.ast;
+$.gl = $.ast;
+$.gu = $.am;
+$.hi = $.am;
+$.hr = $.bs;
+$.hsb = $.dsb;
+$.hu = $.af;
+$.hy = $.fr;
+$.ia = $.ast;
+$.id = $.dz;
+$.it = $.ast;
+$.ja = $.dz;
+$.jgo = $.af;
+$.jv = $.dz;
+$.ka = $.af;
+$.kea = $.dz;
+$.kk = $.af;
+$.kl = $.af;
+$.km = $.dz;
+$.kn = $.am;
+$.ko = $.dz;
+$.ku = $.af;
+$.ky = $.af;
+$.lb = $.af;
+$.lkt = $.dz;
+$.lo = $.dz;
+$.ml = $.af;
+$.mn = $.af;
+$.mr = $.am;
+$.ms = $.dz;
+$.my = $.dz;
+$.nb = $.af;
+$.ne = $.af;
+$.nl = $.ast;
+$.nn = $.af;
+$.or = $.af;
+$.ps = $.af;
+$["pt-PT"] = $.ast;
+$.sah = $.dz;
+$.sd = $.af;
+$.sk = $.cs;
+$.so = $.af;
+$.sq = $.af;
+$.sr = $.bs;
+$.sv = $.ast;
+$.sw = $.ast;
+$.ta = $.af;
+$.te = $.af;
+$.th = $.dz;
+$.ti = $.pa;
+$.tk = $.af;
+$.to = $.dz;
+$.tr = $.af;
+$.ug = $.af;
+$.uk = $.ru;
+$.ur = $.ast;
+$.uz = $.af;
+$.vi = $.dz;
+$.wae = $.af;
+$.yi = $.ast;
+$.yue = $.dz;
+$.zh = $.dz;
+$.zu = $.am;
+/* harmony default export */ __webpack_exports__["default"] = ($);
+//# sourceMappingURL=PluralRuleFunctions.js.map
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/PluralRules.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/PluralRules.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PluralRules; });
+/* harmony import */ var _PluralRuleFunctions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PluralRuleFunctions */ "./node_modules/relative-time-format/modules/PluralRuleFunctions.js");
+/* harmony import */ var _getPluralRulesLocale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getPluralRulesLocale */ "./node_modules/relative-time-format/modules/getPluralRulesLocale.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// Importing `PluralRule` polyfill from a separate package
+// results in a bundle that is larger by 1kB for some reason.
+// export { default as default } from 'intl-plural-rules-polyfill/cardinal'
+
+
+/**
+ * `Intl.PluralRules` polyfill.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/PluralRules
+ */
+
+var PluralRules =
+/*#__PURE__*/
+function () {
+  function PluralRules(locale, options) {
+    _classCallCheck(this, PluralRules);
+
+    var locales = PluralRules.supportedLocalesOf(locale);
+
+    if (locales.length === 0) {
+      throw new RangeError("Unsupported locale: " + locale);
+    }
+
+    if (options && options.type !== "cardinal") {
+      throw new RangeError("Only \"cardinal\" \"type\" is supported");
+    }
+
+    this.$ = _PluralRuleFunctions__WEBPACK_IMPORTED_MODULE_0__["default"][Object(_getPluralRulesLocale__WEBPACK_IMPORTED_MODULE_1__["default"])(locales[0])];
+  }
+
+  _createClass(PluralRules, [{
+    key: "select",
+    value: function select(number) {
+      return this.$(number);
+    }
+  }], [{
+    key: "supportedLocalesOf",
+    value: function supportedLocalesOf(locales) {
+      if (typeof locales === "string") {
+        locales = [locales];
+      }
+
+      return locales.filter(function (locale) {
+        return _PluralRuleFunctions__WEBPACK_IMPORTED_MODULE_0__["default"][Object(_getPluralRulesLocale__WEBPACK_IMPORTED_MODULE_1__["default"])(locale)];
+      });
+    }
+  }]);
+
+  return PluralRules;
+}();
+
+
+//# sourceMappingURL=PluralRules.js.map
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/RelativeTimeFormat.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/RelativeTimeFormat.js ***!
+  \*************************************************************************/
+/*! exports provided: UNITS, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNITS", function() { return UNITS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RelativeTimeFormat; });
+/* harmony import */ var _LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LocaleDataStore */ "./node_modules/relative-time-format/modules/LocaleDataStore.js");
+/* harmony import */ var _resolveLocale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resolveLocale */ "./node_modules/relative-time-format/modules/resolveLocale.js");
+/* harmony import */ var _PluralRules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PluralRules */ "./node_modules/relative-time-format/modules/PluralRules.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+ // Importing `PluralRule` polyfill from a separate package
+// results in a bundle that is larger by 1kB for some reason.
+// import PluralRules from 'intl-plural-rules-polyfill/cardinal'
+// Valid time units.
+
+var UNITS = ["second", "minute", "hour", "day", "week", "month", "quarter", "year"]; // Valid values for the `numeric` option.
+
+var NUMERIC_VALUES = ["auto", "always"]; // Valid values for the `style` option.
+
+var STYLE_VALUES = ["long", "short", "narrow"]; // Valid values for the `localeMatcher` option.
+
+var LOCALE_MATCHER_VALUES = ["lookup", "best fit"];
+/**
+ * Polyfill for `Intl.RelativeTimeFormat` proposal.
+ * https://github.com/tc39/proposal-intl-relative-time
+ * https://github.com/tc39/proposal-intl-relative-time/issues/55
+ */
+
+var RelativeTimeFormat =
+/*#__PURE__*/
+function () {
+  /**
+   * @param {(string|string[])} [locales] - Preferred locales (or locale).
+   * @param {Object} [options] - Formatting options.
+   * @param {string} [options.style="long"] - One of: "long", "short", "narrow".
+   * @param {string} [options.numeric="always"] - (Version >= 2) One of: "always", "auto".
+   * @param {string} [options.localeMatcher="lookup"] - One of: "lookup", "best fit". Currently only "lookup" is supported.
+   */
+  function RelativeTimeFormat() {
+    var locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    _classCallCheck(this, RelativeTimeFormat);
+
+    _defineProperty(this, "numeric", "always");
+
+    _defineProperty(this, "style", "long");
+
+    _defineProperty(this, "localeMatcher", "lookup");
+
+    var numeric = options.numeric,
+        style = options.style,
+        localeMatcher = options.localeMatcher; // Set `numeric` option.
+
+    if (numeric !== undefined) {
+      if (NUMERIC_VALUES.indexOf(numeric) < 0) {
+        throw new RangeError("Invalid \"numeric\" option: ".concat(numeric));
+      }
+
+      this.numeric = numeric;
+    } // Set `style` option.
+
+
+    if (style !== undefined) {
+      if (STYLE_VALUES.indexOf(style) < 0) {
+        throw new RangeError("Invalid \"style\" option: ".concat(style));
+      }
+
+      this.style = style;
+    } // Set `localeMatcher` option.
+
+
+    if (localeMatcher !== undefined) {
+      if (LOCALE_MATCHER_VALUES.indexOf(localeMatcher) < 0) {
+        throw new RangeError("Invalid \"localeMatcher\" option: ".concat(localeMatcher));
+      }
+
+      this.localeMatcher = localeMatcher;
+    } // Set `locale`.
+    // Convert `locales` to an array.
+
+
+    if (typeof locales === 'string') {
+      locales = [locales];
+    } // Add default locale.
+
+
+    locales.push(Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["getDefaultLocale"])()); // Choose the most appropriate locale.
+
+    this.locale = RelativeTimeFormat.supportedLocalesOf(locales, {
+      localeMatcher: this.localeMatcher
+    })[0];
+
+    if (!this.locale) {
+      throw new Error("No supported locale was found");
+    } // Construct an `Intl.PluralRules` instance (polyfill).
+
+
+    if (_PluralRules__WEBPACK_IMPORTED_MODULE_2__["default"].supportedLocalesOf(this.locale).length > 0) {
+      this.pluralRules = new _PluralRules__WEBPACK_IMPORTED_MODULE_2__["default"](this.locale);
+    } else {
+      console.warn("\"".concat(this.locale, "\" locale is not supported"));
+    } // Use `Intl.NumberFormat` for formatting numbers (when available).
+
+
+    if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
+      this.numberFormat = new Intl.NumberFormat(this.locale);
+      this.numberingSystem = this.numberFormat.resolvedOptions().numberingSystem;
+    } else {
+      this.numberingSystem = 'latn';
+    }
+
+    this.locale = Object(_resolveLocale__WEBPACK_IMPORTED_MODULE_1__["default"])(this.locale, {
+      localeMatcher: this.localeMatcher
+    });
+  }
+  /**
+   * Formats time `number` in `units` (either in past or in future).
+   * @param {number} number - Time interval value.
+   * @param {string} unit - Time interval measurement unit.
+   * @return {string}
+   * @throws {RangeError} If unit is not one of "second", "minute", "hour", "day", "week", "month", "quarter".
+   * @example
+   * // Returns "2 days ago"
+   * rtf.format(-2, "day")
+   * // Returns "in 5 minutes"
+   * rtf.format(5, "minute")
+   */
+
+
+  _createClass(RelativeTimeFormat, [{
+    key: "format",
+    value: function format() {
+      var _parseFormatArgs = parseFormatArgs(arguments),
+          _parseFormatArgs2 = _slicedToArray(_parseFormatArgs, 2),
+          number = _parseFormatArgs2[0],
+          unit = _parseFormatArgs2[1];
+
+      return this.getRule(number, unit).replace('{0}', this.formatNumber(Math.abs(number)));
+    }
+    /**
+     * Formats time `number` in `units` (either in past or in future).
+     * @param {number} number - Time interval value.
+     * @param {string} unit - Time interval measurement unit.
+     * @return {Object[]} The parts (`{ type, value }`).
+     * @throws {RangeError} If unit is not one of "second", "minute", "hour", "day", "week", "month", "quarter".
+     * @example
+     * // Version 1.
+     * // Returns [
+     * //   { type: "literal", value: "in " },
+     * //   { type: "day", value: "100" },
+     * //   { type: "literal", value: " days" }
+     * // ]
+     * rtf.formatToParts(100, "day")
+     * //
+     * // Version 2.
+     * // Returns [
+     * //   { type: "literal", value: "in " },
+     * //   { type: "integer", value: "100", unit: "day" },
+     * //   { type: "literal", value: " days" }
+     * // ]
+     * rtf.formatToParts(100, "day")
+     */
+
+  }, {
+    key: "formatToParts",
+    value: function formatToParts() {
+      var _parseFormatArgs3 = parseFormatArgs(arguments),
+          _parseFormatArgs4 = _slicedToArray(_parseFormatArgs3, 2),
+          number = _parseFormatArgs4[0],
+          unit = _parseFormatArgs4[1];
+
+      var rule = this.getRule(number, unit);
+      var valueIndex = rule.indexOf("{0}"); // "yesterday"/"today"/"tomorrow".
+
+      if (valueIndex < 0) {
+        return [{
+          type: "literal",
+          value: rule
+        }];
+      }
+
+      var parts = [];
+
+      if (valueIndex > 0) {
+        parts.push({
+          type: "literal",
+          value: rule.slice(0, valueIndex)
+        });
+      }
+
+      parts = parts.concat(this.formatNumberToParts(Math.abs(number)).map(function (part) {
+        return _objectSpread({}, part, {
+          unit: unit
+        });
+      }));
+
+      if (valueIndex + "{0}".length < rule.length - 1) {
+        parts.push({
+          type: "literal",
+          value: rule.slice(valueIndex + "{0}".length)
+        });
+      }
+
+      return parts;
+    }
+    /**
+     * Returns formatting rule for `value` in `units` (either in past or in future).
+     * @param {number} value - Time interval value.
+     * @param {string} unit - Time interval measurement unit.
+     * @return {string}
+     * @throws {RangeError} If unit is not one of "second", "minute", "hour", "day", "week", "month", "quarter".
+     * @example
+     * // Returns "{0} days ago"
+     * getRule(-2, "day")
+     */
+
+  }, {
+    key: "getRule",
+    value: function getRule(value, unit) {
+      // Get locale-specific time interval formatting rules
+      // of a given `style` for the given value of measurement `unit`.
+      //
+      // E.g.:
+      //
+      // ```json
+      // {
+      //  "past": {
+      //    "one": "a second ago",
+      //    "other": "{0} seconds ago"
+      //  },
+      //  "future": {
+      //    "one": "in a second",
+      //    "other": "in {0} seconds"
+      //  }
+      // }
+      // ```
+      //
+      var unitMessages = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["getLocaleData"])(this.locale)[this.style][unit]; // Special case for "yesterday"/"today"/"tomorrow".
+
+      if (this.numeric === "auto") {
+        // "yesterday", "the day before yesterday", etc.
+        if (value === -2 || value === -1) {
+          var message = unitMessages["previous".concat(value === -1 ? '' : '-' + Math.abs(value))];
+
+          if (message) {
+            return message;
+          }
+        } // "tomorrow", "the day after tomorrow", etc.
+        else if (value === 1 || value === 2) {
+            var _message = unitMessages["next".concat(value === 1 ? '' : '-' + Math.abs(value))];
+
+            if (_message) {
+              return _message;
+            }
+          } // "today"
+          else if (value === 0) {
+              if (unitMessages.current) {
+                return unitMessages.current;
+              }
+            }
+      } // Choose either "past" or "future" based on time `value` sign.
+      // If there's only "other" then it's being collapsed.
+      // (the resulting bundle size optimization technique)
+
+
+      var pluralizedMessages = unitMessages[isNegative(value) ? "past" : "future"]; // Bundle size optimization technique.
+
+      if (typeof pluralizedMessages === "string") {
+        return pluralizedMessages;
+      } // Quantify `value`.
+      // There seems to be no such locale in CLDR
+      // for which "plural rules" function is missing.
+
+
+      var quantifier = this.pluralRules && this.pluralRules.select(Math.abs(value)) || 'other'; // "other" rule is supposed to be always present.
+      // If only "other" rule is present then "rules" is not an object and is a string.
+
+      return pluralizedMessages[quantifier] || pluralizedMessages.other;
+    }
+    /**
+     * Formats a number into a string.
+     * Uses `Intl.NumberFormat` when available.
+     * @param  {number} number
+     * @return {string}
+     */
+
+  }, {
+    key: "formatNumber",
+    value: function formatNumber(number) {
+      return this.numberFormat ? this.numberFormat.format(number) : String(number);
+    }
+    /**
+     * Formats a number into a list of parts.
+     * Uses `Intl.NumberFormat` when available.
+     * @param  {number} number
+     * @return {object[]}
+     */
+
+  }, {
+    key: "formatNumberToParts",
+    value: function formatNumberToParts(number) {
+      // `Intl.NumberFormat.formatToParts()` is not present, for example,
+      // in Node.js 8.x while `Intl.NumberFormat` itself is present.
+      return this.numberFormat && this.numberFormat.formatToParts ? this.numberFormat.formatToParts(number) : [{
+        type: "integer",
+        value: this.formatNumber(number)
+      }];
+    }
+    /**
+     * Returns a new object with properties reflecting the locale and date and time formatting options computed during initialization of this DateTimeFormat object.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/resolvedOptions
+     * @return {Object}
+     */
+
+  }, {
+    key: "resolvedOptions",
+    value: function resolvedOptions() {
+      return {
+        locale: this.locale,
+        style: this.style,
+        numeric: this.numeric,
+        numberingSystem: this.numberingSystem
+      };
+    }
+  }]);
+
+  return RelativeTimeFormat;
+}();
+/**
+ * Returns an array containing those of the provided locales
+ * that are supported in collation without having to fall back
+ * to the runtime's default locale.
+ * @param {(string|string[])} locale - A string with a BCP 47 language tag, or an array of such strings. For the general form of the locales argument, see the Intl page.
+ * @param {Object} [options] - An object that may have the following property:
+ * @param {string} [options.localeMatcher="lookup"] - The locale matching algorithm to use. Possible values are "lookup" and "best fit". Currently only "lookup" is supported.
+ * @return {string[]} An array of strings representing a subset of the given locale tags that are supported in collation without having to fall back to the runtime's default locale.
+ * @example
+ * var locales = ['ban', 'id-u-co-pinyin', 'es-PY']
+ * var options = { localeMatcher: 'lookup' }
+ * // Returns ["id", "es-PY"]
+ * Intl.RelativeTimeFormat.supportedLocalesOf(locales, options)
+ */
+
+
+
+
+RelativeTimeFormat.supportedLocalesOf = function (locales) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  // Convert `locales` to an array.
+  if (typeof locales === 'string') {
+    locales = [locales];
+  } else if (!Array.isArray(locales)) {
+    throw new TypeError('Invalid "locales" argument');
+  }
+
+  return locales.filter(function (locale) {
+    return Object(_resolveLocale__WEBPACK_IMPORTED_MODULE_1__["default"])(locale, options);
+  });
+};
+/**
+ * Adds locale data for a specific locale.
+ * @param {Object} localeData
+ */
+
+
+RelativeTimeFormat.addLocale = _LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["addLocaleData"];
+/**
+ * Sets default locale.
+ * @param  {string} locale
+ */
+
+RelativeTimeFormat.setDefaultLocale = _LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["setDefaultLocale"];
+/**
+ * Gets default locale.
+ * @return  {string} locale
+ */
+
+RelativeTimeFormat.getDefaultLocale = _LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["getDefaultLocale"];
+/**
+ * Export `Intl.PluralRules` just in case it's used somewhere else.
+ */
+
+RelativeTimeFormat.PluralRules = _PluralRules__WEBPACK_IMPORTED_MODULE_2__["default"]; // The specification allows units to be in plural form.
+// Convert plural to singular.
+// Example: "seconds" -> "second".
+
+var UNIT_ERROR = 'Invalid "unit" argument';
+
+function parseUnit(unit) {
+  if (_typeof(unit) === 'symbol') {
+    throw new TypeError(UNIT_ERROR);
+  }
+
+  if (typeof unit !== 'string') {
+    throw new RangeError("".concat(UNIT_ERROR, ": ").concat(unit));
+  }
+
+  if (unit[unit.length - 1] === 's') {
+    unit = unit.slice(0, unit.length - 1);
+  }
+
+  if (UNITS.indexOf(unit) < 0) {
+    throw new RangeError("".concat(UNIT_ERROR, ": ").concat(unit));
+  }
+
+  return unit;
+} // Converts `value` to a `Number`.
+// The specification allows value to be a non-number.
+// For example, "-0" is supposed to be treated as `-0`.
+// Also checks if `value` is a finite number.
+
+
+var NUMBER_ERROR = 'Invalid "number" argument';
+
+function parseNumber(value) {
+  value = Number(value);
+
+  if (Number.isFinite) {
+    if (!Number.isFinite(value)) {
+      throw new RangeError("".concat(NUMBER_ERROR, ": ").concat(value));
+    }
+  }
+
+  return value;
+}
+/**
+ * Tells `0` from `-0`.
+ * https://stackoverflow.com/questions/7223359/are-0-and-0-the-same
+ * @param  {number} number
+ * @return {Boolean}
+ * @example
+ * isNegativeZero(0); // false
+ * isNegativeZero(-0); // true
+ */
+
+
+function isNegativeZero(number) {
+  return 1 / number === -Infinity;
+}
+
+function isNegative(number) {
+  return number < 0 || number === 0 && isNegativeZero(number);
+}
+
+function parseFormatArgs(args) {
+  if (args.length < 2) {
+    throw new TypeError("\"unit\" argument is required");
+  }
+
+  return [parseNumber(args[0]), parseUnit(args[1])];
+}
+//# sourceMappingURL=RelativeTimeFormat.js.map
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/getPluralRulesLocale.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/getPluralRulesLocale.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getPluralRulesLocale; });
+/**
+ * Returns a `locale` for which a function exists in `./PluralRuleFunctions.js`.
+ * @param  {string} locale
+ * @return {string}
+ * @example
+ * getPluralRulesLocale("ru-RU-Cyrl") // Returns "ru".
+ */
+function getPluralRulesLocale(locale) {
+  // "pt" language is the only one having different pluralization rules
+  // for the one ("pt") (Portuguese) locale and the other ("pt-PT") (European Portuguese).
+  // http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html
+  // (see the entries for "pt" and "pt_PT" there)
+  if (locale === 'pt-PT') {
+    return locale;
+  }
+
+  return getLanguageFromLanguageTag(locale);
+}
+/**
+ * Extracts language from an IETF BCP 47 language tag.
+ * @param {string} languageTag - IETF BCP 47 language tag.
+ * @return {string}
+ * @example
+ * // Returns "he"
+ * getLanguageFromLanguageTag("he-IL-u-ca-hebrew-tz-jeruslm")
+ * // Returns "ar"
+ * getLanguageFromLanguageTag("ar-u-nu-latn")
+ */
+
+var LANGUAGE_REG_EXP = /^([a-z0-9]+)/i;
+
+function getLanguageFromLanguageTag(languageTag) {
+  var match = languageTag.match(LANGUAGE_REG_EXP);
+
+  if (!match) {
+    throw new TypeError("Invalid locale: ".concat(languageTag));
+  }
+
+  return match[1];
+}
+//# sourceMappingURL=getPluralRulesLocale.js.map
+
+/***/ }),
+
+/***/ "./node_modules/relative-time-format/modules/resolveLocale.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/relative-time-format/modules/resolveLocale.js ***!
+  \********************************************************************/
+/*! exports provided: default, resolveLocaleLookup */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return resolveLocale; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resolveLocaleLookup", function() { return resolveLocaleLookup; });
+/* harmony import */ var _LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LocaleDataStore */ "./node_modules/relative-time-format/modules/LocaleDataStore.js");
+
+/**
+ * Resolves a locale to a supported one (if any).
+ * @param  {string} locale
+ * @param {Object} [options] - An object that may have the following property:
+ * @param {string} [options.localeMatcher="lookup"] - The locale matching algorithm to use. Possible values are "lookup" and "best fit". Currently only "lookup" is supported.
+ * @return {string} [locale]
+ * @example
+ * // Returns "sr"
+ * resolveLocale("sr-Cyrl-BA")
+ * // Returns `undefined`
+ * resolveLocale("xx-Latn")
+ */
+
+function resolveLocale(locale) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var localeMatcher = options.localeMatcher || 'lookup';
+
+  switch (localeMatcher) {
+    case 'lookup':
+      return resolveLocaleLookup(locale);
+    // "best fit" locale matching is not supported.
+    // https://github.com/catamphetamine/relative-time-format/issues/2
+
+    case 'best fit':
+      // return resolveLocaleBestFit(locale)
+      return resolveLocaleLookup(locale);
+
+    default:
+      throw new RangeError("Invalid \"localeMatcher\" option: ".concat(localeMatcher));
+  }
+}
+/**
+ * Resolves a locale to a supported one (if any).
+ * Starts from the most specific locale and gradually
+ * falls back to less specific ones.
+ * This is a basic implementation of the "lookup" algorithm.
+ * https://tools.ietf.org/html/rfc4647#section-3.4
+ * @param  {string} locale
+ * @return {string} [locale]
+ * @example
+ * // Returns "sr"
+ * resolveLocaleLookup("sr-Cyrl-BA")
+ * // Returns `undefined`
+ * resolveLocaleLookup("xx-Latn")
+ */
+
+function resolveLocaleLookup(locale) {
+  var resolvedLocale = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["resolveLocale"])(locale);
+
+  if (resolvedLocale) {
+    return resolvedLocale;
+  } // `sr-Cyrl-BA` -> `sr-Cyrl` -> `sr`.
+
+
+  var parts = locale.split('-');
+
+  while (locale.length > 1) {
+    parts.pop();
+    locale = parts.join('-');
+
+    var _resolvedLocale = Object(_LocaleDataStore__WEBPACK_IMPORTED_MODULE_0__["resolveLocale"])(locale);
+
+    if (_resolvedLocale) {
+      return _resolvedLocale;
+    }
+  }
+}
+//# sourceMappingURL=resolveLocale.js.map
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -42237,6 +46393,3388 @@ process.umask = function() { return 0; };
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/dist/sweetalert2.all.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/sweetalert2/dist/sweetalert2.all.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+* sweetalert2 v10.7.0
+* Released under the MIT License.
+*/
+(function (global, factory) {
+   true ? module.exports = factory() :
+  undefined;
+}(this, function () { 'use strict';
+
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  function _extends() {
+    _extends = Object.assign || function (target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+
+      return target;
+    };
+
+    return _extends.apply(this, arguments);
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized(self);
+  }
+
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived),
+          result;
+
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get(target, property, receiver || target);
+  }
+
+  var consolePrefix = 'SweetAlert2:';
+  /**
+   * Filter the unique values into a new array
+   * @param arr
+   */
+
+  var uniqueArray = function uniqueArray(arr) {
+    var result = [];
+
+    for (var i = 0; i < arr.length; i++) {
+      if (result.indexOf(arr[i]) === -1) {
+        result.push(arr[i]);
+      }
+    }
+
+    return result;
+  };
+  /**
+   * Capitalize the first letter of a string
+   * @param str
+   */
+
+  var capitalizeFirstLetter = function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+  /**
+   * Returns the array of object values (Object.values isn't supported in IE11)
+   * @param obj
+   */
+
+  var objectValues = function objectValues(obj) {
+    return Object.keys(obj).map(function (key) {
+      return obj[key];
+    });
+  };
+  /**
+   * Convert NodeList to Array
+   * @param nodeList
+   */
+
+  var toArray = function toArray(nodeList) {
+    return Array.prototype.slice.call(nodeList);
+  };
+  /**
+   * Standardise console warnings
+   * @param message
+   */
+
+  var warn = function warn(message) {
+    console.warn("".concat(consolePrefix, " ").concat(message));
+  };
+  /**
+   * Standardise console errors
+   * @param message
+   */
+
+  var error = function error(message) {
+    console.error("".concat(consolePrefix, " ").concat(message));
+  };
+  /**
+   * Private global state for `warnOnce`
+   * @type {Array}
+   * @private
+   */
+
+  var previousWarnOnceMessages = [];
+  /**
+   * Show a console warning, but only if it hasn't already been shown
+   * @param message
+   */
+
+  var warnOnce = function warnOnce(message) {
+    if (!(previousWarnOnceMessages.indexOf(message) !== -1)) {
+      previousWarnOnceMessages.push(message);
+      warn(message);
+    }
+  };
+  /**
+   * Show a one-time console warning about deprecated params/methods
+   */
+
+  var warnAboutDeprecation = function warnAboutDeprecation(deprecatedParam, useInstead) {
+    warnOnce("\"".concat(deprecatedParam, "\" is deprecated and will be removed in the next major release. Please use \"").concat(useInstead, "\" instead."));
+  };
+  /**
+   * If `arg` is a function, call it (with no arguments or context) and return the result.
+   * Otherwise, just pass the value through
+   * @param arg
+   */
+
+  var callIfFunction = function callIfFunction(arg) {
+    return typeof arg === 'function' ? arg() : arg;
+  };
+  var hasToPromiseFn = function hasToPromiseFn(arg) {
+    return arg && typeof arg.toPromise === 'function';
+  };
+  var asPromise = function asPromise(arg) {
+    return hasToPromiseFn(arg) ? arg.toPromise() : Promise.resolve(arg);
+  };
+  var isPromise = function isPromise(arg) {
+    return arg && Promise.resolve(arg) === arg;
+  };
+
+  var DismissReason = Object.freeze({
+    cancel: 'cancel',
+    backdrop: 'backdrop',
+    close: 'close',
+    esc: 'esc',
+    timer: 'timer'
+  });
+
+  var isJqueryElement = function isJqueryElement(elem) {
+    return _typeof(elem) === 'object' && elem.jquery;
+  };
+
+  var isElement = function isElement(elem) {
+    return elem instanceof Element || isJqueryElement(elem);
+  };
+
+  var argsToParams = function argsToParams(args) {
+    var params = {};
+
+    if (_typeof(args[0]) === 'object' && !isElement(args[0])) {
+      _extends(params, args[0]);
+    } else {
+      ['title', 'html', 'icon'].forEach(function (name, index) {
+        var arg = args[index];
+
+        if (typeof arg === 'string' || isElement(arg)) {
+          params[name] = arg;
+        } else if (arg !== undefined) {
+          error("Unexpected type of ".concat(name, "! Expected \"string\" or \"Element\", got ").concat(_typeof(arg)));
+        }
+      });
+    }
+
+    return params;
+  };
+
+  var swalPrefix = 'swal2-';
+  var prefix = function prefix(items) {
+    var result = {};
+
+    for (var i in items) {
+      result[items[i]] = swalPrefix + items[i];
+    }
+
+    return result;
+  };
+  var swalClasses = prefix(['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'no-transition', 'toast', 'toast-shown', 'toast-column', 'show', 'hide', 'close', 'title', 'header', 'content', 'html-container', 'actions', 'confirm', 'deny', 'cancel', 'footer', 'icon', 'icon-content', 'image', 'input', 'file', 'range', 'select', 'radio', 'checkbox', 'label', 'textarea', 'inputerror', 'input-label', 'validation-message', 'progress-steps', 'active-progress-step', 'progress-step', 'progress-step-line', 'loader', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen', 'rtl', 'timer-progress-bar', 'timer-progress-bar-container', 'scrollbar-measure', 'icon-success', 'icon-warning', 'icon-info', 'icon-question', 'icon-error']);
+  var iconTypes = prefix(['success', 'warning', 'info', 'question', 'error']);
+
+  var getContainer = function getContainer() {
+    return document.body.querySelector(".".concat(swalClasses.container));
+  };
+  var elementBySelector = function elementBySelector(selectorString) {
+    var container = getContainer();
+    return container ? container.querySelector(selectorString) : null;
+  };
+
+  var elementByClass = function elementByClass(className) {
+    return elementBySelector(".".concat(className));
+  };
+
+  var getPopup = function getPopup() {
+    return elementByClass(swalClasses.popup);
+  };
+  var getIcons = function getIcons() {
+    var popup = getPopup();
+    return toArray(popup.querySelectorAll(".".concat(swalClasses.icon)));
+  };
+  var getIcon = function getIcon() {
+    var visibleIcon = getIcons().filter(function (icon) {
+      return isVisible(icon);
+    });
+    return visibleIcon.length ? visibleIcon[0] : null;
+  };
+  var getTitle = function getTitle() {
+    return elementByClass(swalClasses.title);
+  };
+  var getContent = function getContent() {
+    return elementByClass(swalClasses.content);
+  };
+  var getHtmlContainer = function getHtmlContainer() {
+    return elementByClass(swalClasses['html-container']);
+  };
+  var getImage = function getImage() {
+    return elementByClass(swalClasses.image);
+  };
+  var getProgressSteps = function getProgressSteps() {
+    return elementByClass(swalClasses['progress-steps']);
+  };
+  var getValidationMessage = function getValidationMessage() {
+    return elementByClass(swalClasses['validation-message']);
+  };
+  var getConfirmButton = function getConfirmButton() {
+    return elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.confirm));
+  };
+  var getDenyButton = function getDenyButton() {
+    return elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.deny));
+  };
+  var getInputLabel = function getInputLabel() {
+    return elementByClass(swalClasses['input-label']);
+  };
+  var getLoader = function getLoader() {
+    return elementBySelector(".".concat(swalClasses.loader));
+  };
+  var getCancelButton = function getCancelButton() {
+    return elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.cancel));
+  };
+  var getActions = function getActions() {
+    return elementByClass(swalClasses.actions);
+  };
+  var getHeader = function getHeader() {
+    return elementByClass(swalClasses.header);
+  };
+  var getFooter = function getFooter() {
+    return elementByClass(swalClasses.footer);
+  };
+  var getTimerProgressBar = function getTimerProgressBar() {
+    return elementByClass(swalClasses['timer-progress-bar']);
+  };
+  var getCloseButton = function getCloseButton() {
+    return elementByClass(swalClasses.close);
+  }; // https://github.com/jkup/focusable/blob/master/index.js
+
+  var focusable = "\n  a[href],\n  area[href],\n  input:not([disabled]),\n  select:not([disabled]),\n  textarea:not([disabled]),\n  button:not([disabled]),\n  iframe,\n  object,\n  embed,\n  [tabindex=\"0\"],\n  [contenteditable],\n  audio[controls],\n  video[controls],\n  summary\n";
+  var getFocusableElements = function getFocusableElements() {
+    var focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')) // sort according to tabindex
+    .sort(function (a, b) {
+      a = parseInt(a.getAttribute('tabindex'));
+      b = parseInt(b.getAttribute('tabindex'));
+
+      if (a > b) {
+        return 1;
+      } else if (a < b) {
+        return -1;
+      }
+
+      return 0;
+    });
+    var otherFocusableElements = toArray(getPopup().querySelectorAll(focusable)).filter(function (el) {
+      return el.getAttribute('tabindex') !== '-1';
+    });
+    return uniqueArray(focusableElementsWithTabindex.concat(otherFocusableElements)).filter(function (el) {
+      return isVisible(el);
+    });
+  };
+  var isModal = function isModal() {
+    return !isToast() && !document.body.classList.contains(swalClasses['no-backdrop']);
+  };
+  var isToast = function isToast() {
+    return document.body.classList.contains(swalClasses['toast-shown']);
+  };
+  var isLoading = function isLoading() {
+    return getPopup().hasAttribute('data-loading');
+  };
+
+  var states = {
+    previousBodyPadding: null
+  };
+  var setInnerHtml = function setInnerHtml(elem, html) {
+    // #1926
+    elem.textContent = '';
+
+    if (html) {
+      var parser = new DOMParser();
+      var parsed = parser.parseFromString(html, "text/html");
+      toArray(parsed.querySelector('head').childNodes).forEach(function (child) {
+        elem.appendChild(child);
+      });
+      toArray(parsed.querySelector('body').childNodes).forEach(function (child) {
+        elem.appendChild(child);
+      });
+    }
+  };
+  var hasClass = function hasClass(elem, className) {
+    if (!className) {
+      return false;
+    }
+
+    var classList = className.split(/\s+/);
+
+    for (var i = 0; i < classList.length; i++) {
+      if (!elem.classList.contains(classList[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var removeCustomClasses = function removeCustomClasses(elem, params) {
+    toArray(elem.classList).forEach(function (className) {
+      if (!(objectValues(swalClasses).indexOf(className) !== -1) && !(objectValues(iconTypes).indexOf(className) !== -1) && !(objectValues(params.showClass).indexOf(className) !== -1)) {
+        elem.classList.remove(className);
+      }
+    });
+  };
+
+  var applyCustomClass = function applyCustomClass(elem, params, className) {
+    removeCustomClasses(elem, params);
+
+    if (params.customClass && params.customClass[className]) {
+      if (typeof params.customClass[className] !== 'string' && !params.customClass[className].forEach) {
+        return warn("Invalid type of customClass.".concat(className, "! Expected string or iterable object, got \"").concat(_typeof(params.customClass[className]), "\""));
+      }
+
+      addClass(elem, params.customClass[className]);
+    }
+  };
+  function getInput(content, inputType) {
+    if (!inputType) {
+      return null;
+    }
+
+    switch (inputType) {
+      case 'select':
+      case 'textarea':
+      case 'file':
+        return getChildByClass(content, swalClasses[inputType]);
+
+      case 'checkbox':
+        return content.querySelector(".".concat(swalClasses.checkbox, " input"));
+
+      case 'radio':
+        return content.querySelector(".".concat(swalClasses.radio, " input:checked")) || content.querySelector(".".concat(swalClasses.radio, " input:first-child"));
+
+      case 'range':
+        return content.querySelector(".".concat(swalClasses.range, " input"));
+
+      default:
+        return getChildByClass(content, swalClasses.input);
+    }
+  }
+  var focusInput = function focusInput(input) {
+    input.focus(); // place cursor at end of text in text input
+
+    if (input.type !== 'file') {
+      // http://stackoverflow.com/a/2345915
+      var val = input.value;
+      input.value = '';
+      input.value = val;
+    }
+  };
+  var toggleClass = function toggleClass(target, classList, condition) {
+    if (!target || !classList) {
+      return;
+    }
+
+    if (typeof classList === 'string') {
+      classList = classList.split(/\s+/).filter(Boolean);
+    }
+
+    classList.forEach(function (className) {
+      if (target.forEach) {
+        target.forEach(function (elem) {
+          condition ? elem.classList.add(className) : elem.classList.remove(className);
+        });
+      } else {
+        condition ? target.classList.add(className) : target.classList.remove(className);
+      }
+    });
+  };
+  var addClass = function addClass(target, classList) {
+    toggleClass(target, classList, true);
+  };
+  var removeClass = function removeClass(target, classList) {
+    toggleClass(target, classList, false);
+  };
+  var getChildByClass = function getChildByClass(elem, className) {
+    for (var i = 0; i < elem.childNodes.length; i++) {
+      if (hasClass(elem.childNodes[i], className)) {
+        return elem.childNodes[i];
+      }
+    }
+  };
+  var applyNumericalStyle = function applyNumericalStyle(elem, property, value) {
+    if (value || parseInt(value) === 0) {
+      elem.style[property] = typeof value === 'number' ? "".concat(value, "px") : value;
+    } else {
+      elem.style.removeProperty(property);
+    }
+  };
+  var show = function show(elem) {
+    var display = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'flex';
+    elem.style.display = display;
+  };
+  var hide = function hide(elem) {
+    elem.style.display = 'none';
+  };
+  var setStyle = function setStyle(parent, selector, property, value) {
+    var el = parent.querySelector(selector);
+
+    if (el) {
+      el.style[property] = value;
+    }
+  };
+  var toggle = function toggle(elem, condition, display) {
+    condition ? show(elem, display) : hide(elem);
+  }; // borrowed from jquery $(elem).is(':visible') implementation
+
+  var isVisible = function isVisible(elem) {
+    return !!(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
+  };
+  /* istanbul ignore next */
+
+  var isScrollable = function isScrollable(elem) {
+    return !!(elem.scrollHeight > elem.clientHeight);
+  }; // borrowed from https://stackoverflow.com/a/46352119
+
+  var hasCssAnimation = function hasCssAnimation(elem) {
+    var style = window.getComputedStyle(elem);
+    var animDuration = parseFloat(style.getPropertyValue('animation-duration') || '0');
+    var transDuration = parseFloat(style.getPropertyValue('transition-duration') || '0');
+    return animDuration > 0 || transDuration > 0;
+  };
+  var contains = function contains(haystack, needle) {
+    if (typeof haystack.contains === 'function') {
+      return haystack.contains(needle);
+    }
+  };
+  var animateTimerProgressBar = function animateTimerProgressBar(timer) {
+    var reset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var timerProgressBar = getTimerProgressBar();
+
+    if (isVisible(timerProgressBar)) {
+      if (reset) {
+        timerProgressBar.style.transition = 'none';
+        timerProgressBar.style.width = '100%';
+      }
+
+      setTimeout(function () {
+        timerProgressBar.style.transition = "width ".concat(timer / 1000, "s linear");
+        timerProgressBar.style.width = '0%';
+      }, 10);
+    }
+  };
+  var stopTimerProgressBar = function stopTimerProgressBar() {
+    var timerProgressBar = getTimerProgressBar();
+    var timerProgressBarWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    timerProgressBar.style.removeProperty('transition');
+    timerProgressBar.style.width = '100%';
+    var timerProgressBarFullWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    var timerProgressBarPercent = parseInt(timerProgressBarWidth / timerProgressBarFullWidth * 100);
+    timerProgressBar.style.removeProperty('transition');
+    timerProgressBar.style.width = "".concat(timerProgressBarPercent, "%");
+  };
+
+  // Detect Node env
+  var isNodeEnv = function isNodeEnv() {
+    return typeof window === 'undefined' || typeof document === 'undefined';
+  };
+
+  var sweetHTML = "\n <div aria-labelledby=\"".concat(swalClasses.title, "\" aria-describedby=\"").concat(swalClasses.content, "\" class=\"").concat(swalClasses.popup, "\" tabindex=\"-1\">\n   <div class=\"").concat(swalClasses.header, "\">\n     <ul class=\"").concat(swalClasses['progress-steps'], "\"></ul>\n     <div class=\"").concat(swalClasses.icon, " ").concat(iconTypes.error, "\"></div>\n     <div class=\"").concat(swalClasses.icon, " ").concat(iconTypes.question, "\"></div>\n     <div class=\"").concat(swalClasses.icon, " ").concat(iconTypes.warning, "\"></div>\n     <div class=\"").concat(swalClasses.icon, " ").concat(iconTypes.info, "\"></div>\n     <div class=\"").concat(swalClasses.icon, " ").concat(iconTypes.success, "\"></div>\n     <img class=\"").concat(swalClasses.image, "\" />\n     <h2 class=\"").concat(swalClasses.title, "\" id=\"").concat(swalClasses.title, "\"></h2>\n     <button type=\"button\" class=\"").concat(swalClasses.close, "\"></button>\n   </div>\n   <div class=\"").concat(swalClasses.content, "\">\n     <div id=\"").concat(swalClasses.content, "\" class=\"").concat(swalClasses['html-container'], "\"></div>\n     <input class=\"").concat(swalClasses.input, "\" />\n     <input type=\"file\" class=\"").concat(swalClasses.file, "\" />\n     <div class=\"").concat(swalClasses.range, "\">\n       <input type=\"range\" />\n       <output></output>\n     </div>\n     <select class=\"").concat(swalClasses.select, "\"></select>\n     <div class=\"").concat(swalClasses.radio, "\"></div>\n     <label for=\"").concat(swalClasses.checkbox, "\" class=\"").concat(swalClasses.checkbox, "\">\n       <input type=\"checkbox\" />\n       <span class=\"").concat(swalClasses.label, "\"></span>\n     </label>\n     <textarea class=\"").concat(swalClasses.textarea, "\"></textarea>\n     <div class=\"").concat(swalClasses['validation-message'], "\" id=\"").concat(swalClasses['validation-message'], "\"></div>\n   </div>\n   <div class=\"").concat(swalClasses.actions, "\">\n     <div class=\"").concat(swalClasses.loader, "\"></div>\n     <button type=\"button\" class=\"").concat(swalClasses.confirm, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.deny, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.cancel, "\"></button>\n   </div>\n   <div class=\"").concat(swalClasses.footer, "\"></div>\n   <div class=\"").concat(swalClasses['timer-progress-bar-container'], "\">\n     <div class=\"").concat(swalClasses['timer-progress-bar'], "\"></div>\n   </div>\n </div>\n").replace(/(^|\n)\s*/g, '');
+
+  var resetOldContainer = function resetOldContainer() {
+    var oldContainer = getContainer();
+
+    if (!oldContainer) {
+      return false;
+    }
+
+    oldContainer.parentNode.removeChild(oldContainer);
+    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['toast-shown'], swalClasses['has-column']]);
+    return true;
+  };
+
+  var oldInputVal; // IE11 workaround, see #1109 for details
+
+  var resetValidationMessage = function resetValidationMessage(e) {
+    if (Swal.isVisible() && oldInputVal !== e.target.value) {
+      Swal.resetValidationMessage();
+    }
+
+    oldInputVal = e.target.value;
+  };
+
+  var addInputChangeListeners = function addInputChangeListeners() {
+    var content = getContent();
+    var input = getChildByClass(content, swalClasses.input);
+    var file = getChildByClass(content, swalClasses.file);
+    var range = content.querySelector(".".concat(swalClasses.range, " input"));
+    var rangeOutput = content.querySelector(".".concat(swalClasses.range, " output"));
+    var select = getChildByClass(content, swalClasses.select);
+    var checkbox = content.querySelector(".".concat(swalClasses.checkbox, " input"));
+    var textarea = getChildByClass(content, swalClasses.textarea);
+    input.oninput = resetValidationMessage;
+    file.onchange = resetValidationMessage;
+    select.onchange = resetValidationMessage;
+    checkbox.onchange = resetValidationMessage;
+    textarea.oninput = resetValidationMessage;
+
+    range.oninput = function (e) {
+      resetValidationMessage(e);
+      rangeOutput.value = range.value;
+    };
+
+    range.onchange = function (e) {
+      resetValidationMessage(e);
+      range.nextSibling.value = range.value;
+    };
+  };
+
+  var getTarget = function getTarget(target) {
+    return typeof target === 'string' ? document.querySelector(target) : target;
+  };
+
+  var setupAccessibility = function setupAccessibility(params) {
+    var popup = getPopup();
+    popup.setAttribute('role', params.toast ? 'alert' : 'dialog');
+    popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
+
+    if (!params.toast) {
+      popup.setAttribute('aria-modal', 'true');
+    }
+  };
+
+  var setupRTL = function setupRTL(targetElement) {
+    if (window.getComputedStyle(targetElement).direction === 'rtl') {
+      addClass(getContainer(), swalClasses.rtl);
+    }
+  };
+  /*
+   * Add modal + backdrop to DOM
+   */
+
+
+  var init = function init(params) {
+    // Clean up the old popup container if it exists
+    var oldContainerExisted = resetOldContainer();
+    /* istanbul ignore if */
+
+    if (isNodeEnv()) {
+      error('SweetAlert2 requires document to initialize');
+      return;
+    }
+
+    var container = document.createElement('div');
+    container.className = swalClasses.container;
+
+    if (oldContainerExisted) {
+      addClass(container, swalClasses['no-transition']);
+    }
+
+    setInnerHtml(container, sweetHTML);
+    var targetElement = getTarget(params.target);
+    targetElement.appendChild(container);
+    setupAccessibility(params);
+    setupRTL(targetElement);
+    addInputChangeListeners();
+  };
+
+  var parseHtmlToContainer = function parseHtmlToContainer(param, target) {
+    // DOM element
+    if (param instanceof HTMLElement) {
+      target.appendChild(param); // Object
+    } else if (_typeof(param) === 'object') {
+      handleObject(param, target); // Plain string
+    } else if (param) {
+      setInnerHtml(target, param);
+    }
+  };
+
+  var handleObject = function handleObject(param, target) {
+    // JQuery element(s)
+    if (param.jquery) {
+      handleJqueryElem(target, param); // For other objects use their string representation
+    } else {
+      setInnerHtml(target, param.toString());
+    }
+  };
+
+  var handleJqueryElem = function handleJqueryElem(target, elem) {
+    target.textContent = '';
+
+    if (0 in elem) {
+      for (var i = 0; (i in elem); i++) {
+        target.appendChild(elem[i].cloneNode(true));
+      }
+    } else {
+      target.appendChild(elem.cloneNode(true));
+    }
+  };
+
+  var animationEndEvent = function () {
+    // Prevent run in Node env
+
+    /* istanbul ignore if */
+    if (isNodeEnv()) {
+      return false;
+    }
+
+    var testEl = document.createElement('div');
+    var transEndEventNames = {
+      WebkitAnimation: 'webkitAnimationEnd',
+      OAnimation: 'oAnimationEnd oanimationend',
+      animation: 'animationend'
+    };
+
+    for (var i in transEndEventNames) {
+      if (Object.prototype.hasOwnProperty.call(transEndEventNames, i) && typeof testEl.style[i] !== 'undefined') {
+        return transEndEventNames[i];
+      }
+    }
+
+    return false;
+  }();
+
+  // https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+
+  var measureScrollbar = function measureScrollbar() {
+    var scrollDiv = document.createElement('div');
+    scrollDiv.className = swalClasses['scrollbar-measure'];
+    document.body.appendChild(scrollDiv);
+    var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  };
+
+  var renderActions = function renderActions(instance, params) {
+    var actions = getActions();
+    var loader = getLoader();
+    var confirmButton = getConfirmButton();
+    var denyButton = getDenyButton();
+    var cancelButton = getCancelButton(); // Actions (buttons) wrapper
+
+    if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
+      hide(actions);
+    } // Custom class
+
+
+    applyCustomClass(actions, params, 'actions'); // Render buttons
+
+    renderButton(confirmButton, 'confirm', params);
+    renderButton(denyButton, 'deny', params);
+    renderButton(cancelButton, 'cancel', params);
+    handleButtonsStyling(confirmButton, denyButton, cancelButton, params);
+
+    if (params.reverseButtons) {
+      actions.insertBefore(cancelButton, loader);
+      actions.insertBefore(denyButton, loader);
+      actions.insertBefore(confirmButton, loader);
+    } // Loader
+
+
+    loader.innerHTML = params.loaderHtml;
+    applyCustomClass(loader, params, 'loader');
+  };
+
+  function handleButtonsStyling(confirmButton, denyButton, cancelButton, params) {
+    if (!params.buttonsStyling) {
+      return removeClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
+    }
+
+    addClass([confirmButton, denyButton, cancelButton], swalClasses.styled); // Buttons background colors
+
+    if (params.confirmButtonColor) {
+      confirmButton.style.backgroundColor = params.confirmButtonColor;
+    }
+
+    if (params.denyButtonColor) {
+      denyButton.style.backgroundColor = params.denyButtonColor;
+    }
+
+    if (params.cancelButtonColor) {
+      cancelButton.style.backgroundColor = params.cancelButtonColor;
+    }
+  }
+
+  function renderButton(button, buttonType, params) {
+    toggle(button, params["show".concat(capitalizeFirstLetter(buttonType), "Button")], 'inline-block');
+    setInnerHtml(button, params["".concat(buttonType, "ButtonText")]); // Set caption text
+
+    button.setAttribute('aria-label', params["".concat(buttonType, "ButtonAriaLabel")]); // ARIA label
+    // Add buttons custom classes
+
+    button.className = swalClasses[buttonType];
+    applyCustomClass(button, params, "".concat(buttonType, "Button"));
+    addClass(button, params["".concat(buttonType, "ButtonClass")]);
+  }
+
+  function handleBackdropParam(container, backdrop) {
+    if (typeof backdrop === 'string') {
+      container.style.background = backdrop;
+    } else if (!backdrop) {
+      addClass([document.documentElement, document.body], swalClasses['no-backdrop']);
+    }
+  }
+
+  function handlePositionParam(container, position) {
+    if (position in swalClasses) {
+      addClass(container, swalClasses[position]);
+    } else {
+      warn('The "position" parameter is not valid, defaulting to "center"');
+      addClass(container, swalClasses.center);
+    }
+  }
+
+  function handleGrowParam(container, grow) {
+    if (grow && typeof grow === 'string') {
+      var growClass = "grow-".concat(grow);
+
+      if (growClass in swalClasses) {
+        addClass(container, swalClasses[growClass]);
+      }
+    }
+  }
+
+  var renderContainer = function renderContainer(instance, params) {
+    var container = getContainer();
+
+    if (!container) {
+      return;
+    }
+
+    handleBackdropParam(container, params.backdrop);
+
+    if (!params.backdrop && params.allowOutsideClick) {
+      warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
+    }
+
+    handlePositionParam(container, params.position);
+    handleGrowParam(container, params.grow); // Custom class
+
+    applyCustomClass(container, params, 'container'); // Set queue step attribute for getQueueStep() method
+
+    var queueStep = document.body.getAttribute('data-swal2-queue-step');
+
+    if (queueStep) {
+      container.setAttribute('data-queue-step', queueStep);
+      document.body.removeAttribute('data-swal2-queue-step');
+    }
+  };
+
+  /**
+   * This module containts `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+  var privateProps = {
+    promise: new WeakMap(),
+    innerParams: new WeakMap(),
+    domCache: new WeakMap()
+  };
+
+  var inputTypes = ['input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea'];
+  var renderInput = function renderInput(instance, params) {
+    var content = getContent();
+    var innerParams = privateProps.innerParams.get(instance);
+    var rerender = !innerParams || params.input !== innerParams.input;
+    inputTypes.forEach(function (inputType) {
+      var inputClass = swalClasses[inputType];
+      var inputContainer = getChildByClass(content, inputClass); // set attributes
+
+      setAttributes(inputType, params.inputAttributes); // set class
+
+      inputContainer.className = inputClass;
+
+      if (rerender) {
+        hide(inputContainer);
+      }
+    });
+
+    if (params.input) {
+      if (rerender) {
+        showInput(params);
+      } // set custom class
+
+
+      setCustomClass(params);
+    }
+  };
+
+  var showInput = function showInput(params) {
+    if (!renderInputType[params.input]) {
+      return error("Unexpected type of input! Expected \"text\", \"email\", \"password\", \"number\", \"tel\", \"select\", \"radio\", \"checkbox\", \"textarea\", \"file\" or \"url\", got \"".concat(params.input, "\""));
+    }
+
+    var inputContainer = getInputContainer(params.input);
+    var input = renderInputType[params.input](inputContainer, params);
+    show(input); // input autofocus
+
+    setTimeout(function () {
+      focusInput(input);
+    });
+  };
+
+  var removeAttributes = function removeAttributes(input) {
+    for (var i = 0; i < input.attributes.length; i++) {
+      var attrName = input.attributes[i].name;
+
+      if (!(['type', 'value', 'style'].indexOf(attrName) !== -1)) {
+        input.removeAttribute(attrName);
+      }
+    }
+  };
+
+  var setAttributes = function setAttributes(inputType, inputAttributes) {
+    var input = getInput(getContent(), inputType);
+
+    if (!input) {
+      return;
+    }
+
+    removeAttributes(input);
+
+    for (var attr in inputAttributes) {
+      // Do not set a placeholder for <input type="range">
+      // it'll crash Edge, #1298
+      if (inputType === 'range' && attr === 'placeholder') {
+        continue;
+      }
+
+      input.setAttribute(attr, inputAttributes[attr]);
+    }
+  };
+
+  var setCustomClass = function setCustomClass(params) {
+    var inputContainer = getInputContainer(params.input);
+
+    if (params.customClass) {
+      addClass(inputContainer, params.customClass.input);
+    }
+  };
+
+  var setInputPlaceholder = function setInputPlaceholder(input, params) {
+    if (!input.placeholder || params.inputPlaceholder) {
+      input.placeholder = params.inputPlaceholder;
+    }
+  };
+
+  var setInputLabel = function setInputLabel(input, prependTo, params) {
+    if (params.inputLabel) {
+      input.id = swalClasses.input;
+      var label = document.createElement('label');
+      var labelClass = swalClasses['input-label'];
+      label.setAttribute('for', input.id);
+      label.className = labelClass;
+      label.innerText = params.inputLabel;
+      prependTo.insertAdjacentElement('beforebegin', label);
+    }
+  };
+
+  var getInputContainer = function getInputContainer(inputType) {
+    var inputClass = swalClasses[inputType] ? swalClasses[inputType] : swalClasses.input;
+    return getChildByClass(getContent(), inputClass);
+  };
+
+  var renderInputType = {};
+
+  renderInputType.text = renderInputType.email = renderInputType.password = renderInputType.number = renderInputType.tel = renderInputType.url = function (input, params) {
+    if (typeof params.inputValue === 'string' || typeof params.inputValue === 'number') {
+      input.value = params.inputValue;
+    } else if (!isPromise(params.inputValue)) {
+      warn("Unexpected type of inputValue! Expected \"string\", \"number\" or \"Promise\", got \"".concat(_typeof(params.inputValue), "\""));
+    }
+
+    setInputLabel(input, input, params);
+    setInputPlaceholder(input, params);
+    input.type = params.input;
+    return input;
+  };
+
+  renderInputType.file = function (input, params) {
+    setInputLabel(input, input, params);
+    setInputPlaceholder(input, params);
+    return input;
+  };
+
+  renderInputType.range = function (range, params) {
+    var rangeInput = range.querySelector('input');
+    var rangeOutput = range.querySelector('output');
+    rangeInput.value = params.inputValue;
+    rangeInput.type = params.input;
+    rangeOutput.value = params.inputValue;
+    setInputLabel(rangeInput, range, params);
+    return range;
+  };
+
+  renderInputType.select = function (select, params) {
+    select.textContent = '';
+
+    if (params.inputPlaceholder) {
+      var placeholder = document.createElement('option');
+      setInnerHtml(placeholder, params.inputPlaceholder);
+      placeholder.value = '';
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      select.appendChild(placeholder);
+    }
+
+    setInputLabel(select, select, params);
+    return select;
+  };
+
+  renderInputType.radio = function (radio) {
+    radio.textContent = '';
+    return radio;
+  };
+
+  renderInputType.checkbox = function (checkboxContainer, params) {
+    var checkbox = getInput(getContent(), 'checkbox');
+    checkbox.value = 1;
+    checkbox.id = swalClasses.checkbox;
+    checkbox.checked = Boolean(params.inputValue);
+    var label = checkboxContainer.querySelector('span');
+    setInnerHtml(label, params.inputPlaceholder);
+    return checkboxContainer;
+  };
+
+  renderInputType.textarea = function (textarea, params) {
+    textarea.value = params.inputValue;
+    setInputPlaceholder(textarea, params);
+    setInputLabel(textarea, textarea, params);
+
+    if ('MutationObserver' in window) {
+      // #1699
+      var initialPopupWidth = parseInt(window.getComputedStyle(getPopup()).width);
+      var popupPadding = parseInt(window.getComputedStyle(getPopup()).paddingLeft) + parseInt(window.getComputedStyle(getPopup()).paddingRight);
+
+      var outputsize = function outputsize() {
+        var contentWidth = textarea.offsetWidth + popupPadding;
+
+        if (contentWidth > initialPopupWidth) {
+          getPopup().style.width = "".concat(contentWidth, "px");
+        } else {
+          getPopup().style.width = null;
+        }
+      };
+
+      new MutationObserver(outputsize).observe(textarea, {
+        attributes: true,
+        attributeFilter: ['style']
+      });
+    }
+
+    return textarea;
+  };
+
+  var renderContent = function renderContent(instance, params) {
+    var content = getContent().querySelector("#".concat(swalClasses.content)); // Content as HTML
+
+    if (params.html) {
+      parseHtmlToContainer(params.html, content);
+      show(content, 'block'); // Content as plain text
+    } else if (params.text) {
+      content.textContent = params.text;
+      show(content, 'block'); // No content
+    } else {
+      hide(content);
+    }
+
+    renderInput(instance, params); // Custom class
+
+    applyCustomClass(getContent(), params, 'content');
+  };
+
+  var renderFooter = function renderFooter(instance, params) {
+    var footer = getFooter();
+    toggle(footer, params.footer);
+
+    if (params.footer) {
+      parseHtmlToContainer(params.footer, footer);
+    } // Custom class
+
+
+    applyCustomClass(footer, params, 'footer');
+  };
+
+  var renderCloseButton = function renderCloseButton(instance, params) {
+    var closeButton = getCloseButton();
+    setInnerHtml(closeButton, params.closeButtonHtml); // Custom class
+
+    applyCustomClass(closeButton, params, 'closeButton');
+    toggle(closeButton, params.showCloseButton);
+    closeButton.setAttribute('aria-label', params.closeButtonAriaLabel);
+  };
+
+  var renderIcon = function renderIcon(instance, params) {
+    var innerParams = privateProps.innerParams.get(instance); // if the given icon already rendered, apply the styling without re-rendering the icon
+
+    if (innerParams && params.icon === innerParams.icon && getIcon()) {
+      applyStyles(getIcon(), params);
+      return;
+    }
+
+    hideAllIcons();
+
+    if (!params.icon) {
+      return;
+    }
+
+    if (Object.keys(iconTypes).indexOf(params.icon) !== -1) {
+      var icon = elementBySelector(".".concat(swalClasses.icon, ".").concat(iconTypes[params.icon]));
+      show(icon); // Custom or default content
+
+      setContent(icon, params);
+      applyStyles(icon, params); // Animate icon
+
+      addClass(icon, params.showClass.icon);
+    } else {
+      error("Unknown icon! Expected \"success\", \"error\", \"warning\", \"info\" or \"question\", got \"".concat(params.icon, "\""));
+    }
+  };
+
+  var hideAllIcons = function hideAllIcons() {
+    var icons = getIcons();
+
+    for (var i = 0; i < icons.length; i++) {
+      hide(icons[i]);
+    }
+  };
+
+  var applyStyles = function applyStyles(icon, params) {
+    // Icon color
+    setColor(icon, params); // Success icon background color
+
+    adjustSuccessIconBackgoundColor(); // Custom class
+
+    applyCustomClass(icon, params, 'icon');
+  }; // Adjust success icon background color to match the popup background color
+
+
+  var adjustSuccessIconBackgoundColor = function adjustSuccessIconBackgoundColor() {
+    var popup = getPopup();
+    var popupBackgroundColor = window.getComputedStyle(popup).getPropertyValue('background-color');
+    var successIconParts = popup.querySelectorAll('[class^=swal2-success-circular-line], .swal2-success-fix');
+
+    for (var i = 0; i < successIconParts.length; i++) {
+      successIconParts[i].style.backgroundColor = popupBackgroundColor;
+    }
+  };
+
+  var setContent = function setContent(icon, params) {
+    icon.textContent = '';
+
+    if (params.iconHtml) {
+      setInnerHtml(icon, iconContent(params.iconHtml));
+    } else if (params.icon === 'success') {
+      setInnerHtml(icon, "\n      <div class=\"swal2-success-circular-line-left\"></div>\n      <span class=\"swal2-success-line-tip\"></span> <span class=\"swal2-success-line-long\"></span>\n      <div class=\"swal2-success-ring\"></div> <div class=\"swal2-success-fix\"></div>\n      <div class=\"swal2-success-circular-line-right\"></div>\n    ");
+    } else if (params.icon === 'error') {
+      setInnerHtml(icon, "\n      <span class=\"swal2-x-mark\">\n        <span class=\"swal2-x-mark-line-left\"></span>\n        <span class=\"swal2-x-mark-line-right\"></span>\n      </span>\n    ");
+    } else {
+      var defaultIconHtml = {
+        question: '?',
+        warning: '!',
+        info: 'i'
+      };
+      setInnerHtml(icon, iconContent(defaultIconHtml[params.icon]));
+    }
+  };
+
+  var setColor = function setColor(icon, params) {
+    if (!params.iconColor) {
+      return;
+    }
+
+    icon.style.color = params.iconColor;
+    icon.style.borderColor = params.iconColor;
+
+    for (var _i = 0, _arr = ['.swal2-success-line-tip', '.swal2-success-line-long', '.swal2-x-mark-line-left', '.swal2-x-mark-line-right']; _i < _arr.length; _i++) {
+      var sel = _arr[_i];
+      setStyle(icon, sel, 'backgroundColor', params.iconColor);
+    }
+
+    setStyle(icon, '.swal2-success-ring', 'borderColor', params.iconColor);
+  };
+
+  var iconContent = function iconContent(content) {
+    return "<div class=\"".concat(swalClasses['icon-content'], "\">").concat(content, "</div>");
+  };
+
+  var renderImage = function renderImage(instance, params) {
+    var image = getImage();
+
+    if (!params.imageUrl) {
+      return hide(image);
+    }
+
+    show(image, ''); // Src, alt
+
+    image.setAttribute('src', params.imageUrl);
+    image.setAttribute('alt', params.imageAlt); // Width, height
+
+    applyNumericalStyle(image, 'width', params.imageWidth);
+    applyNumericalStyle(image, 'height', params.imageHeight); // Class
+
+    image.className = swalClasses.image;
+    applyCustomClass(image, params, 'image');
+  };
+
+  var currentSteps = [];
+  /*
+   * Global function for chaining sweetAlert popups
+   */
+
+  var queue = function queue(steps) {
+    var Swal = this;
+    currentSteps = steps;
+
+    var resetAndResolve = function resetAndResolve(resolve, value) {
+      currentSteps = [];
+      resolve(value);
+    };
+
+    var queueResult = [];
+    return new Promise(function (resolve) {
+      (function step(i, callback) {
+        if (i < currentSteps.length) {
+          document.body.setAttribute('data-swal2-queue-step', i);
+          Swal.fire(currentSteps[i]).then(function (result) {
+            if (typeof result.value !== 'undefined') {
+              queueResult.push(result.value);
+              step(i + 1, callback);
+            } else {
+              resetAndResolve(resolve, {
+                dismiss: result.dismiss
+              });
+            }
+          });
+        } else {
+          resetAndResolve(resolve, {
+            value: queueResult
+          });
+        }
+      })(0);
+    });
+  };
+  /*
+   * Global function for getting the index of current popup in queue
+   */
+
+  var getQueueStep = function getQueueStep() {
+    return getContainer() && getContainer().getAttribute('data-queue-step');
+  };
+  /*
+   * Global function for inserting a popup to the queue
+   */
+
+  var insertQueueStep = function insertQueueStep(step, index) {
+    if (index && index < currentSteps.length) {
+      return currentSteps.splice(index, 0, step);
+    }
+
+    return currentSteps.push(step);
+  };
+  /*
+   * Global function for deleting a popup from the queue
+   */
+
+  var deleteQueueStep = function deleteQueueStep(index) {
+    if (typeof currentSteps[index] !== 'undefined') {
+      currentSteps.splice(index, 1);
+    }
+  };
+
+  var createStepElement = function createStepElement(step) {
+    var stepEl = document.createElement('li');
+    addClass(stepEl, swalClasses['progress-step']);
+    setInnerHtml(stepEl, step);
+    return stepEl;
+  };
+
+  var createLineElement = function createLineElement(params) {
+    var lineEl = document.createElement('li');
+    addClass(lineEl, swalClasses['progress-step-line']);
+
+    if (params.progressStepsDistance) {
+      lineEl.style.width = params.progressStepsDistance;
+    }
+
+    return lineEl;
+  };
+
+  var renderProgressSteps = function renderProgressSteps(instance, params) {
+    var progressStepsContainer = getProgressSteps();
+
+    if (!params.progressSteps || params.progressSteps.length === 0) {
+      return hide(progressStepsContainer);
+    }
+
+    show(progressStepsContainer);
+    progressStepsContainer.textContent = '';
+    var currentProgressStep = parseInt(params.currentProgressStep === undefined ? getQueueStep() : params.currentProgressStep);
+
+    if (currentProgressStep >= params.progressSteps.length) {
+      warn('Invalid currentProgressStep parameter, it should be less than progressSteps.length ' + '(currentProgressStep like JS arrays starts from 0)');
+    }
+
+    params.progressSteps.forEach(function (step, index) {
+      var stepEl = createStepElement(step);
+      progressStepsContainer.appendChild(stepEl);
+
+      if (index === currentProgressStep) {
+        addClass(stepEl, swalClasses['active-progress-step']);
+      }
+
+      if (index !== params.progressSteps.length - 1) {
+        var lineEl = createLineElement(params);
+        progressStepsContainer.appendChild(lineEl);
+      }
+    });
+  };
+
+  var renderTitle = function renderTitle(instance, params) {
+    var title = getTitle();
+    toggle(title, params.title || params.titleText);
+
+    if (params.title) {
+      parseHtmlToContainer(params.title, title);
+    }
+
+    if (params.titleText) {
+      title.innerText = params.titleText;
+    } // Custom class
+
+
+    applyCustomClass(title, params, 'title');
+  };
+
+  var renderHeader = function renderHeader(instance, params) {
+    var header = getHeader(); // Custom class
+
+    applyCustomClass(header, params, 'header'); // Progress steps
+
+    renderProgressSteps(instance, params); // Icon
+
+    renderIcon(instance, params); // Image
+
+    renderImage(instance, params); // Title
+
+    renderTitle(instance, params); // Close button
+
+    renderCloseButton(instance, params);
+  };
+
+  var renderPopup = function renderPopup(instance, params) {
+    var popup = getPopup(); // Width
+
+    applyNumericalStyle(popup, 'width', params.width); // Padding
+
+    applyNumericalStyle(popup, 'padding', params.padding); // Background
+
+    if (params.background) {
+      popup.style.background = params.background;
+    } // Classes
+
+
+    addClasses(popup, params);
+  };
+
+  var addClasses = function addClasses(popup, params) {
+    // Default Class + showClass when updating Swal.update({})
+    popup.className = "".concat(swalClasses.popup, " ").concat(isVisible(popup) ? params.showClass.popup : '');
+
+    if (params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['toast-shown']);
+      addClass(popup, swalClasses.toast);
+    } else {
+      addClass(popup, swalClasses.modal);
+    } // Custom class
+
+
+    applyCustomClass(popup, params, 'popup');
+
+    if (typeof params.customClass === 'string') {
+      addClass(popup, params.customClass);
+    } // Icon class (#1842)
+
+
+    if (params.icon) {
+      addClass(popup, swalClasses["icon-".concat(params.icon)]);
+    }
+  };
+
+  var render = function render(instance, params) {
+    renderPopup(instance, params);
+    renderContainer(instance, params);
+    renderHeader(instance, params);
+    renderContent(instance, params);
+    renderActions(instance, params);
+    renderFooter(instance, params);
+
+    if (typeof params.didRender === 'function') {
+      params.didRender(getPopup());
+    } else if (typeof params.onRender === 'function') {
+      params.onRender(getPopup()); // @deprecated
+    }
+  };
+
+  /*
+   * Global function to determine if SweetAlert2 popup is shown
+   */
+
+  var isVisible$1 = function isVisible$$1() {
+    return isVisible(getPopup());
+  };
+  /*
+   * Global function to click 'Confirm' button
+   */
+
+  var clickConfirm = function clickConfirm() {
+    return getConfirmButton() && getConfirmButton().click();
+  };
+  /*
+   * Global function to click 'Deny' button
+   */
+
+  var clickDeny = function clickDeny() {
+    return getDenyButton() && getDenyButton().click();
+  };
+  /*
+   * Global function to click 'Cancel' button
+   */
+
+  var clickCancel = function clickCancel() {
+    return getCancelButton() && getCancelButton().click();
+  };
+
+  function fire() {
+    var Swal = this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _construct(Swal, args);
+  }
+
+  /**
+   * Returns an extended version of `Swal` containing `params` as defaults.
+   * Useful for reusing Swal configuration.
+   *
+   * For example:
+   *
+   * Before:
+   * const textPromptOptions = { input: 'text', showCancelButton: true }
+   * const {value: firstName} = await Swal.fire({ ...textPromptOptions, title: 'What is your first name?' })
+   * const {value: lastName} = await Swal.fire({ ...textPromptOptions, title: 'What is your last name?' })
+   *
+   * After:
+   * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
+   * const {value: firstName} = await TextPrompt('What is your first name?')
+   * const {value: lastName} = await TextPrompt('What is your last name?')
+   *
+   * @param mixinParams
+   */
+  function mixin(mixinParams) {
+    var MixinSwal = /*#__PURE__*/function (_this) {
+      _inherits(MixinSwal, _this);
+
+      var _super = _createSuper(MixinSwal);
+
+      function MixinSwal() {
+        _classCallCheck(this, MixinSwal);
+
+        return _super.apply(this, arguments);
+      }
+
+      _createClass(MixinSwal, [{
+        key: "_main",
+        value: function _main(params) {
+          return _get(_getPrototypeOf(MixinSwal.prototype), "_main", this).call(this, _extends({}, mixinParams, params));
+        }
+      }]);
+
+      return MixinSwal;
+    }(this);
+
+    return MixinSwal;
+  }
+
+  /**
+   * Show spinner instead of Confirm button
+   */
+
+  var showLoading = function showLoading() {
+    var popup = getPopup();
+
+    if (!popup) {
+      Swal.fire();
+    }
+
+    popup = getPopup();
+    var actions = getActions();
+    var confirmButton = getConfirmButton();
+    var loader = getLoader();
+    show(actions);
+    hide(confirmButton);
+    addClass([popup, actions], swalClasses.loading);
+    show(loader);
+    popup.setAttribute('data-loading', true);
+    popup.setAttribute('aria-busy', true);
+    popup.focus();
+  };
+
+  var RESTORE_FOCUS_TIMEOUT = 100;
+
+  var globalState = {};
+
+  var focusPreviousActiveElement = function focusPreviousActiveElement() {
+    if (globalState.previousActiveElement && globalState.previousActiveElement.focus) {
+      globalState.previousActiveElement.focus();
+      globalState.previousActiveElement = null;
+    } else if (document.body) {
+      document.body.focus();
+    }
+  }; // Restore previous active (focused) element
+
+
+  var restoreActiveElement = function restoreActiveElement() {
+    return new Promise(function (resolve) {
+      var x = window.scrollX;
+      var y = window.scrollY;
+      globalState.restoreFocusTimeout = setTimeout(function () {
+        focusPreviousActiveElement();
+        resolve();
+      }, RESTORE_FOCUS_TIMEOUT); // issues/900
+
+      /* istanbul ignore if */
+
+      if (typeof x !== 'undefined' && typeof y !== 'undefined') {
+        // IE doesn't have scrollX/scrollY support
+        window.scrollTo(x, y);
+      }
+    });
+  };
+
+  /**
+   * If `timer` parameter is set, returns number of milliseconds of timer remained.
+   * Otherwise, returns undefined.
+   */
+
+  var getTimerLeft = function getTimerLeft() {
+    return globalState.timeout && globalState.timeout.getTimerLeft();
+  };
+  /**
+   * Stop timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  var stopTimer = function stopTimer() {
+    if (globalState.timeout) {
+      stopTimerProgressBar();
+      return globalState.timeout.stop();
+    }
+  };
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  var resumeTimer = function resumeTimer() {
+    if (globalState.timeout) {
+      var remaining = globalState.timeout.start();
+      animateTimerProgressBar(remaining);
+      return remaining;
+    }
+  };
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  var toggleTimer = function toggleTimer() {
+    var timer = globalState.timeout;
+    return timer && (timer.running ? stopTimer() : resumeTimer());
+  };
+  /**
+   * Increase timer. Returns number of milliseconds of an updated timer.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  var increaseTimer = function increaseTimer(n) {
+    if (globalState.timeout) {
+      var remaining = globalState.timeout.increase(n);
+      animateTimerProgressBar(remaining, true);
+      return remaining;
+    }
+  };
+  /**
+   * Check if timer is running. Returns true if timer is running
+   * or false if timer is paused or stopped.
+   * If `timer` parameter isn't set, returns undefined
+   */
+
+  var isTimerRunning = function isTimerRunning() {
+    return globalState.timeout && globalState.timeout.isRunning();
+  };
+
+  var defaultParams = {
+    title: '',
+    titleText: '',
+    text: '',
+    html: '',
+    footer: '',
+    icon: undefined,
+    iconColor: undefined,
+    iconHtml: undefined,
+    toast: false,
+    animation: true,
+    showClass: {
+      popup: 'swal2-show',
+      backdrop: 'swal2-backdrop-show',
+      icon: 'swal2-icon-show'
+    },
+    hideClass: {
+      popup: 'swal2-hide',
+      backdrop: 'swal2-backdrop-hide',
+      icon: 'swal2-icon-hide'
+    },
+    customClass: undefined,
+    target: 'body',
+    backdrop: true,
+    heightAuto: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    allowEnterKey: true,
+    stopKeydownPropagation: true,
+    keydownListenerCapture: false,
+    showConfirmButton: true,
+    showDenyButton: false,
+    showCancelButton: false,
+    preConfirm: undefined,
+    confirmButtonText: 'OK',
+    confirmButtonAriaLabel: '',
+    confirmButtonColor: undefined,
+    denyButtonText: 'No',
+    denyButtonAriaLabel: '',
+    denyButtonColor: undefined,
+    cancelButtonText: 'Cancel',
+    cancelButtonAriaLabel: '',
+    cancelButtonColor: undefined,
+    buttonsStyling: true,
+    reverseButtons: false,
+    focusConfirm: true,
+    focusDeny: false,
+    focusCancel: false,
+    showCloseButton: false,
+    closeButtonHtml: '&times;',
+    closeButtonAriaLabel: 'Close this dialog',
+    loaderHtml: '',
+    showLoaderOnConfirm: false,
+    imageUrl: undefined,
+    imageWidth: undefined,
+    imageHeight: undefined,
+    imageAlt: '',
+    timer: undefined,
+    timerProgressBar: false,
+    width: undefined,
+    padding: undefined,
+    background: undefined,
+    input: undefined,
+    inputPlaceholder: '',
+    inputLabel: '',
+    inputValue: '',
+    inputOptions: {},
+    inputAutoTrim: true,
+    inputAttributes: {},
+    inputValidator: undefined,
+    returnInputValueOnDeny: false,
+    validationMessage: undefined,
+    grow: false,
+    position: 'center',
+    progressSteps: [],
+    currentProgressStep: undefined,
+    progressStepsDistance: undefined,
+    onBeforeOpen: undefined,
+    onOpen: undefined,
+    willOpen: undefined,
+    didOpen: undefined,
+    onRender: undefined,
+    didRender: undefined,
+    onClose: undefined,
+    onAfterClose: undefined,
+    willClose: undefined,
+    didClose: undefined,
+    onDestroy: undefined,
+    didDestroy: undefined,
+    scrollbarPadding: true
+  };
+  var updatableParams = ['allowEscapeKey', 'allowOutsideClick', 'background', 'buttonsStyling', 'cancelButtonAriaLabel', 'cancelButtonColor', 'cancelButtonText', 'closeButtonAriaLabel', 'closeButtonHtml', 'confirmButtonAriaLabel', 'confirmButtonColor', 'confirmButtonText', 'currentProgressStep', 'customClass', 'denyButtonAriaLabel', 'denyButtonColor', 'denyButtonText', 'didClose', 'didDestroy', 'footer', 'hideClass', 'html', 'icon', 'iconColor', 'imageAlt', 'imageHeight', 'imageUrl', 'imageWidth', 'onAfterClose', 'onClose', 'onDestroy', 'progressSteps', 'reverseButtons', 'showCancelButton', 'showCloseButton', 'showConfirmButton', 'showDenyButton', 'text', 'title', 'titleText', 'willClose'];
+  var deprecatedParams = {
+    animation: 'showClass" and "hideClass',
+    onBeforeOpen: 'willOpen',
+    onOpen: 'didOpen',
+    onRender: 'didRender',
+    onClose: 'willClose',
+    onAfterClose: 'didClose',
+    onDestroy: 'didDestroy'
+  };
+  var toastIncompatibleParams = ['allowOutsideClick', 'allowEnterKey', 'backdrop', 'focusConfirm', 'focusDeny', 'focusCancel', 'heightAuto', 'keydownListenerCapture'];
+  /**
+   * Is valid parameter
+   * @param {String} paramName
+   */
+
+  var isValidParameter = function isValidParameter(paramName) {
+    return Object.prototype.hasOwnProperty.call(defaultParams, paramName);
+  };
+  /**
+   * Is valid parameter for Swal.update() method
+   * @param {String} paramName
+   */
+
+  var isUpdatableParameter = function isUpdatableParameter(paramName) {
+    return updatableParams.indexOf(paramName) !== -1;
+  };
+  /**
+   * Is deprecated parameter
+   * @param {String} paramName
+   */
+
+  var isDeprecatedParameter = function isDeprecatedParameter(paramName) {
+    return deprecatedParams[paramName];
+  };
+
+  var checkIfParamIsValid = function checkIfParamIsValid(param) {
+    if (!isValidParameter(param)) {
+      warn("Unknown parameter \"".concat(param, "\""));
+    }
+  };
+
+  var checkIfToastParamIsValid = function checkIfToastParamIsValid(param) {
+    if (toastIncompatibleParams.indexOf(param) !== -1) {
+      warn("The parameter \"".concat(param, "\" is incompatible with toasts"));
+    }
+  };
+
+  var checkIfParamIsDeprecated = function checkIfParamIsDeprecated(param) {
+    if (isDeprecatedParameter(param)) {
+      warnAboutDeprecation(param, isDeprecatedParameter(param));
+    }
+  };
+  /**
+   * Show relevant warnings for given params
+   *
+   * @param params
+   */
+
+
+  var showWarningsForParams = function showWarningsForParams(params) {
+    for (var param in params) {
+      checkIfParamIsValid(param);
+
+      if (params.toast) {
+        checkIfToastParamIsValid(param);
+      }
+
+      checkIfParamIsDeprecated(param);
+    }
+  };
+
+
+
+  var staticMethods = /*#__PURE__*/Object.freeze({
+    isValidParameter: isValidParameter,
+    isUpdatableParameter: isUpdatableParameter,
+    isDeprecatedParameter: isDeprecatedParameter,
+    argsToParams: argsToParams,
+    isVisible: isVisible$1,
+    clickConfirm: clickConfirm,
+    clickDeny: clickDeny,
+    clickCancel: clickCancel,
+    getContainer: getContainer,
+    getPopup: getPopup,
+    getTitle: getTitle,
+    getContent: getContent,
+    getHtmlContainer: getHtmlContainer,
+    getImage: getImage,
+    getIcon: getIcon,
+    getIcons: getIcons,
+    getInputLabel: getInputLabel,
+    getCloseButton: getCloseButton,
+    getActions: getActions,
+    getConfirmButton: getConfirmButton,
+    getDenyButton: getDenyButton,
+    getCancelButton: getCancelButton,
+    getLoader: getLoader,
+    getHeader: getHeader,
+    getFooter: getFooter,
+    getTimerProgressBar: getTimerProgressBar,
+    getFocusableElements: getFocusableElements,
+    getValidationMessage: getValidationMessage,
+    isLoading: isLoading,
+    fire: fire,
+    mixin: mixin,
+    queue: queue,
+    getQueueStep: getQueueStep,
+    insertQueueStep: insertQueueStep,
+    deleteQueueStep: deleteQueueStep,
+    showLoading: showLoading,
+    enableLoading: showLoading,
+    getTimerLeft: getTimerLeft,
+    stopTimer: stopTimer,
+    resumeTimer: resumeTimer,
+    toggleTimer: toggleTimer,
+    increaseTimer: increaseTimer,
+    isTimerRunning: isTimerRunning
+  });
+
+  /**
+   * Enables buttons and hide loader.
+   */
+
+  function hideLoading() {
+    // do nothing if popup is closed
+    var innerParams = privateProps.innerParams.get(this);
+
+    if (!innerParams) {
+      return;
+    }
+
+    var domCache = privateProps.domCache.get(this);
+    hide(domCache.loader);
+
+    if (innerParams.showConfirmButton) {
+      show(domCache.confirmButton, 'inline-block');
+    } else if (!innerParams.showConfirmButton && !innerParams.showCancelButton) {
+      hide(domCache.actions);
+    }
+
+    removeClass([domCache.popup, domCache.actions], swalClasses.loading);
+    domCache.popup.removeAttribute('aria-busy');
+    domCache.popup.removeAttribute('data-loading');
+    domCache.confirmButton.disabled = false;
+    domCache.denyButton.disabled = false;
+    domCache.cancelButton.disabled = false;
+  }
+
+  function getInput$1(instance) {
+    var innerParams = privateProps.innerParams.get(instance || this);
+    var domCache = privateProps.domCache.get(instance || this);
+
+    if (!domCache) {
+      return null;
+    }
+
+    return getInput(domCache.content, innerParams.input);
+  }
+
+  var fixScrollbar = function fixScrollbar() {
+    // for queues, do not do this more than once
+    if (states.previousBodyPadding !== null) {
+      return;
+    } // if the body has overflow
+
+
+    if (document.body.scrollHeight > window.innerHeight) {
+      // add padding so the content doesn't shift after removal of scrollbar
+      states.previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
+      document.body.style.paddingRight = "".concat(states.previousBodyPadding + measureScrollbar(), "px");
+    }
+  };
+  var undoScrollbar = function undoScrollbar() {
+    if (states.previousBodyPadding !== null) {
+      document.body.style.paddingRight = "".concat(states.previousBodyPadding, "px");
+      states.previousBodyPadding = null;
+    }
+  };
+
+  /* istanbul ignore file */
+
+  var iOSfix = function iOSfix() {
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+
+    if (iOS && !hasClass(document.body, swalClasses.iosfix)) {
+      var offset = document.body.scrollTop;
+      document.body.style.top = "".concat(offset * -1, "px");
+      addClass(document.body, swalClasses.iosfix);
+      lockBodyScroll();
+      addBottomPaddingForTallPopups(); // #1948
+    }
+  };
+
+  var addBottomPaddingForTallPopups = function addBottomPaddingForTallPopups() {
+    var safari = !navigator.userAgent.match(/(CriOS|FxiOS|EdgiOS|YaBrowser|UCBrowser)/i);
+
+    if (safari) {
+      var bottomPanelHeight = 44;
+
+      if (getPopup().scrollHeight > window.innerHeight - bottomPanelHeight) {
+        getContainer().style.paddingBottom = "".concat(bottomPanelHeight, "px");
+      }
+    }
+  };
+
+  var lockBodyScroll = function lockBodyScroll() {
+    // #1246
+    var container = getContainer();
+    var preventTouchMove;
+
+    container.ontouchstart = function (e) {
+      preventTouchMove = shouldPreventTouchMove(e);
+    };
+
+    container.ontouchmove = function (e) {
+      if (preventTouchMove) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+  };
+
+  var shouldPreventTouchMove = function shouldPreventTouchMove(event) {
+    var target = event.target;
+    var container = getContainer();
+
+    if (event.touches && event.touches.length && event.touches[0].touchType === 'stylus') {
+      // #1786
+      return false;
+    }
+
+    if (target === container) {
+      return true;
+    }
+
+    if (!isScrollable(container) && target.tagName !== 'INPUT' && // #1603
+    !(isScrollable(getContent()) && // #1944
+    getContent().contains(target))) {
+      return true;
+    }
+
+    return false;
+  };
+
+  var undoIOSfix = function undoIOSfix() {
+    if (hasClass(document.body, swalClasses.iosfix)) {
+      var offset = parseInt(document.body.style.top, 10);
+      removeClass(document.body, swalClasses.iosfix);
+      document.body.style.top = '';
+      document.body.scrollTop = offset * -1;
+    }
+  };
+
+  /* istanbul ignore file */
+
+  var isIE11 = function isIE11() {
+    return !!window.MSInputMethodContext && !!document.documentMode;
+  }; // Fix IE11 centering sweetalert2/issues/933
+
+
+  var fixVerticalPositionIE = function fixVerticalPositionIE() {
+    var container = getContainer();
+    var popup = getPopup();
+    container.style.removeProperty('align-items');
+
+    if (popup.offsetTop < 0) {
+      container.style.alignItems = 'flex-start';
+    }
+  };
+
+  var IEfix = function IEfix() {
+    if (typeof window !== 'undefined' && isIE11()) {
+      fixVerticalPositionIE();
+      window.addEventListener('resize', fixVerticalPositionIE);
+    }
+  };
+  var undoIEfix = function undoIEfix() {
+    if (typeof window !== 'undefined' && isIE11()) {
+      window.removeEventListener('resize', fixVerticalPositionIE);
+    }
+  };
+
+  // Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
+  // elements not within the active modal dialog will not be surfaced if a user opens a screen
+  // reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
+
+  var setAriaHidden = function setAriaHidden() {
+    var bodyChildren = toArray(document.body.children);
+    bodyChildren.forEach(function (el) {
+      if (el === getContainer() || contains(el, getContainer())) {
+        return;
+      }
+
+      if (el.hasAttribute('aria-hidden')) {
+        el.setAttribute('data-previous-aria-hidden', el.getAttribute('aria-hidden'));
+      }
+
+      el.setAttribute('aria-hidden', 'true');
+    });
+  };
+  var unsetAriaHidden = function unsetAriaHidden() {
+    var bodyChildren = toArray(document.body.children);
+    bodyChildren.forEach(function (el) {
+      if (el.hasAttribute('data-previous-aria-hidden')) {
+        el.setAttribute('aria-hidden', el.getAttribute('data-previous-aria-hidden'));
+        el.removeAttribute('data-previous-aria-hidden');
+      } else {
+        el.removeAttribute('aria-hidden');
+      }
+    });
+  };
+
+  /**
+   * This module containts `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+  var privateMethods = {
+    swalPromiseResolve: new WeakMap()
+  };
+
+  /*
+   * Instance method to close sweetAlert
+   */
+
+  function removePopupAndResetState(instance, container, isToast$$1, didClose) {
+    if (isToast$$1) {
+      triggerDidCloseAndDispose(instance, didClose);
+    } else {
+      restoreActiveElement().then(function () {
+        return triggerDidCloseAndDispose(instance, didClose);
+      });
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = false;
+    }
+
+    if (container.parentNode && !document.body.getAttribute('data-swal2-queue-step')) {
+      container.parentNode.removeChild(container);
+    }
+
+    if (isModal()) {
+      undoScrollbar();
+      undoIOSfix();
+      undoIEfix();
+      unsetAriaHidden();
+    }
+
+    removeBodyClasses();
+  }
+
+  function removeBodyClasses() {
+    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['height-auto'], swalClasses['no-backdrop'], swalClasses['toast-shown'], swalClasses['toast-column']]);
+  }
+
+  function close(resolveValue) {
+    var popup = getPopup();
+
+    if (!popup) {
+      return;
+    }
+
+    resolveValue = prepareResolveValue(resolveValue);
+    var innerParams = privateProps.innerParams.get(this);
+
+    if (!innerParams || hasClass(popup, innerParams.hideClass.popup)) {
+      return;
+    }
+
+    var swalPromiseResolve = privateMethods.swalPromiseResolve.get(this);
+    removeClass(popup, innerParams.showClass.popup);
+    addClass(popup, innerParams.hideClass.popup);
+    var backdrop = getContainer();
+    removeClass(backdrop, innerParams.showClass.backdrop);
+    addClass(backdrop, innerParams.hideClass.backdrop);
+    handlePopupAnimation(this, popup, innerParams); // Resolve Swal promise
+
+    swalPromiseResolve(resolveValue);
+  }
+
+  var prepareResolveValue = function prepareResolveValue(resolveValue) {
+    // When user calls Swal.close()
+    if (typeof resolveValue === 'undefined') {
+      return {
+        isConfirmed: false,
+        isDenied: false,
+        isDismissed: true
+      };
+    }
+
+    return _extends({
+      isConfirmed: false,
+      isDenied: false,
+      isDismissed: false
+    }, resolveValue);
+  };
+
+  var handlePopupAnimation = function handlePopupAnimation(instance, popup, innerParams) {
+    var container = getContainer(); // If animation is supported, animate
+
+    var animationIsSupported = animationEndEvent && hasCssAnimation(popup);
+    var onClose = innerParams.onClose,
+        onAfterClose = innerParams.onAfterClose,
+        willClose = innerParams.willClose,
+        didClose = innerParams.didClose;
+    runDidClose(popup, willClose, onClose);
+
+    if (animationIsSupported) {
+      animatePopup(instance, popup, container, didClose || onAfterClose);
+    } else {
+      // Otherwise, remove immediately
+      removePopupAndResetState(instance, container, isToast(), didClose || onAfterClose);
+    }
+  };
+
+  var runDidClose = function runDidClose(popup, willClose, onClose) {
+    if (willClose !== null && typeof willClose === 'function') {
+      willClose(popup);
+    } else if (onClose !== null && typeof onClose === 'function') {
+      onClose(popup); // @deprecated
+    }
+  };
+
+  var animatePopup = function animatePopup(instance, popup, container, didClose) {
+    globalState.swalCloseEventFinishedCallback = removePopupAndResetState.bind(null, instance, container, isToast(), didClose);
+    popup.addEventListener(animationEndEvent, function (e) {
+      if (e.target === popup) {
+        globalState.swalCloseEventFinishedCallback();
+        delete globalState.swalCloseEventFinishedCallback;
+      }
+    });
+  };
+
+  var triggerDidCloseAndDispose = function triggerDidCloseAndDispose(instance, didClose) {
+    setTimeout(function () {
+      if (typeof didClose === 'function') {
+        didClose();
+      }
+
+      instance._destroy();
+    });
+  };
+
+  function setButtonsDisabled(instance, buttons, disabled) {
+    var domCache = privateProps.domCache.get(instance);
+    buttons.forEach(function (button) {
+      domCache[button].disabled = disabled;
+    });
+  }
+
+  function setInputDisabled(input, disabled) {
+    if (!input) {
+      return false;
+    }
+
+    if (input.type === 'radio') {
+      var radiosContainer = input.parentNode.parentNode;
+      var radios = radiosContainer.querySelectorAll('input');
+
+      for (var i = 0; i < radios.length; i++) {
+        radios[i].disabled = disabled;
+      }
+    } else {
+      input.disabled = disabled;
+    }
+  }
+
+  function enableButtons() {
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], false);
+  }
+  function disableButtons() {
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], true);
+  }
+  function enableInput() {
+    return setInputDisabled(this.getInput(), false);
+  }
+  function disableInput() {
+    return setInputDisabled(this.getInput(), true);
+  }
+
+  function showValidationMessage(error) {
+    var domCache = privateProps.domCache.get(this);
+    var params = privateProps.innerParams.get(this);
+    setInnerHtml(domCache.validationMessage, error);
+    domCache.validationMessage.className = swalClasses['validation-message'];
+
+    if (params.customClass && params.customClass.validationMessage) {
+      addClass(domCache.validationMessage, params.customClass.validationMessage);
+    }
+
+    show(domCache.validationMessage);
+    var input = this.getInput();
+
+    if (input) {
+      input.setAttribute('aria-invalid', true);
+      input.setAttribute('aria-describedBy', swalClasses['validation-message']);
+      focusInput(input);
+      addClass(input, swalClasses.inputerror);
+    }
+  } // Hide block with validation message
+
+  function resetValidationMessage$1() {
+    var domCache = privateProps.domCache.get(this);
+
+    if (domCache.validationMessage) {
+      hide(domCache.validationMessage);
+    }
+
+    var input = this.getInput();
+
+    if (input) {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedBy');
+      removeClass(input, swalClasses.inputerror);
+    }
+  }
+
+  function getProgressSteps$1() {
+    var domCache = privateProps.domCache.get(this);
+    return domCache.progressSteps;
+  }
+
+  var Timer = /*#__PURE__*/function () {
+    function Timer(callback, delay) {
+      _classCallCheck(this, Timer);
+
+      this.callback = callback;
+      this.remaining = delay;
+      this.running = false;
+      this.start();
+    }
+
+    _createClass(Timer, [{
+      key: "start",
+      value: function start() {
+        if (!this.running) {
+          this.running = true;
+          this.started = new Date();
+          this.id = setTimeout(this.callback, this.remaining);
+        }
+
+        return this.remaining;
+      }
+    }, {
+      key: "stop",
+      value: function stop() {
+        if (this.running) {
+          this.running = false;
+          clearTimeout(this.id);
+          this.remaining -= new Date() - this.started;
+        }
+
+        return this.remaining;
+      }
+    }, {
+      key: "increase",
+      value: function increase(n) {
+        var running = this.running;
+
+        if (running) {
+          this.stop();
+        }
+
+        this.remaining += n;
+
+        if (running) {
+          this.start();
+        }
+
+        return this.remaining;
+      }
+    }, {
+      key: "getTimerLeft",
+      value: function getTimerLeft() {
+        if (this.running) {
+          this.stop();
+          this.start();
+        }
+
+        return this.remaining;
+      }
+    }, {
+      key: "isRunning",
+      value: function isRunning() {
+        return this.running;
+      }
+    }]);
+
+    return Timer;
+  }();
+
+  var defaultInputValidators = {
+    email: function email(string, validationMessage) {
+      return /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid email address');
+    },
+    url: function url(string, validationMessage) {
+      // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
+      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid URL');
+    }
+  };
+
+  function setDefaultInputValidators(params) {
+    // Use default `inputValidator` for supported input types if not provided
+    if (!params.inputValidator) {
+      Object.keys(defaultInputValidators).forEach(function (key) {
+        if (params.input === key) {
+          params.inputValidator = defaultInputValidators[key];
+        }
+      });
+    }
+  }
+
+  function validateCustomTargetElement(params) {
+    // Determine if the custom target element is valid
+    if (!params.target || typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
+      warn('Target parameter is not valid, defaulting to "body"');
+      params.target = 'body';
+    }
+  }
+  /**
+   * Set type, text and actions on popup
+   *
+   * @param params
+   * @returns {boolean}
+   */
+
+
+  function setParameters(params) {
+    setDefaultInputValidators(params); // showLoaderOnConfirm && preConfirm
+
+    if (params.showLoaderOnConfirm && !params.preConfirm) {
+      warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
+    } // params.animation will be actually used in renderPopup.js
+    // but in case when params.animation is a function, we need to call that function
+    // before popup (re)initialization, so it'll be possible to check Swal.isVisible()
+    // inside the params.animation function
+
+
+    params.animation = callIfFunction(params.animation);
+    validateCustomTargetElement(params); // Replace newlines with <br> in title
+
+    if (typeof params.title === 'string') {
+      params.title = params.title.split('\n').join('<br />');
+    }
+
+    init(params);
+  }
+
+  var SHOW_CLASS_TIMEOUT = 10;
+  /**
+   * Open popup, add necessary classes and styles, fix scrollbar
+   *
+   * @param params
+   */
+
+  var openPopup = function openPopup(params) {
+    var container = getContainer();
+    var popup = getPopup();
+
+    if (typeof params.willOpen === 'function') {
+      params.willOpen(popup);
+    } else if (typeof params.onBeforeOpen === 'function') {
+      params.onBeforeOpen(popup); // @deprecated
+    }
+
+    var bodyStyles = window.getComputedStyle(document.body);
+    var initialBodyOverflow = bodyStyles.overflowY;
+    addClasses$1(container, popup, params); // scrolling is 'hidden' until animation is done, after that 'auto'
+
+    setTimeout(function () {
+      setScrollingVisibility(container, popup);
+    }, SHOW_CLASS_TIMEOUT);
+
+    if (isModal()) {
+      fixScrollContainer(container, params.scrollbarPadding, initialBodyOverflow);
+      setAriaHidden();
+    }
+
+    if (!isToast() && !globalState.previousActiveElement) {
+      globalState.previousActiveElement = document.activeElement;
+    }
+
+    runDidOpen(popup, params);
+    removeClass(container, swalClasses['no-transition']);
+  };
+
+  var runDidOpen = function runDidOpen(popup, params) {
+    if (typeof params.didOpen === 'function') {
+      setTimeout(function () {
+        return params.didOpen(popup);
+      });
+    } else if (typeof params.onOpen === 'function') {
+      setTimeout(function () {
+        return params.onOpen(popup);
+      }); // @deprecated
+    }
+  };
+
+  var swalOpenAnimationFinished = function swalOpenAnimationFinished(event) {
+    var popup = getPopup();
+
+    if (event.target !== popup) {
+      return;
+    }
+
+    var container = getContainer();
+    popup.removeEventListener(animationEndEvent, swalOpenAnimationFinished);
+    container.style.overflowY = 'auto';
+  };
+
+  var setScrollingVisibility = function setScrollingVisibility(container, popup) {
+    if (animationEndEvent && hasCssAnimation(popup)) {
+      container.style.overflowY = 'hidden';
+      popup.addEventListener(animationEndEvent, swalOpenAnimationFinished);
+    } else {
+      container.style.overflowY = 'auto';
+    }
+  };
+
+  var fixScrollContainer = function fixScrollContainer(container, scrollbarPadding, initialBodyOverflow) {
+    iOSfix();
+    IEfix();
+
+    if (scrollbarPadding && initialBodyOverflow !== 'hidden') {
+      fixScrollbar();
+    } // sweetalert2/issues/1247
+
+
+    setTimeout(function () {
+      container.scrollTop = 0;
+    });
+  };
+
+  var addClasses$1 = function addClasses(container, popup, params) {
+    addClass(container, params.showClass.backdrop); // the workaround with setting/unsetting opacity is needed for #2019 and 2059
+
+    popup.style.setProperty('opacity', '0', 'important');
+    show(popup);
+    setTimeout(function () {
+      // Animate popup right after showing it
+      addClass(popup, params.showClass.popup); // and remove the opacity workaround
+
+      popup.style.removeProperty('opacity');
+    }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
+
+    addClass([document.documentElement, document.body], swalClasses.shown);
+
+    if (params.heightAuto && params.backdrop && !params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['height-auto']);
+    }
+  };
+
+  var handleInputOptionsAndValue = function handleInputOptionsAndValue(instance, params) {
+    if (params.input === 'select' || params.input === 'radio') {
+      handleInputOptions(instance, params);
+    } else if (['text', 'email', 'number', 'tel', 'textarea'].indexOf(params.input) !== -1 && (hasToPromiseFn(params.inputValue) || isPromise(params.inputValue))) {
+      handleInputValue(instance, params);
+    }
+  };
+  var getInputValue = function getInputValue(instance, innerParams) {
+    var input = instance.getInput();
+
+    if (!input) {
+      return null;
+    }
+
+    switch (innerParams.input) {
+      case 'checkbox':
+        return getCheckboxValue(input);
+
+      case 'radio':
+        return getRadioValue(input);
+
+      case 'file':
+        return getFileValue(input);
+
+      default:
+        return innerParams.inputAutoTrim ? input.value.trim() : input.value;
+    }
+  };
+
+  var getCheckboxValue = function getCheckboxValue(input) {
+    return input.checked ? 1 : 0;
+  };
+
+  var getRadioValue = function getRadioValue(input) {
+    return input.checked ? input.value : null;
+  };
+
+  var getFileValue = function getFileValue(input) {
+    return input.files.length ? input.getAttribute('multiple') !== null ? input.files : input.files[0] : null;
+  };
+
+  var handleInputOptions = function handleInputOptions(instance, params) {
+    var content = getContent();
+
+    var processInputOptions = function processInputOptions(inputOptions) {
+      return populateInputOptions[params.input](content, formatInputOptions(inputOptions), params);
+    };
+
+    if (hasToPromiseFn(params.inputOptions) || isPromise(params.inputOptions)) {
+      showLoading();
+      asPromise(params.inputOptions).then(function (inputOptions) {
+        instance.hideLoading();
+        processInputOptions(inputOptions);
+      });
+    } else if (_typeof(params.inputOptions) === 'object') {
+      processInputOptions(params.inputOptions);
+    } else {
+      error("Unexpected type of inputOptions! Expected object, Map or Promise, got ".concat(_typeof(params.inputOptions)));
+    }
+  };
+
+  var handleInputValue = function handleInputValue(instance, params) {
+    var input = instance.getInput();
+    hide(input);
+    asPromise(params.inputValue).then(function (inputValue) {
+      input.value = params.input === 'number' ? parseFloat(inputValue) || 0 : "".concat(inputValue);
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    })["catch"](function (err) {
+      error("Error in inputValue promise: ".concat(err));
+      input.value = '';
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    });
+  };
+
+  var populateInputOptions = {
+    select: function select(content, inputOptions, params) {
+      var select = getChildByClass(content, swalClasses.select);
+
+      var renderOption = function renderOption(parent, optionLabel, optionValue) {
+        var option = document.createElement('option');
+        option.value = optionValue;
+        setInnerHtml(option, optionLabel);
+
+        if (params.inputValue.toString() === optionValue.toString()) {
+          option.selected = true;
+        }
+
+        parent.appendChild(option);
+      };
+
+      inputOptions.forEach(function (inputOption) {
+        var optionValue = inputOption[0];
+        var optionLabel = inputOption[1]; // <optgroup> spec:
+        // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
+        // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
+        // check whether this is a <optgroup>
+
+        if (Array.isArray(optionLabel)) {
+          // if it is an array, then it is an <optgroup>
+          var optgroup = document.createElement('optgroup');
+          optgroup.label = optionValue;
+          optgroup.disabled = false; // not configurable for now
+
+          select.appendChild(optgroup);
+          optionLabel.forEach(function (o) {
+            return renderOption(optgroup, o[1], o[0]);
+          });
+        } else {
+          // case of <option>
+          renderOption(select, optionLabel, optionValue);
+        }
+      });
+      select.focus();
+    },
+    radio: function radio(content, inputOptions, params) {
+      var radio = getChildByClass(content, swalClasses.radio);
+      inputOptions.forEach(function (inputOption) {
+        var radioValue = inputOption[0];
+        var radioLabel = inputOption[1];
+        var radioInput = document.createElement('input');
+        var radioLabelElement = document.createElement('label');
+        radioInput.type = 'radio';
+        radioInput.name = swalClasses.radio;
+        radioInput.value = radioValue;
+
+        if (params.inputValue.toString() === radioValue.toString()) {
+          radioInput.checked = true;
+        }
+
+        var label = document.createElement('span');
+        setInnerHtml(label, radioLabel);
+        label.className = swalClasses.label;
+        radioLabelElement.appendChild(radioInput);
+        radioLabelElement.appendChild(label);
+        radio.appendChild(radioLabelElement);
+      });
+      var radios = radio.querySelectorAll('input');
+
+      if (radios.length) {
+        radios[0].focus();
+      }
+    }
+  };
+  /**
+   * Converts `inputOptions` into an array of `[value, label]`s
+   * @param inputOptions
+   */
+
+  var formatInputOptions = function formatInputOptions(inputOptions) {
+    var result = [];
+
+    if (typeof Map !== 'undefined' && inputOptions instanceof Map) {
+      inputOptions.forEach(function (value, key) {
+        var valueFormatted = value;
+
+        if (_typeof(valueFormatted) === 'object') {
+          // case of <optgroup>
+          valueFormatted = formatInputOptions(valueFormatted);
+        }
+
+        result.push([key, valueFormatted]);
+      });
+    } else {
+      Object.keys(inputOptions).forEach(function (key) {
+        var valueFormatted = inputOptions[key];
+
+        if (_typeof(valueFormatted) === 'object') {
+          // case of <optgroup>
+          valueFormatted = formatInputOptions(valueFormatted);
+        }
+
+        result.push([key, valueFormatted]);
+      });
+    }
+
+    return result;
+  };
+
+  var handleConfirmButtonClick = function handleConfirmButtonClick(instance, innerParams) {
+    instance.disableButtons();
+
+    if (innerParams.input) {
+      handleConfirmOrDenyWithInput(instance, innerParams, 'confirm');
+    } else {
+      confirm(instance, innerParams, true);
+    }
+  };
+  var handleDenyButtonClick = function handleDenyButtonClick(instance, innerParams) {
+    instance.disableButtons(); // here we could add preDeny in future, if needed
+
+    if (innerParams.returnInputValueOnDeny) {
+      handleConfirmOrDenyWithInput(instance, innerParams, 'deny');
+    } else {
+      deny(instance, false);
+    }
+  };
+  var handleCancelButtonClick = function handleCancelButtonClick(instance, dismissWith) {
+    instance.disableButtons();
+    dismissWith(DismissReason.cancel);
+  };
+
+  var handleConfirmOrDenyWithInput = function handleConfirmOrDenyWithInput(instance, innerParams, type
+  /* type is either 'confirm' or 'deny' */
+  ) {
+    var inputValue = getInputValue(instance, innerParams);
+
+    if (innerParams.inputValidator) {
+      handleInputValidator(instance, innerParams, inputValue);
+    } else if (!instance.getInput().checkValidity()) {
+      instance.enableButtons();
+      instance.showValidationMessage(innerParams.validationMessage);
+    } else if (type === 'deny') {
+      deny(instance, inputValue);
+    } else {
+      confirm(instance, innerParams, inputValue);
+    }
+  };
+
+  var handleInputValidator = function handleInputValidator(instance, innerParams, inputValue) {
+    instance.disableInput();
+    var validationPromise = Promise.resolve().then(function () {
+      return asPromise(innerParams.inputValidator(inputValue, innerParams.validationMessage));
+    });
+    validationPromise.then(function (validationMessage) {
+      instance.enableButtons();
+      instance.enableInput();
+
+      if (validationMessage) {
+        instance.showValidationMessage(validationMessage);
+      } else {
+        confirm(instance, innerParams, inputValue);
+      }
+    });
+  };
+
+  var deny = function deny(instance, value) {
+    instance.closePopup({
+      isDenied: true,
+      value: value
+    });
+  };
+
+  var succeedWith = function succeedWith(instance, value) {
+    instance.closePopup({
+      isConfirmed: true,
+      value: value
+    });
+  };
+
+  var confirm = function confirm(instance, innerParams, value) {
+    if (innerParams.showLoaderOnConfirm) {
+      showLoading(); // TODO: make showLoading an *instance* method
+    }
+
+    if (innerParams.preConfirm) {
+      instance.resetValidationMessage();
+      var preConfirmPromise = Promise.resolve().then(function () {
+        return asPromise(innerParams.preConfirm(value, innerParams.validationMessage));
+      });
+      preConfirmPromise.then(function (preConfirmValue) {
+        if (isVisible(getValidationMessage()) || preConfirmValue === false) {
+          instance.hideLoading();
+        } else {
+          succeedWith(instance, typeof preConfirmValue === 'undefined' ? value : preConfirmValue);
+        }
+      });
+    } else {
+      succeedWith(instance, value);
+    }
+  };
+
+  var addKeydownHandler = function addKeydownHandler(instance, globalState, innerParams, dismissWith) {
+    if (globalState.keydownTarget && globalState.keydownHandlerAdded) {
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = false;
+    }
+
+    if (!innerParams.toast) {
+      globalState.keydownHandler = function (e) {
+        return keydownHandler(instance, e, dismissWith);
+      };
+
+      globalState.keydownTarget = innerParams.keydownListenerCapture ? window : getPopup();
+      globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
+      globalState.keydownTarget.addEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = true;
+    }
+  }; // Focus handling
+
+  var setFocus = function setFocus(innerParams, index, increment) {
+    var focusableElements = getFocusableElements(); // search for visible elements and select the next possible match
+
+    for (var i = 0; i < focusableElements.length; i++) {
+      index = index + increment; // rollover to first item
+
+      if (index === focusableElements.length) {
+        index = 0; // go to last item
+      } else if (index === -1) {
+        index = focusableElements.length - 1;
+      }
+
+      return focusableElements[index].focus();
+    } // no visible focusable elements, focus the popup
+
+
+    getPopup().focus();
+  };
+  var arrowKeysNextButton = ['ArrowRight', 'ArrowDown', 'Right', 'Down' // IE11
+  ];
+  var arrowKeysPreviousButton = ['ArrowLeft', 'ArrowUp', 'Left', 'Up' // IE11
+  ];
+  var escKeys = ['Escape', 'Esc' // IE11
+  ];
+
+  var keydownHandler = function keydownHandler(instance, e, dismissWith) {
+    var innerParams = privateProps.innerParams.get(instance);
+
+    if (innerParams.stopKeydownPropagation) {
+      e.stopPropagation();
+    } // ENTER
+
+
+    if (e.key === 'Enter') {
+      handleEnter(instance, e, innerParams); // TAB
+    } else if (e.key === 'Tab') {
+      handleTab(e, innerParams); // ARROWS - switch focus between buttons
+    } else if ([].concat(arrowKeysNextButton, arrowKeysPreviousButton).indexOf(e.key) !== -1) {
+      handleArrows(e.key); // ESC
+    } else if (escKeys.indexOf(e.key) !== -1) {
+      handleEsc(e, innerParams, dismissWith);
+    }
+  };
+
+  var handleEnter = function handleEnter(instance, e, innerParams) {
+    // #720 #721
+    if (e.isComposing) {
+      return;
+    }
+
+    if (e.target && instance.getInput() && e.target.outerHTML === instance.getInput().outerHTML) {
+      if (['textarea', 'file'].indexOf(innerParams.input) !== -1) {
+        return; // do not submit
+      }
+
+      clickConfirm();
+      e.preventDefault();
+    }
+  };
+
+  var handleTab = function handleTab(e, innerParams) {
+    var targetElement = e.target;
+    var focusableElements = getFocusableElements();
+    var btnIndex = -1;
+
+    for (var i = 0; i < focusableElements.length; i++) {
+      if (targetElement === focusableElements[i]) {
+        btnIndex = i;
+        break;
+      }
+    }
+
+    if (!e.shiftKey) {
+      // Cycle to the next button
+      setFocus(innerParams, btnIndex, 1);
+    } else {
+      // Cycle to the prev button
+      setFocus(innerParams, btnIndex, -1);
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  var handleArrows = function handleArrows(key) {
+    var confirmButton = getConfirmButton();
+    var denyButton = getDenyButton();
+    var cancelButton = getCancelButton();
+
+    if (!([confirmButton, denyButton, cancelButton].indexOf(document.activeElement) !== -1)) {
+      return;
+    }
+
+    var sibling = arrowKeysNextButton.indexOf(key) !== -1 ? 'nextElementSibling' : 'previousElementSibling';
+    var buttonToFocus = document.activeElement[sibling];
+
+    if (buttonToFocus) {
+      buttonToFocus.focus();
+    }
+  };
+
+  var handleEsc = function handleEsc(e, innerParams, dismissWith) {
+    if (callIfFunction(innerParams.allowEscapeKey)) {
+      e.preventDefault();
+      dismissWith(DismissReason.esc);
+    }
+  };
+
+  var handlePopupClick = function handlePopupClick(instance, domCache, dismissWith) {
+    var innerParams = privateProps.innerParams.get(instance);
+
+    if (innerParams.toast) {
+      handleToastClick(instance, domCache, dismissWith);
+    } else {
+      // Ignore click events that had mousedown on the popup but mouseup on the container
+      // This can happen when the user drags a slider
+      handleModalMousedown(domCache); // Ignore click events that had mousedown on the container but mouseup on the popup
+
+      handleContainerMousedown(domCache);
+      handleModalClick(instance, domCache, dismissWith);
+    }
+  };
+
+  var handleToastClick = function handleToastClick(instance, domCache, dismissWith) {
+    // Closing toast by internal click
+    domCache.popup.onclick = function () {
+      var innerParams = privateProps.innerParams.get(instance);
+
+      if (innerParams.showConfirmButton || innerParams.showDenyButton || innerParams.showCancelButton || innerParams.showCloseButton || innerParams.input) {
+        return;
+      }
+
+      dismissWith(DismissReason.close);
+    };
+  };
+
+  var ignoreOutsideClick = false;
+
+  var handleModalMousedown = function handleModalMousedown(domCache) {
+    domCache.popup.onmousedown = function () {
+      domCache.container.onmouseup = function (e) {
+        domCache.container.onmouseup = undefined; // We only check if the mouseup target is the container because usually it doesn't
+        // have any other direct children aside of the popup
+
+        if (e.target === domCache.container) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  var handleContainerMousedown = function handleContainerMousedown(domCache) {
+    domCache.container.onmousedown = function () {
+      domCache.popup.onmouseup = function (e) {
+        domCache.popup.onmouseup = undefined; // We also need to check if the mouseup target is a child of the popup
+
+        if (e.target === domCache.popup || domCache.popup.contains(e.target)) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  var handleModalClick = function handleModalClick(instance, domCache, dismissWith) {
+    domCache.container.onclick = function (e) {
+      var innerParams = privateProps.innerParams.get(instance);
+
+      if (ignoreOutsideClick) {
+        ignoreOutsideClick = false;
+        return;
+      }
+
+      if (e.target === domCache.container && callIfFunction(innerParams.allowOutsideClick)) {
+        dismissWith(DismissReason.backdrop);
+      }
+    };
+  };
+
+  function _main(userParams) {
+    showWarningsForParams(userParams);
+
+    if (globalState.currentInstance) {
+      globalState.currentInstance._destroy();
+    }
+
+    globalState.currentInstance = this;
+    var innerParams = prepareParams(userParams);
+    setParameters(innerParams);
+    Object.freeze(innerParams); // clear the previous timer
+
+    if (globalState.timeout) {
+      globalState.timeout.stop();
+      delete globalState.timeout;
+    } // clear the restore focus timeout
+
+
+    clearTimeout(globalState.restoreFocusTimeout);
+    var domCache = populateDomCache(this);
+    render(this, innerParams);
+    privateProps.innerParams.set(this, innerParams);
+    return swalPromise(this, domCache, innerParams);
+  }
+
+  var prepareParams = function prepareParams(userParams) {
+    var showClass = _extends({}, defaultParams.showClass, userParams.showClass);
+
+    var hideClass = _extends({}, defaultParams.hideClass, userParams.hideClass);
+
+    var params = _extends({}, defaultParams, userParams);
+
+    params.showClass = showClass;
+    params.hideClass = hideClass; // @deprecated
+
+    if (userParams.animation === false) {
+      params.showClass = {
+        popup: 'swal2-noanimation',
+        backdrop: 'swal2-noanimation'
+      };
+      params.hideClass = {};
+    }
+
+    return params;
+  };
+
+  var swalPromise = function swalPromise(instance, domCache, innerParams) {
+    return new Promise(function (resolve) {
+      // functions to handle all closings/dismissals
+      var dismissWith = function dismissWith(dismiss) {
+        instance.closePopup({
+          isDismissed: true,
+          dismiss: dismiss
+        });
+      };
+
+      privateMethods.swalPromiseResolve.set(instance, resolve);
+
+      domCache.confirmButton.onclick = function () {
+        return handleConfirmButtonClick(instance, innerParams);
+      };
+
+      domCache.denyButton.onclick = function () {
+        return handleDenyButtonClick(instance, innerParams);
+      };
+
+      domCache.cancelButton.onclick = function () {
+        return handleCancelButtonClick(instance, dismissWith);
+      };
+
+      domCache.closeButton.onclick = function () {
+        return dismissWith(DismissReason.close);
+      };
+
+      handlePopupClick(instance, domCache, dismissWith);
+      addKeydownHandler(instance, globalState, innerParams, dismissWith);
+
+      if (innerParams.toast && (innerParams.input || innerParams.footer || innerParams.showCloseButton)) {
+        addClass(document.body, swalClasses['toast-column']);
+      } else {
+        removeClass(document.body, swalClasses['toast-column']);
+      }
+
+      handleInputOptionsAndValue(instance, innerParams);
+      openPopup(innerParams);
+      setupTimer(globalState, innerParams, dismissWith);
+      initFocus(domCache, innerParams); // Scroll container to top on open (#1247, #1946)
+
+      setTimeout(function () {
+        domCache.container.scrollTop = 0;
+      });
+    });
+  };
+
+  var populateDomCache = function populateDomCache(instance) {
+    var domCache = {
+      popup: getPopup(),
+      container: getContainer(),
+      content: getContent(),
+      actions: getActions(),
+      confirmButton: getConfirmButton(),
+      denyButton: getDenyButton(),
+      cancelButton: getCancelButton(),
+      loader: getLoader(),
+      closeButton: getCloseButton(),
+      validationMessage: getValidationMessage(),
+      progressSteps: getProgressSteps()
+    };
+    privateProps.domCache.set(instance, domCache);
+    return domCache;
+  };
+
+  var setupTimer = function setupTimer(globalState$$1, innerParams, dismissWith) {
+    var timerProgressBar = getTimerProgressBar();
+    hide(timerProgressBar);
+
+    if (innerParams.timer) {
+      globalState$$1.timeout = new Timer(function () {
+        dismissWith('timer');
+        delete globalState$$1.timeout;
+      }, innerParams.timer);
+
+      if (innerParams.timerProgressBar) {
+        show(timerProgressBar);
+        setTimeout(function () {
+          if (globalState$$1.timeout.running) {
+            // timer can be already stopped at this point
+            animateTimerProgressBar(innerParams.timer);
+          }
+        });
+      }
+    }
+  };
+
+  var initFocus = function initFocus(domCache, innerParams) {
+    if (innerParams.toast) {
+      return;
+    }
+
+    if (!callIfFunction(innerParams.allowEnterKey)) {
+      return blurActiveElement();
+    }
+
+    if (!focusButton(domCache, innerParams)) {
+      setFocus(innerParams, -1, 1);
+    }
+  };
+
+  var focusButton = function focusButton(domCache, innerParams) {
+    if (innerParams.focusDeny && isVisible(domCache.denyButton)) {
+      domCache.denyButton.focus();
+      return true;
+    }
+
+    if (innerParams.focusCancel && isVisible(domCache.cancelButton)) {
+      domCache.cancelButton.focus();
+      return true;
+    }
+
+    if (innerParams.focusConfirm && isVisible(domCache.confirmButton)) {
+      domCache.confirmButton.focus();
+      return true;
+    }
+
+    return false;
+  };
+
+  var blurActiveElement = function blurActiveElement() {
+    if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+  };
+
+  /**
+   * Updates popup parameters.
+   */
+
+  function update(params) {
+    var popup = getPopup();
+    var innerParams = privateProps.innerParams.get(this);
+
+    if (!popup || hasClass(popup, innerParams.hideClass.popup)) {
+      return warn("You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.");
+    }
+
+    var validUpdatableParams = {}; // assign valid params from `params` to `defaults`
+
+    Object.keys(params).forEach(function (param) {
+      if (Swal.isUpdatableParameter(param)) {
+        validUpdatableParams[param] = params[param];
+      } else {
+        warn("Invalid parameter to update: \"".concat(param, "\". Updatable params are listed here: https://github.com/sweetalert2/sweetalert2/blob/master/src/utils/params.js\n\nIf you think this parameter should be updatable, request it here: https://github.com/sweetalert2/sweetalert2/issues/new?template=02_feature_request.md"));
+      }
+    });
+
+    var updatedParams = _extends({}, innerParams, validUpdatableParams);
+
+    render(this, updatedParams);
+    privateProps.innerParams.set(this, updatedParams);
+    Object.defineProperties(this, {
+      params: {
+        value: _extends({}, this.params, params),
+        writable: false,
+        enumerable: true
+      }
+    });
+  }
+
+  function _destroy() {
+    var domCache = privateProps.domCache.get(this);
+    var innerParams = privateProps.innerParams.get(this);
+
+    if (!innerParams) {
+      return; // This instance has already been destroyed
+    } // Check if there is another Swal closing
+
+
+    if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
+      globalState.swalCloseEventFinishedCallback();
+      delete globalState.swalCloseEventFinishedCallback;
+    } // Check if there is a swal disposal defer timer
+
+
+    if (globalState.deferDisposalTimer) {
+      clearTimeout(globalState.deferDisposalTimer);
+      delete globalState.deferDisposalTimer;
+    }
+
+    runDidDestroy(innerParams);
+    disposeSwal(this);
+  }
+
+  var runDidDestroy = function runDidDestroy(innerParams) {
+    if (typeof innerParams.didDestroy === 'function') {
+      innerParams.didDestroy();
+    } else if (typeof innerParams.onDestroy === 'function') {
+      innerParams.onDestroy(); // @deprecated
+    }
+  };
+
+  var disposeSwal = function disposeSwal(instance) {
+    // Unset this.params so GC will dispose it (#1569)
+    delete instance.params; // Unset globalState props so GC will dispose globalState (#1569)
+
+    delete globalState.keydownHandler;
+    delete globalState.keydownTarget; // Unset WeakMaps so GC will be able to dispose them (#1569)
+
+    unsetWeakMaps(privateProps);
+    unsetWeakMaps(privateMethods);
+  };
+
+  var unsetWeakMaps = function unsetWeakMaps(obj) {
+    for (var i in obj) {
+      obj[i] = new WeakMap();
+    }
+  };
+
+
+
+  var instanceMethods = /*#__PURE__*/Object.freeze({
+    hideLoading: hideLoading,
+    disableLoading: hideLoading,
+    getInput: getInput$1,
+    close: close,
+    closePopup: close,
+    closeModal: close,
+    closeToast: close,
+    enableButtons: enableButtons,
+    disableButtons: disableButtons,
+    enableInput: enableInput,
+    disableInput: disableInput,
+    showValidationMessage: showValidationMessage,
+    resetValidationMessage: resetValidationMessage$1,
+    getProgressSteps: getProgressSteps$1,
+    _main: _main,
+    update: update,
+    _destroy: _destroy
+  });
+
+  var currentInstance;
+
+  var SweetAlert = /*#__PURE__*/function () {
+    function SweetAlert() {
+      _classCallCheck(this, SweetAlert);
+
+      // Prevent run in Node env
+      if (typeof window === 'undefined') {
+        return;
+      } // Check for the existence of Promise
+
+
+      if (typeof Promise === 'undefined') {
+        error('This package requires a Promise library, please include a shim to enable it in this browser (See: https://github.com/sweetalert2/sweetalert2/wiki/Migration-from-SweetAlert-to-SweetAlert2#1-ie-support)');
+      }
+
+      currentInstance = this;
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var outerParams = Object.freeze(this.constructor.argsToParams(args));
+      Object.defineProperties(this, {
+        params: {
+          value: outerParams,
+          writable: false,
+          enumerable: true,
+          configurable: true
+        }
+      });
+
+      var promise = this._main(this.params);
+
+      privateProps.promise.set(this, promise);
+    } // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+
+
+    _createClass(SweetAlert, [{
+      key: "then",
+      value: function then(onFulfilled) {
+        var promise = privateProps.promise.get(this);
+        return promise.then(onFulfilled);
+      }
+    }, {
+      key: "finally",
+      value: function _finally(onFinally) {
+        var promise = privateProps.promise.get(this);
+        return promise["finally"](onFinally);
+      }
+    }]);
+
+    return SweetAlert;
+  }(); // Assign instance methods from src/instanceMethods/*.js to prototype
+
+
+  _extends(SweetAlert.prototype, instanceMethods); // Assign static methods from src/staticMethods/*.js to constructor
+
+
+  _extends(SweetAlert, staticMethods); // Proxy to instance methods to constructor, for now, for backwards compatibility
+
+
+  Object.keys(instanceMethods).forEach(function (key) {
+    SweetAlert[key] = function () {
+      if (currentInstance) {
+        var _currentInstance;
+
+        return (_currentInstance = currentInstance)[key].apply(_currentInstance, arguments);
+      }
+    };
+  });
+  SweetAlert.DismissReason = DismissReason;
+  SweetAlert.version = '10.7.0';
+
+  var Swal = SweetAlert;
+  Swal["default"] = Swal;
+
+  return Swal;
+
+}));
+if (typeof this !== 'undefined' && this.Sweetalert2){  this.swal = this.sweetAlert = this.Swal = this.SweetAlert = this.Sweetalert2}
+
+"undefined"!=typeof document&&function(e,t){var n=e.createElement("style");if(e.getElementsByTagName("head")[0].appendChild(n),n.styleSheet)n.styleSheet.disabled||(n.styleSheet.cssText=t);else try{n.innerHTML=t}catch(e){n.innerText=t}}(document,".swal2-popup.swal2-toast{flex-direction:row;align-items:center;width:auto;padding:.625em;overflow-y:hidden;background:#fff;box-shadow:0 0 .625em #d9d9d9}.swal2-popup.swal2-toast .swal2-header{flex-direction:row;padding:0}.swal2-popup.swal2-toast .swal2-title{flex-grow:1;justify-content:flex-start;margin:0 .6em;font-size:1em}.swal2-popup.swal2-toast .swal2-footer{margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-popup.swal2-toast .swal2-close{position:static;width:.8em;height:.8em;line-height:.8}.swal2-popup.swal2-toast .swal2-content{justify-content:flex-start;padding:0;font-size:1em}.swal2-popup.swal2-toast .swal2-icon{width:2em;min-width:2em;height:2em;margin:0}.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:700}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{font-size:.25em}}.swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-popup.swal2-toast .swal2-actions{flex-basis:auto!important;width:auto;height:auto;margin:0 .3125em;padding:0}.swal2-popup.swal2-toast .swal2-styled{margin:0 .3125em;padding:.3125em .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-styled:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(50,100,150,.4)}.swal2-popup.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;transform:rotate(45deg);border-radius:50%}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.8em;left:-.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-popup.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-toast-animate-success-line-tip .75s;animation:swal2-toast-animate-success-line-tip .75s}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-toast-animate-success-line-long .75s;animation:swal2-toast-animate-success-line-long .75s}.swal2-popup.swal2-toast.swal2-show{-webkit-animation:swal2-toast-show .5s;animation:swal2-toast-show .5s}.swal2-popup.swal2-toast.swal2-hide{-webkit-animation:swal2-toast-hide .1s forwards;animation:swal2-toast-hide .1s forwards}.swal2-container{display:flex;position:fixed;z-index:1060;top:0;right:0;bottom:0;left:0;flex-direction:row;align-items:center;justify-content:center;padding:.625em;overflow-x:hidden;transition:background-color .1s;-webkit-overflow-scrolling:touch}.swal2-container.swal2-backdrop-show,.swal2-container.swal2-noanimation{background:rgba(0,0,0,.4)}.swal2-container.swal2-backdrop-hide{background:0 0!important}.swal2-container.swal2-top{align-items:flex-start}.swal2-container.swal2-top-left,.swal2-container.swal2-top-start{align-items:flex-start;justify-content:flex-start}.swal2-container.swal2-top-end,.swal2-container.swal2-top-right{align-items:flex-start;justify-content:flex-end}.swal2-container.swal2-center{align-items:center}.swal2-container.swal2-center-left,.swal2-container.swal2-center-start{align-items:center;justify-content:flex-start}.swal2-container.swal2-center-end,.swal2-container.swal2-center-right{align-items:center;justify-content:flex-end}.swal2-container.swal2-bottom{align-items:flex-end}.swal2-container.swal2-bottom-left,.swal2-container.swal2-bottom-start{align-items:flex-end;justify-content:flex-start}.swal2-container.swal2-bottom-end,.swal2-container.swal2-bottom-right{align-items:flex-end;justify-content:flex-end}.swal2-container.swal2-bottom-end>:first-child,.swal2-container.swal2-bottom-left>:first-child,.swal2-container.swal2-bottom-right>:first-child,.swal2-container.swal2-bottom-start>:first-child,.swal2-container.swal2-bottom>:first-child{margin-top:auto}.swal2-container.swal2-grow-fullscreen>.swal2-modal{display:flex!important;flex:1;align-self:stretch;justify-content:center}.swal2-container.swal2-grow-row>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-grow-column{flex:1;flex-direction:column}.swal2-container.swal2-grow-column.swal2-bottom,.swal2-container.swal2-grow-column.swal2-center,.swal2-container.swal2-grow-column.swal2-top{align-items:center}.swal2-container.swal2-grow-column.swal2-bottom-left,.swal2-container.swal2-grow-column.swal2-bottom-start,.swal2-container.swal2-grow-column.swal2-center-left,.swal2-container.swal2-grow-column.swal2-center-start,.swal2-container.swal2-grow-column.swal2-top-left,.swal2-container.swal2-grow-column.swal2-top-start{align-items:flex-start}.swal2-container.swal2-grow-column.swal2-bottom-end,.swal2-container.swal2-grow-column.swal2-bottom-right,.swal2-container.swal2-grow-column.swal2-center-end,.swal2-container.swal2-grow-column.swal2-center-right,.swal2-container.swal2-grow-column.swal2-top-end,.swal2-container.swal2-grow-column.swal2-top-right{align-items:flex-end}.swal2-container.swal2-grow-column>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-no-transition{transition:none!important}.swal2-container:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal{margin:auto}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-container .swal2-modal{margin:0!important}}.swal2-popup{display:none;position:relative;box-sizing:border-box;flex-direction:column;justify-content:center;width:32em;max-width:100%;padding:1.25em;border:none;border-radius:.3125em;background:#fff;font-family:inherit;font-size:1rem}.swal2-popup:focus{outline:0}.swal2-popup.swal2-loading{overflow-y:hidden}.swal2-header{display:flex;flex-direction:column;align-items:center;padding:0 1.8em}.swal2-title{position:relative;max-width:100%;margin:0 0 .4em;padding:0;color:#595959;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;word-wrap:break-word}.swal2-actions{display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:center;width:100%;margin:1.25em auto 0;padding:0 1.6em}.swal2-actions:not(.swal2-loading) .swal2-styled[disabled]{opacity:.4}.swal2-actions:not(.swal2-loading) .swal2-styled:hover{background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.swal2-actions:not(.swal2-loading) .swal2-styled:active{background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.swal2-loader{display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;-webkit-animation:swal2-rotate-loading 1.5s linear 0s infinite normal;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 transparent #2778c4 transparent}.swal2-styled{margin:.3125em;padding:.625em 2em;box-shadow:none;font-weight:500}.swal2-styled:not([disabled]){cursor:pointer}.swal2-styled.swal2-confirm{border:0;border-radius:.25em;background:initial;background-color:#2778c4;color:#fff;font-size:1.0625em}.swal2-styled.swal2-deny{border:0;border-radius:.25em;background:initial;background-color:#d14529;color:#fff;font-size:1.0625em}.swal2-styled.swal2-cancel{border:0;border-radius:.25em;background:initial;background-color:#757575;color:#fff;font-size:1.0625em}.swal2-styled:focus{outline:0;box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(50,100,150,.4)}.swal2-styled::-moz-focus-inner{border:0}.swal2-footer{justify-content:center;margin:1.25em 0 0;padding:1em 0 0;border-top:1px solid #eee;color:#545454;font-size:1em}.swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;height:.25em;overflow:hidden;border-bottom-right-radius:.3125em;border-bottom-left-radius:.3125em}.swal2-timer-progress-bar{width:100%;height:.25em;background:rgba(0,0,0,.2)}.swal2-image{max-width:100%;margin:1.25em auto}.swal2-close{position:absolute;z-index:2;top:0;right:0;align-items:center;justify-content:center;width:1.2em;height:1.2em;padding:0;overflow:hidden;transition:color .1s ease-out;border:none;border-radius:0;background:0 0;color:#ccc;font-family:serif;font-size:2.5em;line-height:1.2;cursor:pointer}.swal2-close:hover{transform:none;background:0 0;color:#f27474}.swal2-close::-moz-focus-inner{border:0}.swal2-content{z-index:1;justify-content:center;margin:0;padding:0 1.6em;color:#545454;font-size:1.125em;font-weight:400;line-height:normal;text-align:center;word-wrap:break-word}.swal2-checkbox,.swal2-file,.swal2-input,.swal2-radio,.swal2-select,.swal2-textarea{margin:1em auto}.swal2-file,.swal2-input,.swal2-textarea{box-sizing:border-box;width:100%;transition:border-color .3s,box-shadow .3s;border:1px solid #d9d9d9;border-radius:.1875em;background:inherit;box-shadow:inset 0 1px 1px rgba(0,0,0,.06);color:inherit;font-size:1.125em}.swal2-file.swal2-inputerror,.swal2-input.swal2-inputerror,.swal2-textarea.swal2-inputerror{border-color:#f27474!important;box-shadow:0 0 2px #f27474!important}.swal2-file:focus,.swal2-input:focus,.swal2-textarea:focus{border:1px solid #b4dbed;outline:0;box-shadow:0 0 3px #c4e6f5}.swal2-file::-moz-placeholder,.swal2-input::-moz-placeholder,.swal2-textarea::-moz-placeholder{color:#ccc}.swal2-file:-ms-input-placeholder,.swal2-input:-ms-input-placeholder,.swal2-textarea:-ms-input-placeholder{color:#ccc}.swal2-file::placeholder,.swal2-input::placeholder,.swal2-textarea::placeholder{color:#ccc}.swal2-range{margin:1em auto;background:#fff}.swal2-range input{width:80%}.swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}.swal2-range input,.swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}.swal2-input{height:2.625em;padding:0 .75em}.swal2-input[type=number]{max-width:10em}.swal2-file{background:inherit;font-size:1.125em}.swal2-textarea{height:6.75em;padding:.75em}.swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:inherit;color:inherit;font-size:1.125em}.swal2-checkbox,.swal2-radio{align-items:center;justify-content:center;background:#fff;color:inherit}.swal2-checkbox label,.swal2-radio label{margin:0 .6em;font-size:1.125em}.swal2-checkbox input,.swal2-radio input{margin:0 .4em}.swal2-input-label{display:flex;justify-content:center;margin:1em auto}.swal2-validation-message{display:none;align-items:center;justify-content:center;margin:0 -2.7em;padding:.625em;overflow:hidden;background:#f0f0f0;color:#666;font-size:1em;font-weight:300}.swal2-validation-message::before{content:\"!\";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}.swal2-icon{position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:1.25em auto 1.875em;border:.25em solid transparent;border-radius:50%;font-family:inherit;line-height:5em;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}.swal2-icon.swal2-error{border-color:#f27474;color:#f27474}.swal2-icon.swal2-error .swal2-x-mark{position:relative;flex-grow:1}.swal2-icon.swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}.swal2-icon.swal2-error.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-error.swal2-icon-show .swal2-x-mark{-webkit-animation:swal2-animate-error-x-mark .5s;animation:swal2-animate-error-x-mark .5s}.swal2-icon.swal2-warning{border-color:#facea8;color:#f8bb86}.swal2-icon.swal2-info{border-color:#9de0f6;color:#3fc3ee}.swal2-icon.swal2-question{border-color:#c9dae1;color:#87adbd}.swal2-icon.swal2-success{border-color:#a5dc86;color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;transform:rotate(45deg);border-radius:50%}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}.swal2-icon.swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-.25em;left:-.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}.swal2-icon.swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}.swal2-icon.swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}.swal2-icon.swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-animate-success-line-tip .75s;animation:swal2-animate-success-line-tip .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-animate-success-line-long .75s;animation:swal2-animate-success-line-long .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-circular-line-right{-webkit-animation:swal2-rotate-success-circular-line 4.25s ease-in;animation:swal2-rotate-success-circular-line 4.25s ease-in}.swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:0 0 1.25em;padding:0;background:inherit;font-weight:600}.swal2-progress-steps li{display:inline-block;position:relative}.swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:#add8e6;color:#fff}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:#add8e6}.swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}[class^=swal2]{-webkit-tap-highlight-color:transparent}.swal2-show{-webkit-animation:swal2-show .3s;animation:swal2-show .3s}.swal2-hide{-webkit-animation:swal2-hide .15s forwards;animation:swal2-hide .15s forwards}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{right:auto;left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}@supports (-ms-accelerator:true){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@-moz-document url-prefix(){.swal2-close:focus{outline:2px solid rgba(50,100,150,.4)}}@-webkit-keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@-webkit-keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@-webkit-keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@-webkit-keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@-webkit-keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@-webkit-keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@-webkit-keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@-webkit-keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@-webkit-keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@-webkit-keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@-webkit-keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@-webkit-keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto!important}body.swal2-no-backdrop .swal2-container{top:auto;right:auto;bottom:auto;left:auto;max-width:calc(100% - .625em * 2);background-color:transparent!important}body.swal2-no-backdrop .swal2-container>.swal2-modal{box-shadow:0 0 10px rgba(0,0,0,.4)}body.swal2-no-backdrop .swal2-container.swal2-top{top:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-top-left,body.swal2-no-backdrop .swal2-container.swal2-top-start{top:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-top-end,body.swal2-no-backdrop .swal2-container.swal2-top-right{top:0;right:0}body.swal2-no-backdrop .swal2-container.swal2-center{top:50%;left:50%;transform:translate(-50%,-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-left,body.swal2-no-backdrop .swal2-container.swal2-center-start{top:50%;left:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-end,body.swal2-no-backdrop .swal2-container.swal2-center-right{top:50%;right:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom{bottom:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom-left,body.swal2-no-backdrop .swal2-container.swal2-bottom-start{bottom:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-bottom-end,body.swal2-no-backdrop .swal2-container.swal2-bottom-right{right:0;bottom:0}@media print{body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:scroll!important}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) .swal2-container{position:static!important}}body.swal2-toast-shown .swal2-container{background-color:transparent}body.swal2-toast-shown .swal2-container.swal2-top{top:0;right:auto;bottom:auto;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{top:0;right:0;bottom:auto;left:auto}body.swal2-toast-shown .swal2-container.swal2-top-left,body.swal2-toast-shown .swal2-container.swal2-top-start{top:0;right:auto;bottom:auto;left:0}body.swal2-toast-shown .swal2-container.swal2-center-left,body.swal2-toast-shown .swal2-container.swal2-center-start{top:50%;right:auto;bottom:auto;left:0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{top:50%;right:auto;bottom:auto;left:50%;transform:translate(-50%,-50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{top:50%;right:0;bottom:auto;left:auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-left,body.swal2-toast-shown .swal2-container.swal2-bottom-start{top:auto;right:auto;bottom:0;left:0}body.swal2-toast-shown .swal2-container.swal2-bottom{top:auto;right:auto;bottom:0;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{top:auto;right:0;bottom:0;left:auto}body.swal2-toast-column .swal2-toast{flex-direction:column;align-items:stretch}body.swal2-toast-column .swal2-toast .swal2-actions{flex:1;align-self:stretch;height:2.2em;margin-top:.3125em}body.swal2-toast-column .swal2-toast .swal2-loading{justify-content:center}body.swal2-toast-column .swal2-toast .swal2-input{height:2em;margin:.3125em auto;font-size:1em}body.swal2-toast-column .swal2-toast .swal2-validation-message{font-size:1em}");
 
 /***/ }),
 
@@ -42830,7 +50368,7 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _c("span", { domProps: { textContent: _vm._s(_vm.buttonText) } })
+        _c("span", [_vm._v(_vm._s(_vm.buttonText))])
       ]
     )
   ])
@@ -42841,6 +50379,334 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "ldio-7lxobt9epcp" }, [_c("div")])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade bd-example-modal-sm show",
+      attrs: {
+        id: "followersModal",
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "followersModal",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal-dialog modal-dialog-centered modal-sm" },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h4",
+                {
+                  staticClass: "modal-title text-center",
+                  attrs: { id: "followersModal" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.messages.words.followers) +
+                      "\n                "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "modal-body py-1",
+                staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
+              },
+              [
+                _vm.followers.length == 0
+                  ? _c("div", { staticClass: "h3 m-0 p-3 text-center" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.messages.words.nothing_found) +
+                          "\n                "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.followers, function(follower) {
+                  return _c(
+                    "div",
+                    { key: follower.id, staticClass: "follower py-2" },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "text-decoration-none",
+                          attrs: { href: follower.profile_url }
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "d-flex align-items-center" },
+                            [
+                              _c("div", { staticClass: "mr-3" }, [
+                                _c("img", {
+                                  staticClass: "rounded-circle",
+                                  staticStyle: {
+                                    width: "35px",
+                                    height: "35px"
+                                  },
+                                  attrs: {
+                                    src: follower.profile_image,
+                                    alt: "User Image"
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "text-dark" }, [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(follower.username) +
+                                    "\n                            "
+                                )
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _vm.loading
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"
+                      },
+                      [_vm._m(1)]
+                    )
+                  : _vm._e()
+              ],
+              2
+            )
+          ])
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ldio-j0phwa9fshm" }, [_c("div")])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade bd-example-modal-sm show",
+      attrs: {
+        id: "followingsModal",
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "followingsModal",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal-dialog modal-dialog-centered modal-sm" },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h4",
+                {
+                  staticClass: "modal-title text-center",
+                  attrs: { id: "followingsModal" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.messages.words.following) +
+                      "\n                "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "modal-body py-1",
+                staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
+              },
+              [
+                _vm.followings.length == 0
+                  ? _c("div", { staticClass: "h3 m-0 p-3 text-center" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.messages.words.nothing_found) +
+                          "\n                "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.followings, function(following) {
+                  return _c(
+                    "div",
+                    { key: following.id, staticClass: "following py-2" },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "text-decoration-none",
+                          attrs: { href: following.profile_url }
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "d-flex align-items-center" },
+                            [
+                              _c("div", { staticClass: "mr-3" }, [
+                                _c("img", {
+                                  staticClass: "rounded-circle",
+                                  staticStyle: {
+                                    width: "35px",
+                                    height: "35px"
+                                  },
+                                  attrs: {
+                                    src: following.profile_image,
+                                    alt: "User Image"
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "text-dark" }, [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(following.username) +
+                                    "\n                            "
+                                )
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _vm.loading
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"
+                      },
+                      [_vm._m(1)]
+                    )
+                  : _vm._e()
+              ],
+              2
+            )
+          ])
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ldio-j0phwa9fshm" }, [_c("div")])
   }
 ]
 render._withStripped = true
@@ -42923,6 +50789,140 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade bd-example-modal-sm show",
+      attrs: {
+        id: "likesModal",
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "likesModal",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal-dialog modal-dialog-centered modal-sm" },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h4",
+                {
+                  staticClass: "modal-title text-center",
+                  attrs: { id: "likesModal" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.messages.words.likes) +
+                      "\n                "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "modal-body py-1",
+                staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
+              },
+              [
+                _vm.likes.length == 0
+                  ? _c("div", { staticClass: "h3 m-0 p-3 text-center" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.messages.words.nothing_found) +
+                          "\n                "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.likes, function(like) {
+                  return _c("div", { key: like.id, staticClass: "like py-2" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "text-decoration-none",
+                        attrs: { href: like.user.profile_url }
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "d-flex align-items-center" },
+                          [
+                            _c("div", { staticClass: "mr-3" }, [
+                              _c("img", {
+                                staticClass: "rounded-circle",
+                                staticStyle: { width: "35px", height: "35px" },
+                                attrs: {
+                                  src: like.user.profile_image,
+                                  alt: "User Image"
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(like.user.username))])
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PostRight.vue?vue&type=template&id=e9f98cfe&":
 /*!************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PostRight.vue?vue&type=template&id=e9f98cfe& ***!
@@ -42940,21 +50940,75 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "right col-md-4 d-flex flex-column" }, [
     !_vm.mobile
-      ? _c("div", { staticClass: "post-author d-flex align-items-center" }, [
-          _c("a", { attrs: { href: _vm.post.user.profile_url } }, [
-            _c("img", {
-              staticClass: "rounded-circle",
-              staticStyle: { width: "35px", height: "35px" },
-              attrs: { src: _vm.post.user.profile_image, alt: "Profile Image" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("a", {
-            staticClass: "post-author-username h6 m-0 ml-2",
-            attrs: { href: _vm.post.user.profile_url },
-            domProps: { textContent: _vm._s(_vm.post.user.username) }
-          })
-        ])
+      ? _c(
+          "div",
+          {
+            staticClass:
+              "post-author d-flex justify-content-between align-items-center"
+          },
+          [
+            _c("div", [
+              _c("a", { attrs: { href: _vm.post.user.profile_url } }, [
+                _c("img", {
+                  staticClass: "rounded-circle",
+                  staticStyle: { width: "35px", height: "35px" },
+                  attrs: {
+                    src: _vm.post.user.profile_image,
+                    alt: "Profile Image"
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "post-author-username h6 m-0 ml-2",
+                  attrs: { href: _vm.post.user.profile_url }
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.post.user.username) +
+                      "\n            "
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "p-2" }, [
+              _vm.$user.id == _vm.post.user.id
+                ? _c("div", [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "dropdown-menu dropdown-menu-right" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item delete-post-btn",
+                            on: {
+                              click: function($event) {
+                                return _vm.deletePost($event)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(_vm.messages.words.delete) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ]
+        )
       : _vm._e(),
     _vm._v(" "),
     !_vm.mobile
@@ -42975,23 +51029,42 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "comment-content" }, [
                   _c("span", { staticClass: "comment-author-username" }, [
-                    _c("a", {
-                      attrs: { href: _vm.post.user.profile_url },
-                      domProps: { textContent: _vm._s(_vm.post.user.username) }
-                    })
+                    _c("a", { attrs: { href: _vm.post.user.profile_url } }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(_vm.post.user.username) +
+                          "\n                            "
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("span", {
-                    staticClass: "comment-body",
-                    domProps: { textContent: _vm._s(_vm.post.caption) }
-                  }),
+                  _c("span", { staticClass: "comment-body" }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(_vm.post.caption) +
+                        "\n                        "
+                    )
+                  ]),
                   _vm._v(" "),
-                  _vm._m(0)
+                  _c("div", { staticClass: "comment-info" }, [
+                    _c("div", { staticClass: "comment-posted-at" }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(
+                            _vm.timeAgo.format(
+                              new Date(_vm.post.created_at),
+                              "mini-now"
+                            )
+                          ) +
+                          "\n                            "
+                      )
+                    ])
+                  ])
                 ])
               ])
             ]),
             _vm._v(" "),
-            _vm.commentsLoading || _vm.firstCommentsLoad
+            _vm.comments.loading || _vm.comments.firstCommentsLoad
               ? _c(
                   "div",
                   {
@@ -43002,7 +51075,9 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            !_vm.commentsEnd && !_vm.commentsLoading && !_vm.firstCommentsLoad
+            !_vm.comments.end &&
+            !_vm.comments.loading &&
+            !_vm.comments.firstCommentsLoad
               ? _c(
                   "div",
                   {
@@ -43022,39 +51097,67 @@ var render = function() {
             _c(
               "div",
               { staticClass: "comments" },
-              _vm._l(_vm.comments, function(comment) {
-                return _c("li", { key: comment.id, staticClass: "py-2" }, [
-                  _c("div", { staticClass: "d-flex" }, [
-                    _c("div", { staticClass: "comment-author-image" }, [
-                      _c("img", {
-                        staticClass: "rounded-circle mr-2",
-                        staticStyle: { width: "35px", height: "35px" },
-                        attrs: {
-                          src: comment.user.profile_image,
-                          alt: "User Image"
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "comment-content" }, [
-                      _c("span", { staticClass: "comment-author-username" }, [
-                        _c("a", {
-                          attrs: { href: comment.user.profile_url },
-                          domProps: {
-                            textContent: _vm._s(comment.user.username)
+              _vm._l(_vm.comments.data, function(comment) {
+                return _c(
+                  "li",
+                  { key: comment.id, staticClass: "py-2 position-relative" },
+                  [
+                    _c("div", { staticClass: "d-flex" }, [
+                      _c("div", { staticClass: "comment-author-image" }, [
+                        _c("img", {
+                          staticClass: "rounded-circle mr-2",
+                          staticStyle: { width: "35px", height: "35px" },
+                          attrs: {
+                            src: comment.user.profile_image,
+                            alt: "User Image"
                           }
                         })
                       ]),
                       _vm._v(" "),
-                      _c("span", {
-                        staticClass: "comment-body",
-                        domProps: { textContent: _vm._s(comment.body) }
-                      }),
-                      _vm._v(" "),
-                      _vm._m(2, true)
+                      _c("div", { staticClass: "comment-content pr-3" }, [
+                        _c("span", { staticClass: "comment-author-username" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "d-inline",
+                              attrs: { href: comment.user.profile_url }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(comment.user.username) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "comment-body" }, [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(comment.body) +
+                              "\n                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "comment-info" }, [
+                          _c("div", { staticClass: "comment-posted-at" }, [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(
+                                  _vm.timeAgo.format(
+                                    new Date(comment.created_at),
+                                    "mini-now"
+                                  )
+                                ) +
+                                "\n                                "
+                            )
+                          ])
+                        ])
+                      ])
                     ])
-                  ])
-                ])
+                  ]
+                )
               }),
               0
             )
@@ -43071,7 +51174,7 @@ var render = function() {
               _c("like-button", {
                 attrs: {
                   "post-id": _vm.post.id,
-                  "post-to": _vm.likeUrl,
+                  urls: _vm.urls,
                   likes: _vm.post.likedByCurrentUser
                 }
               }),
@@ -43116,21 +51219,27 @@ var render = function() {
             "div",
             {
               staticClass: "post-likes mt-2",
-              staticStyle: { cursor: "pointer" },
-              on: { click: _vm.getLikes }
+              staticStyle: { cursor: "pointer" }
             },
             [
-              _c("span", {
-                attrs: { id: "likes-" + _vm.post.id },
-                domProps: { textContent: _vm._s(_vm.post.likesCount) }
-              }),
+              _c("span", { attrs: { id: "likes-" + _vm.post.id } }, [
+                _vm._v(_vm._s(_vm.post.likesCount.toLocaleString()))
+              ]),
               _vm._v(" "),
-              _c("span", [_vm._v(" likes")])
+              _c("span", [
+                _vm._v(_vm._s(_vm.messages.words.likes.toLowerCase()))
+              ])
             ]
           ),
           _vm._v(" "),
           _c("div", { staticClass: "post-time mt-2" }, [
-            _vm._v("\n            1 hour ago\n        ")
+            _vm._v(
+              "\n            " +
+                _vm._s(
+                  _vm.timeAgo.format(new Date(_vm.post.created_at), "round")
+                ) +
+                "\n        "
+            )
           ])
         ])
       : _vm._e(),
@@ -43144,7 +51253,7 @@ var render = function() {
               _c("like-button", {
                 attrs: {
                   "post-id": _vm.post.id,
-                  "post-to": _vm.likeUrl,
+                  urls: _vm.urls,
                   likes: _vm.post.likedByCurrentUser
                 }
               }),
@@ -43180,7 +51289,40 @@ var render = function() {
                     ]
                   )
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "p-2 ml-auto" }, [
+                _vm.$user.id == _vm.post.user.id
+                  ? _c("div", [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "dropdown-menu dropdown-menu-right" },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "dropdown-item delete-post-btn",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deletePost($event)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(_vm.messages.words.delete) +
+                                  "\n                        "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ])
             ],
             1
           ),
@@ -43189,30 +51331,46 @@ var render = function() {
             "div",
             {
               staticClass: "post-likes mt-2",
-              staticStyle: { cursor: "pointer" },
-              on: { click: _vm.getLikes }
+              staticStyle: { cursor: "pointer" }
             },
             [
-              _c("span", {
-                attrs: { id: "likes-" + _vm.post.id },
-                domProps: { textContent: _vm._s(_vm.post.likesCount) }
-              }),
+              _c("span", { attrs: { id: "likes-" + _vm.post.id } }, [
+                _vm._v(_vm._s(_vm.post.likesCount.toLocaleString()))
+              ]),
               _vm._v(" "),
-              _c("span", [_vm._v(" likes")])
+              _c("span", [
+                _vm._v(_vm._s(_vm.messages.words.likes.toLowerCase()))
+              ])
             ]
           ),
           _vm._v(" "),
           _c("div", [
-            _c("span", {
-              staticClass: "post-author",
-              domProps: { textContent: _vm._s(_vm.post.user.username) }
-            }),
-            _vm._v(" "),
-            _c("span", { domProps: { textContent: _vm._s(_vm.post.caption) } })
+            _c(
+              "a",
+              {
+                staticClass: "post-author",
+                attrs: { href: _vm.post.user.profile_url }
+              },
+              [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.post.user.username) +
+                    "\n            "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.post.caption))])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "post-time mt-2" }, [
-            _vm._v("\n            1 hour ago\n        ")
+            _vm._v(
+              "\n            " +
+                _vm._s(
+                  _vm.timeAgo.format(new Date(_vm.post.created_at), "round")
+                ) +
+                "\n        "
+            )
           ])
         ])
       : _vm._e(),
@@ -43220,7 +51378,7 @@ var render = function() {
     _vm.mobile
       ? _c("div", { staticClass: "post-comments py-2" }, [
           _c("ul", { staticClass: "m-0 p-0" }, [
-            _vm.commentsLoading || _vm.firstCommentsLoad
+            _vm.comments.loading || _vm.comments.firstCommentsLoad
               ? _c(
                   "div",
                   {
@@ -43231,7 +51389,9 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            !_vm.commentsEnd && !_vm.commentsLoading && !_vm.firstCommentsLoad
+            !_vm.comments.end &&
+            !_vm.comments.loading &&
+            !_vm.comments.firstCommentsLoad
               ? _c(
                   "div",
                   {
@@ -43248,10 +51408,18 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
+            _c("div", { staticClass: "h4 m-0 p-3 text-center" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.messages.no_comments) +
+                  "\n            "
+              )
+            ]),
+            _vm._v(" "),
             _c(
               "div",
               { staticClass: "comments" },
-              _vm._l(_vm.comments, function(comment) {
+              _vm._l(_vm.comments.data, function(comment) {
                 return _c("li", { key: comment.id, staticClass: "py-2" }, [
                   _c("div", { staticClass: "d-flex" }, [
                     _c("div", { staticClass: "comment-author-image" }, [
@@ -43267,20 +51435,37 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "comment-content" }, [
                       _c("span", { staticClass: "comment-author-username" }, [
-                        _c("a", {
-                          attrs: { href: comment.user.profile_url },
-                          domProps: {
-                            textContent: _vm._s(comment.user.username)
-                          }
-                        })
+                        _c("a", { attrs: { href: comment.user.profile_url } }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(comment.user.username) +
+                              "\n                                "
+                          )
+                        ])
                       ]),
                       _vm._v(" "),
-                      _c("span", {
-                        staticClass: "comment-body",
-                        domProps: { textContent: _vm._s(comment.body) }
-                      }),
+                      _c("span", { staticClass: "comment-body" }, [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(comment.body) +
+                            "\n                            "
+                        )
+                      ]),
                       _vm._v(" "),
-                      _vm._m(4, true)
+                      _c("div", { staticClass: "comment-info" }, [
+                        _c("div", { staticClass: "comment-posted-at" }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(
+                                _vm.timeAgo.format(
+                                  new Date(comment.created_at),
+                                  "mini-now"
+                                )
+                              ) +
+                              "\n                                "
+                          )
+                        ])
+                      ])
                     ])
                   ])
                 ])
@@ -43309,8 +51494,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.addCommentVal,
-                expression: "addCommentVal"
+                value: _vm.comments.addCommentVal,
+                expression: "comments.addCommentVal"
               }
             ],
             ref: "addCommentField",
@@ -43322,31 +51507,35 @@ var render = function() {
               autocorrect: "off",
               id: "comment-" + _vm.post.id
             },
-            domProps: { value: _vm.addCommentVal },
+            domProps: { value: _vm.comments.addCommentVal },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.addCommentVal = $event.target.value
+                _vm.$set(_vm.comments, "addCommentVal", $event.target.value)
               }
             }
           }),
           _vm._v(" "),
-          !_vm.commentAdding
+          !_vm.comments.addingComment
             ? _c("button", { staticClass: "ml-auto px-4 py-0 btn" }, [
-                _vm._v("\n                Post\n            ")
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.messages.words.post) +
+                    "\n            "
+                )
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.commentAdding
+          _vm.comments.addingComment
             ? _c(
                 "div",
                 {
                   staticClass:
                     "mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
                 },
-                [_vm._m(5)]
+                [_vm._m(4)]
               )
             : _vm._e()
         ]
@@ -43359,9 +51548,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-info" }, [
-      _c("div", { staticClass: "comment-posted-at" }, [_vm._v("1h")])
-    ])
+    return _c(
+      "a",
+      {
+        staticClass: "text-dark",
+        staticStyle: { transform: "rotate(90deg)", display: "block" },
+        attrs: {
+          "data-toggle": "dropdown",
+          role: "button",
+          "aria-haspopup": "true",
+          "aria-expanded": "false",
+          href: "#"
+        }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
   },
   function() {
     var _vm = this
@@ -43373,23 +51574,27 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-info" }, [
-      _c("div", { staticClass: "comment-posted-at" }, [_vm._v("1h")])
-    ])
+    return _c(
+      "a",
+      {
+        staticClass: "text-dark",
+        staticStyle: { transform: "rotate(90deg)", display: "block" },
+        attrs: {
+          "data-toggle": "dropdown",
+          role: "button",
+          "aria-haspopup": "true",
+          "aria-expanded": "false",
+          href: "#"
+        }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "ldio-ztkrgk44qa" }, [_c("div")])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-info" }, [
-      _c("div", { staticClass: "comment-posted-at" }, [_vm._v("1h")])
-    ])
   },
   function() {
     var _vm = this
@@ -43425,26 +51630,74 @@ var render = function() {
     [
       _vm._l(_vm.posts, function(post) {
         return _c("div", { key: post.id, staticClass: "post card mb-4" }, [
-          _c("div", { staticClass: "card-header post-user" }, [
-            _c("div", { staticClass: "d-flex align-items-center" }, [
-              _c("a", { attrs: { href: post.user.profile_url } }, [
-                _c("img", {
-                  staticClass: "rounded-circle",
-                  staticStyle: { width: "35px", height: "35px" },
-                  attrs: { src: post.user.profile_image, alt: "Profile Image" }
-                })
+          _c(
+            "div",
+            {
+              staticClass:
+                "card-header post-user d-flex justify-content-between align-items-center"
+            },
+            [
+              _c("div", { staticClass: "d-flex align-items-center" }, [
+                _c("a", { attrs: { href: post.user.profile_url } }, [
+                  _c("img", {
+                    staticClass: "rounded-circle",
+                    staticStyle: { width: "35px", height: "35px" },
+                    attrs: {
+                      src: post.user.profile_image,
+                      alt: "Profile Image"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "post-author-username h6",
+                    attrs: { href: post.user.profile_url }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(post.user.username) +
+                        "\n                "
+                    )
+                  ]
+                )
               ]),
               _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "post-author-username h6",
-                  attrs: { href: post.user.profile_url }
-                },
-                [_vm._v(_vm._s(post.user.username))]
-              )
-            ])
-          ]),
+              _vm.$user.id == post.user.id
+                ? _c("div", [
+                    _vm._m(0, true),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "dropdown-menu dropdown-menu-right" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item delete-post-btn",
+                            attrs: { "data-post-id": post.id },
+                            on: {
+                              click: function($event) {
+                                return _vm.deletePost($event)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(_vm.messages.words.delete) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                : _vm._e()
+            ]
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "card-body p-0" }, [
             _c("div", { staticClass: "card-image d-flex" }, [
@@ -43469,7 +51722,7 @@ var render = function() {
                   _c("like-button", {
                     attrs: {
                       "post-id": post.id,
-                      "post-to": _vm.likeUrl,
+                      urls: _vm.urls,
                       likes: post.likedByCurrentUser
                     }
                   }),
@@ -43526,23 +51779,43 @@ var render = function() {
                   }
                 },
                 [
-                  _c("span", {
-                    attrs: { id: "likes-" + post.id },
-                    domProps: { textContent: _vm._s(post.likesCount) }
-                  }),
-                  _vm._v("\n                    likes\n                ")
+                  _c("span", { attrs: { id: "likes-" + post.id } }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(post.likesCount.toLocaleString()) +
+                        "\n                    "
+                    )
+                  ]),
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.messages.words.likes.toLowerCase()) +
+                      "\n                "
+                  )
                 ]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "post-caption mt-1" }, [
-                _c("a", {
-                  staticClass: "post-caption-author",
-                  attrs: { href: post.user.profile_url },
-                  domProps: { textContent: _vm._s(post.user.username) }
-                }),
+                _c(
+                  "a",
+                  {
+                    staticClass: "post-caption-author",
+                    attrs: { href: post.user.profile_url }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(post.user.username) +
+                        "\n                    "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
                 _c("span", { staticStyle: { "word-break": "break-all" } }, [
-                  _vm._v(_vm._s(post.caption))
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(post.caption) +
+                      "\n                    "
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -43560,9 +51833,13 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        View all " +
-                            _vm._s(post.commentsCount) +
-                            " comments\n                    "
+                          "\n                        " +
+                            _vm._s(_vm.messages.words.view_all) +
+                            "\n                        " +
+                            _vm._s(post.commentsCount.toLocaleString()) +
+                            "\n                        " +
+                            _vm._s(_vm.messages.words.comments.toLowerCase()) +
+                            "\n                    "
                         )
                       ]
                     )
@@ -43580,24 +51857,44 @@ var render = function() {
                           staticClass: "mb-1 post-comment-latest"
                         },
                         [
-                          _c("a", {
-                            attrs: { href: comment.user.profile_url },
-                            domProps: {
-                              textContent: _vm._s(comment.user.username)
-                            }
-                          }),
+                          _c(
+                            "a",
+                            { attrs: { href: comment.user.profile_url } },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(comment.user.username) +
+                                  "\n                            "
+                              )
+                            ]
+                          ),
                           _vm._v(" "),
                           _c(
                             "span",
                             { staticStyle: { "word-break": "break-all" } },
-                            [_vm._v(" " + _vm._s(comment.body))]
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(comment.body) +
+                                  "\n                            "
+                              )
+                            ]
                           )
                         ]
                       )
                     }),
                     _vm._v(" "),
                     _c("div", { staticClass: "time-posted" }, [
-                      _vm._v("1 hour ago")
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(
+                            _vm.timeAgo.format(
+                              new Date(post.created_at),
+                              "round"
+                            )
+                          ) +
+                          "\n                        "
+                      )
                     ])
                   ],
                   2
@@ -43637,10 +51934,16 @@ var render = function() {
                     style: [_vm.commentLoading ? { cursor: "no-drop" } : ""],
                     attrs: { disabled: _vm.commentLoading }
                   },
-                  [_vm._v("\n                    Post\n                ")]
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.messages.words.post) +
+                        "\n                "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _vm._m(0, true)
+                _vm._m(1, true)
               ]
             )
           ])
@@ -43650,7 +51953,7 @@ var render = function() {
       _vm.end
         ? _c("div", {
             staticClass: "h2 text-center m-0 py-3",
-            domProps: { innerHTML: _vm._s(_vm.endMessage) }
+            domProps: { innerHTML: _vm._s(_vm.messages.end_of_page.title) }
           })
         : _vm._e(),
       _vm._v(" "),
@@ -43666,6 +51969,25 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "text-dark",
+        attrs: {
+          "data-toggle": "dropdown",
+          role: "button",
+          "aria-haspopup": "true",
+          "aria-expanded": "false",
+          href: "#"
+        }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -43702,118 +52024,125 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: this.busy,
-            expression: "this.busy"
-          }
-        ],
-        staticClass: "loadingio-spinner-rolling-0tu00tw3hyi"
-      },
-      [_vm._m(0)]
-    ),
-    _vm._v(" "),
-    _c("input", {
-      directives: [
-        { name: "model", rawName: "v-model", value: _vm.q, expression: "q" }
-      ],
-      staticClass:
-        "search-bar border rounded text-center outline-none py-1 pl-4 pr-3",
-      staticStyle: { width: "250px" },
-      attrs: { type: "text", placeholder: _vm.placeholder },
-      domProps: { value: _vm.q },
-      on: {
-        focus: _vm.handleFocus,
-        blur: _vm.handleBlur,
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.q = $event.target.value
+  return _c(
+    "li",
+    { staticClass: "nav-item d-flex align-items-center position-relative" },
+    [
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: this.busy,
+              expression: "this.busy"
+            }
+          ],
+          staticClass: "loadingio-spinner-rolling-0tu00tw3hyi"
+        },
+        [_vm._m(0)]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass:
+          "search-bar border rounded text-center outline-none py-1 pl-4 pr-3",
+        staticStyle: { width: "250px" },
+        attrs: { type: "text", placeholder: _vm.placeholder },
+        domProps: { value: _vm.q },
+        on: {
+          input: function(e) {
+            return (_vm.q = e.target.value)
+          },
+          focus: _vm.handleFocus,
+          blur: _vm.handleBlur
         }
-      }
-    }),
-    _vm._v(" "),
-    _vm.showSearchResults
-      ? _c("div", [
-          _c("ul", { staticClass: "list-group search-results" }, [
-            _vm.noResult
-              ? _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item p-2 d-flex align-items-center justify-content-center"
-                  },
-                  [
-                    _c("div", { staticClass: "h5 m-0 py-2" }, [
-                      _vm._v("No results found")
-                    ])
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "li",
-              _vm._l(_vm.data, function(item) {
-                return _c(
-                  "a",
-                  { key: item.username, attrs: { href: item.profile_url } },
-                  [
-                    _c(
-                      "li",
-                      {
-                        staticClass:
-                          "list-group-item p-2 d-flex align-items-center"
-                      },
-                      [
-                        _c("div", [
-                          _c("img", {
-                            staticStyle: { width: "25px" },
-                            attrs: {
-                              src: item.profile_image,
-                              alt: "Profile Image"
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "ml-3" }, [
-                          _c(
-                            "div",
-                            { staticClass: "search-results-username" },
-                            [
+      }),
+      _vm._v(" "),
+      _vm.showSearchResults
+        ? _c("div", [
+            _c("ul", { staticClass: "list-group search-results" }, [
+              _vm.noResult
+                ? _c(
+                    "li",
+                    {
+                      staticClass:
+                        "list-group-item p-2 d-flex align-items-center justify-content-center"
+                    },
+                    [
+                      _c("div", { staticClass: "h5 m-0 py-2" }, [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.messages.words.no_results_found) +
+                            "\n                "
+                        )
+                      ])
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "li",
+                _vm._l(_vm.data, function(item) {
+                  return _c(
+                    "a",
+                    { key: item.username, attrs: { href: item.profile_url } },
+                    [
+                      _c(
+                        "li",
+                        {
+                          staticClass:
+                            "list-group-item p-2 d-flex align-items-center"
+                        },
+                        [
+                          _c("div", [
+                            _c("img", {
+                              staticClass: "rounded-circle",
+                              staticStyle: { width: "25px" },
+                              attrs: {
+                                src: item.profile_image,
+                                alt: "Profile Image"
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "ml-3" }, [
+                            _c(
+                              "div",
+                              { staticClass: "search-results-username" },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(item.username) +
+                                    "\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "search-results-name" }, [
                               _vm._v(
                                 "\n                                " +
-                                  _vm._s(item.username) +
+                                  _vm._s(item.name) +
                                   "\n                            "
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "search-results-name" }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(item.name) +
-                                "\n                            "
-                            )
+                            ])
                           ])
-                        ])
-                      ]
-                    )
-                  ]
-                )
-              }),
-              0
-            )
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
           ])
-        ])
-      : _vm._e()
-  ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("i", {
+        staticClass: "fa fa-search position-absolute ml-2 ml-md-0 ml-md-2"
+      })
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -56020,6 +64349,7 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+Vue.prototype.$user = window.User;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -56035,6 +64365,9 @@ Vue.component("like-button", __webpack_require__(/*! ./components/LikeButton.vue
 Vue.component("posts-feed", __webpack_require__(/*! ./components/PostsFeed.vue */ "./resources/js/components/PostsFeed.vue")["default"]);
 Vue.component("post-right", __webpack_require__(/*! ./components/PostRight.vue */ "./resources/js/components/PostRight.vue")["default"]);
 Vue.component("follow-button", __webpack_require__(/*! ./components/FollowButton.vue */ "./resources/js/components/FollowButton.vue")["default"]);
+Vue.component("followers-modal", __webpack_require__(/*! ./components/FollowersModal.vue */ "./resources/js/components/FollowersModal.vue")["default"]);
+Vue.component("followings-modal", __webpack_require__(/*! ./components/FollowingsModal.vue */ "./resources/js/components/FollowingsModal.vue")["default"]);
+Vue.component("likes-modal", __webpack_require__(/*! ./components/LikesModal.vue */ "./resources/js/components/LikesModal.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -56043,7 +64376,45 @@ Vue.component("follow-button", __webpack_require__(/*! ./components/FollowButton
 
 var app = new Vue({
   el: "#app"
-});
+}); // Helpers Functions
+
+window.show_success = function (alert_title, alert_message) {
+  var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
+  toastr.success(alert_message, alert_title, {
+    closeButton: true,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: true,
+    showDuration: 300,
+    hideDuration: 1000,
+    timeOut: timeout,
+    extendedTimeOut: timeout,
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut"
+  });
+  return true;
+};
+
+window.show_error = function (alert_title, alert_message) {
+  var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
+  toastr.error(alert_message, alert_title, {
+    closeButton: true,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: true,
+    showDuration: 300,
+    hideDuration: 1000,
+    timeOut: timeout,
+    extendedTimeOut: timeout,
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut"
+  });
+  return true;
+};
 
 /***/ }),
 
@@ -56051,9 +64422,14 @@ var app = new Vue({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var javascript_time_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! javascript-time-ago */ "./node_modules/javascript-time-ago/index.js");
+/* harmony import */ var javascript_time_ago_locale_en__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! javascript-time-ago/locale/en */ "./node_modules/javascript-time-ago/locale/en.json");
+var javascript_time_ago_locale_en__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! javascript-time-ago/locale/en */ "./node_modules/javascript-time-ago/locale/en.json", 1);
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -56093,7 +64469,14 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js"); // Cropper JS
 
-window.Cropper = __webpack_require__(/*! cropperjs */ "./node_modules/cropperjs/dist/cropper.js");
+window.Cropper = __webpack_require__(/*! cropperjs */ "./node_modules/cropperjs/dist/cropper.js"); // SweetAlert
+
+window.Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js"); // TimeAgo
+
+
+
+javascript_time_ago__WEBPACK_IMPORTED_MODULE_0__["default"].addDefaultLocale(javascript_time_ago_locale_en__WEBPACK_IMPORTED_MODULE_1__);
+window.timeAgo = new javascript_time_ago__WEBPACK_IMPORTED_MODULE_0__["default"]("en-US");
 
 /***/ }),
 
@@ -56166,6 +64549,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/FollowersModal.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/FollowersModal.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FollowersModal.vue?vue&type=template&id=5f474ac3& */ "./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3&");
+/* harmony import */ var _FollowersModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FollowersModal.vue?vue&type=script&lang=js& */ "./resources/js/components/FollowersModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FollowersModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/FollowersModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/FollowersModal.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/FollowersModal.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowersModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowersModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowersModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowersModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowersModal.vue?vue&type=template&id=5f474ac3& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowersModal.vue?vue&type=template&id=5f474ac3&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowersModal_vue_vue_type_template_id_5f474ac3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/FollowingsModal.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/FollowingsModal.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FollowingsModal.vue?vue&type=template&id=7c3aeaa0& */ "./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0&");
+/* harmony import */ var _FollowingsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FollowingsModal.vue?vue&type=script&lang=js& */ "./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FollowingsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/FollowingsModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowingsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowingsModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowingsModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowingsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowingsModal.vue?vue&type=template&id=7c3aeaa0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowingsModal.vue?vue&type=template&id=7c3aeaa0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowingsModal_vue_vue_type_template_id_7c3aeaa0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/LikeButton.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/LikeButton.vue ***!
@@ -56230,6 +64751,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_2a9c25d4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_2a9c25d4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/LikesModal.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/LikesModal.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikesModal.vue?vue&type=template&id=542fd87c& */ "./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c&");
+/* harmony import */ var _LikesModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LikesModal.vue?vue&type=script&lang=js& */ "./resources/js/components/LikesModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _LikesModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/LikesModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/LikesModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/LikesModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LikesModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./LikesModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LikesModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LikesModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./LikesModal.vue?vue&type=template&id=542fd87c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LikesModal.vue?vue&type=template&id=542fd87c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikesModal_vue_vue_type_template_id_542fd87c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

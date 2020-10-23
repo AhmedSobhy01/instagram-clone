@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <li class="nav-item d-flex align-items-center position-relative">
         <div class="loadingio-spinner-rolling-0tu00tw3hyi" v-show="this.busy">
             <div class="ldio-904g46jbyyt">
                 <div></div>
@@ -11,7 +11,8 @@
             type="text"
             style="width: 250px"
             :placeholder="placeholder"
-            v-model="q"
+            :value="q"
+            @input="e => (q = e.target.value)"
             @focus="handleFocus"
             @blur="handleBlur"
         />
@@ -23,7 +24,9 @@
                     class="list-group-item p-2 d-flex align-items-center justify-content-center"
                     v-if="noResult"
                 >
-                    <div class="h5 m-0 py-2">No results found</div>
+                    <div class="h5 m-0 py-2">
+                        {{ messages.words.no_results_found }}
+                    </div>
                 </li>
 
                 <!-- Results -->
@@ -41,6 +44,7 @@
                                     :src="item.profile_image"
                                     alt="Profile Image"
                                     style="width: 25px"
+                                    class="rounded-circle"
                                 />
                             </div>
                             <div class="ml-3">
@@ -56,12 +60,13 @@
                 </li>
             </ul>
         </div>
-    </div>
+        <i class="fa fa-search position-absolute ml-2 ml-md-0 ml-md-2"></i>
+    </li>
 </template>
 
 <script>
 export default {
-    props: ["placeholder", "postTo"],
+    props: ["urls", "messages", "placeholder"],
 
     data: function() {
         return {
@@ -89,11 +94,12 @@ export default {
 
     methods: {
         doSearch() {
+            if (this.busy) return;
             this.busy = true;
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(() => {
                 axios
-                    .post(this.postTo, {
+                    .post(this.urls.search.index, {
                         q: this.q
                     })
                     .then(res => res.data)
@@ -112,6 +118,7 @@ export default {
                     });
             }, 700);
         },
+
         handleFocus() {
             clearTimeout(this.showSearchResultsTimeout);
             if (this.q == "") {
@@ -120,11 +127,20 @@ export default {
                 this.showSearchResults = true;
             }
         },
+
         handleBlur() {
             clearTimeout(this.showSearchResultsTimeout);
             this.showSearchResultsTimeout = setTimeout(() => {
                 this.showSearchResults = false;
             }, 150);
+        },
+
+        checkScreen() {
+            if (window.matchMedia("screen and (max-width: 768px)").matches) {
+                this.mobile = true;
+            } else {
+                this.mobile = false;
+            }
         }
     }
 };

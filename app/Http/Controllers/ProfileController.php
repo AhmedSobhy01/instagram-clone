@@ -9,7 +9,6 @@ use App\Http\Requests\ProfileRequest;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\ProfileImageRequest;
 
 class ProfileController extends Controller
 {
@@ -19,10 +18,21 @@ class ProfileController extends Controller
             $q->latest();
         }])->first();
 
-        if (!$user) :
-            return abort(404, __('main.messages_title.user_delete_error'));
-        endif;
-        return view('profile.index', compact('user'));
+        if (!$user) return abort(404, __('main.messages_title.user_delete_error'));
+
+        $urls = json_encode(([
+            "follow" => [
+                "store" => route('follow.store')
+            ],
+            "followers" => [
+                'index' => route('user.followers')
+            ],
+            "followings" => [
+                'index' => route('user.followings')
+            ],
+        ]));
+
+        return view('profile.index', compact('user', 'urls'));
     }
 
     public function edit()
@@ -50,12 +60,10 @@ class ProfileController extends Controller
 
             DB::commit();
 
-            session()->flash('success', __("main.profile_updated"));
-            return redirect()->route('profile.edit');
+            return redirect()->route('profile.edit')->with('success', __("main.profile_updated"));
         } catch (\Exception $e) {
             DB::rollback();
-            session()->flash('error', __("main.error"));
-            return redirect()->route('profile.edit');
+            return redirect()->route('profile.edit')->with('error', __("main.error"));
         }
     }
 
@@ -63,9 +71,7 @@ class ProfileController extends Controller
     {
         if (!$request->wantsJson()) return abort(404);
 
-        if (!auth()->check()) {
-            return response_unauthenticated();
-        }
+        if (!auth()->check()) return response_unauthenticated();
 
         $validator = Validator::make($request->all(), [
             'image' => 'required|base64image|base64max:4096|base64mimes:jpeg,png',

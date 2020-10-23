@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,12 +11,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function edit(AccountEdit $request)
+    public function edit()
+    {
+        return view('account.edit');
+    }
+
+    public function update(AccountEdit $request)
     {
         try {
             DB::beginTransaction();
 
-            if (!(Hash::check($request->current_password, auth()->user()->password))) {
+            $user = auth()->user();
+
+            if (!(Hash::check($request->current_password, $user->password))) {
                 return redirect()->route('account.edit')->with("error", __("main.current_password_wrong"));
             }
 
@@ -25,8 +31,8 @@ class UserController extends Controller
                 return redirect()->route('account.edit')->with("error", __("main.new_password_same_as_current"));
             }
 
-            auth()->user()->password = Hash::make($request->password);
-            auth()->user()->save();
+            $user->password = Hash::make($request->password);
+            $user->save();
 
             DB::commit();
             return redirect()->route('account.edit')->with('success', __('main.password_updated'));
@@ -39,9 +45,36 @@ class UserController extends Controller
     {
         if (!$request->wantsJson()) return abort(404);
 
-        if (!auth()->check()) {
-            return response_unauthenticated();
+        if (!auth()->check()) return response_unauthenticated();
+
+        $validator = Validator::make($request->all(), [
+            'userID' => 'required|integer',
+        ], [
+            'userID.required' => __('custom_validation.userID.required'),
+            'userID.integer' => __('custom_validation.userID.integer'),
+        ]);
+
+        if ($validator->fails()) return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
+
+        try {
+            $user = User::find($request->userID);
+
+            if (!$user) return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
+
+            DB::beginTransaction();
+            if (auth()->user()->follow($user)) {
+                DB::commit();
+                return response_created();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response_server_error();
         }
+    }
+
+    public function getFollowers(Request $request)
+    {
+        if (!$request->wantsJson()) return abort(404);
 
         $validator = Validator::make($request->all(), [
             'userID' => 'required|integer',
@@ -61,14 +94,55 @@ class UserController extends Controller
                 return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
             }
 
-            DB::beginTransaction();
-            if (auth()->user()->follow($user)) {
-                DB::commit();
-                return response_created();
-            }
+            $followers = $user->followers()->paginate(8, ['username', 'profile_image']);
+
+            $last_page = $followers->currentPage() >= $followers->lastPage() ? true : false;
+
+            $followers = $followers->map(function ($item) {
+                unset($item['pivot']);
+                return $item;
+            });
+
+            return response_ok("", "", ["followers" => $followers, "last_page" => $last_page]);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response_server_error();
+            return response_server_error($e);
+        }
+    }
+
+    public function getFollowing(Request $request)
+    {
+        if (!$request->wantsJson()) return abort(404);
+
+        $validator = Validator::make($request->all(), [
+            'userID' => 'required|integer',
+        ], [
+            'userID.required' => __('custom_validation.userID.required'),
+            'userID.integer' => __('custom_validation.userID.integer'),
+        ]);
+
+        if ($validator->fails()) {
+            return response_invalid_request(__("main.messages_title.invalid_inputs"), array_values($validator->getMessageBag()->toArray())[0][0]);
+        }
+
+        try {
+            $user = User::find($request->userID);
+
+            if (!$user) {
+                return response_not_found(__("main.messages_title.user_delete_error"), __("main.user_delete_error"));
+            }
+
+            $followings = $user->following()->paginate(8, ['username', 'profile_image']);
+
+            $last_page = $followings->currentPage() >= $followings->lastPage() ? true : false;
+
+            $followings = $followings->map(function ($item) {
+                unset($item['pivot']);
+                return $item;
+            });
+
+            return response_ok("", "", ["followings" => $followings, "last_page" => $last_page]);
+        } catch (\Exception $e) {
+            return response_server_error($e);
         }
     }
 }

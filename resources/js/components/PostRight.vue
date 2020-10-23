@@ -1,19 +1,48 @@
 <template>
     <div class="right col-md-4 d-flex flex-column">
-        <div class="post-author d-flex align-items-center" v-if="!mobile">
-            <a :href="post.user.profile_url">
-                <img
-                    :src="post.user.profile_image"
-                    alt="Profile Image"
-                    class="rounded-circle"
-                    style="width: 35px;height: 35px;"
-                />
-            </a>
-            <a
-                :href="post.user.profile_url"
-                class="post-author-username h6 m-0 ml-2"
-                v-text="post.user.username"
-            ></a>
+        <div
+            class="post-author d-flex justify-content-between align-items-center"
+            v-if="!mobile"
+        >
+            <div>
+                <a :href="post.user.profile_url">
+                    <img
+                        :src="post.user.profile_image"
+                        alt="Profile Image"
+                        class="rounded-circle"
+                        style="width: 35px;height: 35px;"
+                    />
+                </a>
+                <a
+                    :href="post.user.profile_url"
+                    class="post-author-username h6 m-0 ml-2"
+                >
+                    {{ post.user.username }}
+                </a>
+            </div>
+            <div class="p-2">
+                <div v-if="$user.id == post.user.id">
+                    <a
+                        data-toggle="dropdown"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        class="text-dark"
+                        href="#"
+                        style="transform: rotate(90deg); display: block;"
+                    >
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button
+                            class="dropdown-item delete-post-btn"
+                            @click="deletePost($event)"
+                        >
+                            {{ messages.words.delete }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="post-comments py-2" v-if="!mobile">
             <ul class="m-0 p-0">
@@ -29,15 +58,22 @@
                         </div>
                         <div class="comment-content">
                             <span class="comment-author-username">
-                                <a
-                                    :href="post.user.profile_url"
-                                    v-text="post.user.username"
-                                ></a>
+                                <a :href="post.user.profile_url">
+                                    {{ post.user.username }}
+                                </a>
                             </span>
-                            <span class="comment-body" v-text="post.caption">
+                            <span class="comment-body">
+                                {{ post.caption }}
                             </span>
                             <div class="comment-info">
-                                <div class="comment-posted-at">1h</div>
+                                <div class="comment-posted-at">
+                                    {{
+                                        timeAgo.format(
+                                            new Date(post.created_at),
+                                            "mini-now"
+                                        )
+                                    }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -45,7 +81,7 @@
 
                 <div
                     class="loadingio-spinner-rolling-zorg03qagl mx-auto mb-3 d-block"
-                    v-if="commentsLoading || firstCommentsLoad"
+                    v-if="comments.loading || comments.firstCommentsLoad"
                 >
                     <div class="ldio-ztkrgk44qa">
                         <div></div>
@@ -55,7 +91,9 @@
                 <div
                     class="load-comments rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3"
                     v-if="
-                        !commentsEnd && !commentsLoading && !firstCommentsLoad
+                        !comments.end &&
+                            !comments.loading &&
+                            !comments.firstCommentsLoad
                     "
                     @click="loadComments"
                 >
@@ -67,8 +105,8 @@
 
                 <div class="comments">
                     <li
-                        class="py-2"
-                        v-for="comment in comments"
+                        class="py-2 position-relative"
+                        v-for="comment in comments.data"
                         :key="comment.id"
                     >
                         <div class="d-flex">
@@ -80,20 +118,27 @@
                                     style="width: 35px;height: 35px;"
                                 />
                             </div>
-                            <div class="comment-content">
+                            <div class="comment-content pr-3">
                                 <span class="comment-author-username">
                                     <a
                                         :href="comment.user.profile_url"
-                                        v-text="comment.user.username"
-                                    ></a>
+                                        class="d-inline"
+                                    >
+                                        {{ comment.user.username }}
+                                    </a>
                                 </span>
-                                <span
-                                    class="comment-body"
-                                    v-text="comment.body"
-                                >
+                                <span class="comment-body">
+                                    {{ comment.body }}
                                 </span>
                                 <div class="comment-info">
-                                    <div class="comment-posted-at">1h</div>
+                                    <div class="comment-posted-at">
+                                        {{
+                                            timeAgo.format(
+                                                new Date(comment.created_at),
+                                                "mini-now"
+                                            )
+                                        }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +150,7 @@
             <div class="d-flex align-items-center mt-2">
                 <like-button
                     :post-id="post.id"
-                    :post-to="likeUrl"
+                    :urls="urls"
                     :likes="post.likedByCurrentUser"
                 ></like-button>
                 <div
@@ -128,23 +173,21 @@
                     </svg>
                 </div>
             </div>
-            <div
-                class="post-likes mt-2"
-                style="cursor: pointer"
-                @click="getLikes"
-            >
-                <span :id="'likes-' + post.id" v-text="post.likesCount"></span>
-                <span> likes</span>
+            <div class="post-likes mt-2" style="cursor: pointer">
+                <span :id="'likes-' + post.id">{{
+                    post.likesCount.toLocaleString()
+                }}</span>
+                <span>{{ messages.words.likes.toLowerCase() }}</span>
             </div>
             <div class="post-time mt-2">
-                1 hour ago
+                {{ timeAgo.format(new Date(post.created_at), "round") }}
             </div>
         </div>
         <div class="post-actions py-3" v-if="mobile">
             <div class="d-flex align-items-center mt-2">
                 <like-button
                     :post-id="post.id"
-                    :post-to="likeUrl"
+                    :urls="urls"
                     :likes="post.likedByCurrentUser"
                 ></like-button>
                 <div
@@ -166,28 +209,51 @@
                         ></path>
                     </svg>
                 </div>
+                <div class="p-2 ml-auto">
+                    <div v-if="$user.id == post.user.id">
+                        <a
+                            data-toggle="dropdown"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            class="text-dark"
+                            href="#"
+                            style="transform: rotate(90deg); display: block;"
+                        >
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button
+                                class="dropdown-item delete-post-btn"
+                                @click="deletePost($event)"
+                            >
+                                {{ messages.words.delete }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div
-                class="post-likes mt-2"
-                style="cursor: pointer"
-                @click="getLikes"
-            >
-                <span :id="'likes-' + post.id" v-text="post.likesCount"></span>
-                <span> likes</span>
+            <div class="post-likes mt-2" style="cursor: pointer">
+                <span :id="'likes-' + post.id">{{
+                    post.likesCount.toLocaleString()
+                }}</span>
+                <span>{{ messages.words.likes.toLowerCase() }}</span>
             </div>
             <div>
-                <span class="post-author" v-text="post.user.username"></span
-                >&nbsp;<span v-text="post.caption"></span>
+                <a class="post-author" :href="post.user.profile_url">
+                    {{ post.user.username }}
+                </a>
+                <span>{{ post.caption }}</span>
             </div>
             <div class="post-time mt-2">
-                1 hour ago
+                {{ timeAgo.format(new Date(post.created_at), "round") }}
             </div>
         </div>
         <div class="post-comments py-2" v-if="mobile">
             <ul class="m-0 p-0">
                 <div
                     class="loadingio-spinner-rolling-zorg03qagl mx-auto mb-3 d-block"
-                    v-if="commentsLoading || firstCommentsLoad"
+                    v-if="comments.loading || comments.firstCommentsLoad"
                 >
                     <div class="ldio-ztkrgk44qa">
                         <div></div>
@@ -197,7 +263,9 @@
                 <div
                     class="load-comments rounded-circle d-flex justify-content-center align-items-center mx-auto my-3"
                     v-if="
-                        !commentsEnd && !commentsLoading && !firstCommentsLoad
+                        !comments.end &&
+                            !comments.loading &&
+                            !comments.firstCommentsLoad
                     "
                     @click="loadComments"
                 >
@@ -207,10 +275,14 @@
                     ></span>
                 </div>
 
+                <div class="h4 m-0 p-3 text-center">
+                    {{ messages.no_comments }}
+                </div>
+
                 <div class="comments">
                     <li
                         class="py-2"
-                        v-for="comment in comments"
+                        v-for="comment in comments.data"
                         :key="comment.id"
                     >
                         <div class="d-flex">
@@ -224,18 +296,22 @@
                             </div>
                             <div class="comment-content">
                                 <span class="comment-author-username">
-                                    <a
-                                        :href="comment.user.profile_url"
-                                        v-text="comment.user.username"
-                                    ></a>
+                                    <a :href="comment.user.profile_url">
+                                        {{ comment.user.username }}
+                                    </a>
                                 </span>
-                                <span
-                                    class="comment-body"
-                                    v-text="comment.body"
-                                >
+                                <span class="comment-body">
+                                    {{ comment.body }}
                                 </span>
                                 <div class="comment-info">
-                                    <div class="comment-posted-at">1h</div>
+                                    <div class="comment-posted-at">
+                                        {{
+                                            timeAgo.format(
+                                                new Date(comment.created_at),
+                                                "mini-now"
+                                            )
+                                        }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -255,15 +331,18 @@
                     autocomplete="off"
                     autocorrect="off"
                     :id="'comment-' + post.id"
-                    v-model="addCommentVal"
+                    v-model="comments.addCommentVal"
                     ref="addCommentField"
                 ></textarea>
-                <button class="ml-auto px-4 py-0 btn" v-if="!commentAdding">
-                    Post
+                <button
+                    class="ml-auto px-4 py-0 btn"
+                    v-if="!comments.addingComment"
+                >
+                    {{ messages.words.post }}
                 </button>
                 <div
                     class="mx-auto loadingio-spinner-rolling-mufr14le4r comment-loader"
-                    v-if="commentAdding"
+                    v-if="comments.addingComment"
                 >
                     <div class="ldio-va3amnnosd">
                         <div></div>
@@ -276,21 +355,12 @@
 
 <script>
 export default {
-    props: [
-        "postData",
-        "likeUrl",
-        "getLikesUrl",
-        "commentsGetUrl",
-        "commentCreateUrl",
-        "commentErrorRequired",
-        "commentErrorMax",
-        "errorWord"
-    ],
+    props: ["postData", "urls", "messages"],
 
     watch: {
-        likesLoading: function() {
+        "likes.loading": function() {
             let elm = document.querySelector("#likesModal .modal-body");
-            if (this.likesLoading) {
+            if (this.likes.loading) {
                 elm.innerHTML += `<div class="loadingio-spinner-rolling-dbisj67kqze d-block mx-auto my-2"><div class="ldio-j0phwa9fshm"><div></div></div></div>`;
             } else {
                 elm.querySelector(
@@ -302,150 +372,145 @@ export default {
 
     data: function() {
         return {
+            timeAgo: window.timeAgo,
             post: this.postData,
-            likesPage: 1,
-            likesLoading: false,
-            likesEnd: false,
-            comments: [],
-            commentPage: 1,
-            addCommentVal: "",
-            firstCommentsLoad: false,
-            commentsLoading: false,
-            commentAdding: false,
-            commentsEnd: false,
-            mobile: false
+            mobile: false,
+
+            likes: {
+                page: 1,
+                loading: false,
+                end: false
+            },
+
+            comments: {
+                data: [],
+                page: 1,
+                loading: false,
+                end: false,
+                addCommentVal: "",
+                firstCommentsLoad: false,
+                addingComment: false
+            }
         };
     },
 
     methods: {
         loadComments() {
-            if (!this.commentsLoading) {
-                this.commentsLoading = true;
+            if (this.comments.loading) return;
+            this.comments.loading = true;
 
-                axios
-                    .get(this.commentsGetUrl, {
-                        params: {
-                            postId: this.post.id,
-                            page: this.commentPage
-                        }
-                    })
-                    .then(res => res.data)
-                    .then(data => {
-                        if (data.response_code == 200) {
-                            this.commentsEnd =
-                                data.data.current_page >= data.data.last_page;
-                            this.comments.unshift(...data.data.data);
-                            this.commentPage++;
-                        }
-                    })
-                    .catch(err => {
-                        if (err.response.status == 401) {
-                            window.location = err.response.data.redirectUrl;
-                        } else {
-                            toastr.error(
-                                err.response.data.error_message,
-                                err.response.data.error_title,
-                                {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: "toast-top-right",
-                                    preventDuplicates: true,
-                                    showDuration: 300,
-                                    hideDuration: 1000,
-                                    timeOut: 5000,
-                                    extendedTimeOut: 5000,
-                                    showEasing: "swing",
-                                    hideEasing: "linear",
-                                    showMethod: "fadeIn",
-                                    hideMethod: "fadeOut"
-                                }
-                            );
-                        }
-                    })
-                    .finally(() => {
-                        this.commentsLoading = false;
-                        this.firstCommentsLoad = false;
-                    });
-            }
+            axios
+                .get(this.urls.comment.index, {
+                    params: {
+                        postId: this.post.id,
+                        page: this.comments.page
+                    }
+                })
+                .then(res => res.data)
+                .then(data => {
+                    if (data.response_code == 200) {
+                        this.comments.end =
+                            data.data.current_page >= data.data.last_page;
+                        this.comments.data.unshift(...data.data.data);
+                        this.comments.page++;
+                    }
+                })
+                .catch(err => {
+                    show_error(
+                        err.response.data.error_title,
+                        err.response.data.error_message
+                    );
+                })
+                .finally(() => {
+                    this.comments.loading = false;
+                    this.comments.firstCommentsLoad = false;
+                });
         },
 
         addComment() {
-            if (!this.commentAdding) {
-                if (this.addCommentVal == "") {
-                    toastr.error(this.commentErrorRequired, this.errorWord, {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right",
-                        preventDuplicates: true,
-                        showDuration: 300,
-                        hideDuration: 1000,
-                        timeOut: 5000,
-                        extendedTimeOut: 5000,
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut"
-                    });
+            if (!this.comments.addingComment) {
+                if (this.comments.addCommentVal == "") {
+                    show_error(
+                        this.messages.comment_errors.required.title,
+                        this.messages.comment_errors.required.message
+                    );
                     return false;
-                } else if (this.addCommentVal.length > 255) {
-                    toastr.error(this.commentErrorMax, this.errorWord, {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right",
-                        preventDuplicates: true,
-                        showDuration: 300,
-                        hideDuration: 1000,
-                        timeOut: 5000,
-                        extendedTimeOut: 5000,
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut"
-                    });
+                } else if (this.comments.addCommentVal.length > 255) {
+                    show_error(
+                        this.messages.comment_errors.max.title,
+                        this.messages.comment_errors.max.message
+                    );
                     return false;
                 }
-                this.commentAdding = true;
+                this.comments.addingComment = true;
                 axios
-                    .post(this.commentCreateUrl, {
-                        postID: this.post.id,
-                        comment: this.addCommentVal
+                    .post(this.urls.comment.store, {
+                        postId: this.post.id,
+                        comment: this.comments.addCommentVal
                     })
                     .then(res => res.data)
                     .then(data => {
                         if (data.response_code == 201) {
-                            this.comments.unshift(data.data.comment);
+                            this.comments.data.unshift(data.data.comment);
                             this.post.commentsCount++;
                         }
-                        this.addCommentVal = "";
+                        this.comments.addCommentVal = "";
                     })
                     .catch(err => {
                         if (err.response.status == 401) {
                             window.location = err.response.data.redirectUrl;
                         } else {
-                            toastr.error(
-                                err.response.data.error_message,
+                            show_error(
                                 err.response.data.error_title,
-                                {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: "toast-top-right",
-                                    preventDuplicates: true,
-                                    showDuration: 300,
-                                    hideDuration: 1000,
-                                    timeOut: 5000,
-                                    extendedTimeOut: 5000,
-                                    showEasing: "swing",
-                                    hideEasing: "linear",
-                                    showMethod: "fadeIn",
-                                    hideMethod: "fadeOut"
-                                }
+                                err.response.data.error_message
                             );
                         }
                     })
                     .finally(() => {
-                        this.commentAdding = false;
+                        this.comments.addingComment = false;
                     });
             }
+        },
+
+        deletePost(e) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+                showLoaderOnConfirm: true,
+                preConfirm: del => {
+                    return axios
+                        .delete(this.urls.post.delete, {
+                            data: {
+                                postId: this.post.id
+                            }
+                        })
+                        .then(res => res.data)
+                        .then(data => {
+                            return data;
+                        })
+                        .catch(err => {
+                            Swal.close();
+                            show_error(
+                                err.response.data.error_title,
+                                err.response.data.error_message
+                            );
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(r => {
+                if (r.isConfirmed) {
+                    Swal.fire(
+                        r.value.error_title,
+                        r.value.error_message,
+                        "success"
+                    ).then(() => (window.location.href = this.urls.home.index));
+                }
+            });
         },
 
         focusAddComment() {
@@ -458,66 +523,6 @@ export default {
             } else {
                 this.mobile = false;
             }
-        },
-
-        getLikes() {
-            $("#likesModal").modal("show");
-            if (this.likesLoading || this.likesEnd) return;
-
-            this.likesLoading = true;
-            axios
-                .get(this.getLikesUrl, {
-                    params: {
-                        postId: this.post.id,
-                        page: this.likesPage
-                    }
-                })
-                .then(res => res.data)
-                .then(data => {
-                    document.querySelector(
-                        "#likesModal .modal-body"
-                    ).innerHTML += data.data.content;
-                    this.likesEnd = data.data.lastPage;
-                    this.likesPage++;
-                    this.firstLikesLoad = false;
-                })
-                .catch(err => {
-                    if (err.response.status !== 200) {
-                        toastr.error(
-                            err.response.data.error_message,
-                            err.response.data.error_title,
-                            {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: "toast-top-right",
-                                preventDuplicates: true,
-                                showDuration: 300,
-                                hideDuration: 1000,
-                                timeOut: 5000,
-                                extendedTimeOut: 5000,
-                                showEasing: "swing",
-                                hideEasing: "linear",
-                                showMethod: "fadeIn",
-                                hideMethod: "fadeOut"
-                            }
-                        );
-                    }
-                })
-                .finally(() => {
-                    this.likesLoading = false;
-                });
-        },
-
-        enableScrollForLikes() {
-            const elm = document.querySelector("#likesModal .modal-body");
-            elm.addEventListener("scroll", e => {
-                if (
-                    elm.offsetHeight + elm.scrollTop >=
-                    elm.scrollHeight - 100
-                ) {
-                    this.getLikes();
-                }
-            });
         }
     },
 
@@ -525,7 +530,6 @@ export default {
         this.loadComments();
         this.checkScreen();
         window.addEventListener("resize", this.checkScreen);
-        this.enableScrollForLikes();
     }
 };
 </script>

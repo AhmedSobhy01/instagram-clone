@@ -7,6 +7,7 @@
 require("./bootstrap");
 
 window.Vue = require("vue");
+Vue.prototype.$user = window.User;
 
 /**
  * The following block of code may be used to automatically register your
@@ -32,6 +33,18 @@ Vue.component(
     require("./components/FollowButton.vue").default
 );
 
+Vue.component(
+    "followers-modal",
+    require("./components/FollowersModal.vue").default
+);
+
+Vue.component(
+    "followings-modal",
+    require("./components/FollowingsModal.vue").default
+);
+
+Vue.component("likes-modal", require("./components/LikesModal.vue").default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -41,3 +54,40 @@ Vue.component(
 const app = new Vue({
     el: "#app"
 });
+
+// Helpers Functions
+window.show_success = function(alert_title, alert_message, timeout = 10000) {
+    toastr.success(alert_message, alert_title, {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        showDuration: 300,
+        hideDuration: 1000,
+        timeOut: timeout,
+        extendedTimeOut: timeout,
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    });
+    return true;
+};
+
+window.show_error = function(alert_title, alert_message, timeout = 10000) {
+    toastr.error(alert_message, alert_title, {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        showDuration: 300,
+        hideDuration: 1000,
+        timeOut: timeout,
+        extendedTimeOut: timeout,
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    });
+    return true;
+};

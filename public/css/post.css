@@ -18,7 +18,7 @@
 
 .post-image {
   margin-left: -100%;
-  z-index: 100;
+  z-index: 99;
   -o-object-fit: contain;
      object-fit: contain;
 }
@@ -100,7 +100,7 @@ a:hover {
 }
 
 .comment-body {
-  word-break: break-word;
+  word-break: break-all;
 }
 
 .comment-info {
