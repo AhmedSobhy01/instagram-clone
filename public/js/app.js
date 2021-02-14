@@ -2105,6 +2105,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["urls", "messages", "userId"],
   data: function data() {
@@ -2161,7 +2162,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     this.getFollowers(); // Enable Lazy Loading (Scroll Load)
 
-    var elm = document.querySelector("#followersModal .modal-body");
+    var elm = this.$refs.followersModal;
     elm.addEventListener("scroll", function (e) {
       if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
         _this2.getFollowers();
@@ -2193,6 +2194,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -2319,7 +2321,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     this.getFollowings(); // Enable Lazy Loading (Scroll Load)
 
-    var elm = document.querySelector("#followingsModal .modal-body");
+    var elm = this.$refs.followingsModal;
     elm.addEventListener("scroll", function (e) {
       if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
         _this2.getFollowings();
@@ -2372,10 +2374,12 @@ __webpack_require__.r(__webpack_exports__);
   props: ["urls", "postId", "likes"],
   watch: {
     status: function status() {
+      var elm = document.getElementById("likes-".concat(this.postId));
+
       if (this.status) {
-        document.getElementById("likes-".concat(this.postId)).innerHTML = parseInt(document.getElementById("likes-".concat(this.postId)).innerHTML) + 1;
+        elm.innerHTML = parseInt(elm.innerHTML) + 1;
       } else {
-        document.getElementById("likes-".concat(this.postId)).innerHTML = parseInt(document.getElementById("likes-".concat(this.postId)).innerHTML) - 1;
+        elm.innerHTML = parseInt(elm.innerHTML) - 1;
       }
     }
   },
@@ -2497,6 +2501,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["urls", "messages", "postId"],
   data: function data() {
@@ -2540,7 +2545,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     this.getLikes(); // Enable Lazy Loading (Scroll Load)
 
-    var elm = document.querySelector("#likesModal .modal-body");
+    var elm = this.$ref.likesModal;
     elm.addEventListener("scroll", function (e) {
       if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
         _this2.getLikes();
@@ -50427,20 +50432,13 @@ var render = function() {
         [
           _c("div", { staticClass: "modal-content" }, [
             _c("div", { staticClass: "modal-header" }, [
-              _c(
-                "h4",
-                {
-                  staticClass: "modal-title text-center",
-                  attrs: { id: "followersModal" }
-                },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.messages.words.followers) +
-                      "\n                "
-                  )
-                ]
-              ),
+              _c("h4", { staticClass: "modal-title text-center" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.messages.words.followers) +
+                    "\n                "
+                )
+              ]),
               _vm._v(" "),
               _vm._m(0)
             ]),
@@ -50448,6 +50446,7 @@ var render = function() {
             _c(
               "div",
               {
+                ref: "followersModal",
                 staticClass: "modal-body py-1",
                 staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
               },
@@ -50591,20 +50590,13 @@ var render = function() {
         [
           _c("div", { staticClass: "modal-content" }, [
             _c("div", { staticClass: "modal-header" }, [
-              _c(
-                "h4",
-                {
-                  staticClass: "modal-title text-center",
-                  attrs: { id: "followingsModal" }
-                },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.messages.words.following) +
-                      "\n                "
-                  )
-                ]
-              ),
+              _c("h4", { staticClass: "modal-title text-center" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.messages.words.following) +
+                    "\n                "
+                )
+              ]),
               _vm._v(" "),
               _vm._m(0)
             ]),
@@ -50612,6 +50604,7 @@ var render = function() {
             _c(
               "div",
               {
+                ref: "followingsModal",
                 staticClass: "modal-body py-1",
                 staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
               },
@@ -50829,20 +50822,13 @@ var render = function() {
         [
           _c("div", { staticClass: "modal-content" }, [
             _c("div", { staticClass: "modal-header" }, [
-              _c(
-                "h4",
-                {
-                  staticClass: "modal-title text-center",
-                  attrs: { id: "likesModal" }
-                },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.messages.words.likes) +
-                      "\n                "
-                  )
-                ]
-              ),
+              _c("h4", { staticClass: "modal-title text-center" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.messages.words.likes) +
+                    "\n                "
+                )
+              ]),
               _vm._v(" "),
               _vm._m(0)
             ]),
@@ -50850,6 +50836,7 @@ var render = function() {
             _c(
               "div",
               {
+                ref: "likesModal",
                 staticClass: "modal-body py-1",
                 staticStyle: { "max-height": "300px", "overflow-y": "scroll" }
               },

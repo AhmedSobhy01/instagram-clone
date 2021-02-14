@@ -33,18 +33,11 @@ export default {
 
     watch: {
         status: function() {
+            let elm = document.getElementById(`likes-${this.postId}`);
             if (this.status) {
-                document.getElementById(`likes-${this.postId}`).innerHTML =
-                    parseInt(
-                        document.getElementById(`likes-${this.postId}`)
-                            .innerHTML
-                    ) + 1;
+                elm.innerHTML = parseInt(elm.innerHTML) + 1;
             } else {
-                document.getElementById(`likes-${this.postId}`).innerHTML =
-                    parseInt(
-                        document.getElementById(`likes-${this.postId}`)
-                            .innerHTML
-                    ) - 1;
+                elm.innerHTML = parseInt(elm.innerHTML) - 1;
             }
         }
     },

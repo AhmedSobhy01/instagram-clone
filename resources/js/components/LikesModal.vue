@@ -10,7 +10,7 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-center" id="likesModal">
+                    <h4 class="modal-title text-center">
                         {{ messages.words.likes }}
                     </h4>
                     <button
@@ -25,6 +25,7 @@
                 <div
                     class="modal-body py-1"
                     style="max-height: 300px; overflow-y: scroll"
+                    ref="likesModal"
                 >
                     <div
                         class="h3 m-0 p-3 text-center"
@@ -118,7 +119,7 @@ export default {
         this.getLikes();
 
         // Enable Lazy Loading (Scroll Load)
-        const elm = document.querySelector("#likesModal .modal-body");
+        const elm = this.$ref.likesModal;
         elm.addEventListener("scroll", e => {
             if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
                 this.getLikes();
