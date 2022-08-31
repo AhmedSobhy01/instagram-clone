@@ -24,7 +24,6 @@ class UserSeeder extends Seeder
             "username" => "ahmedsobhy",
             "email" => "test@test.com",
             "profile_image" => "default.jpg",
-            "password" => Hash::make("12345678")
         ]);
 
         $user->profile()->save(factory(Profile::class)->make());

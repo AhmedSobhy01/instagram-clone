@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Profile::class, function (Faker $faker) {
     return [
-        'bio' => $faker->text,
+        'bio' => $faker->text(150),
         'website' => $faker->url,
     ];
 });
