@@ -14,7 +14,9 @@ const mix = require("laravel-mix");
 mix.js("resources/js/app.js", "public/js")
     .js("resources/js/upload.js", "public/js")
     .js("resources/js/profile.js", "public/js")
+    .vue()
     .sass("resources/sass/app.scss", "public/css")
     .sass("resources/sass/profile.scss", "public/css")
     .sass("resources/sass/feed.scss", "public/css")
-    .sass("resources/sass/post.scss", "public/css");
+    .sass("resources/sass/post.scss", "public/css")
+    .copyDirectory("storage/app/seeding_assets", "storage/app/public");

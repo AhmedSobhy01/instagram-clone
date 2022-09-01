@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             $user->profile()->save($profile);
         });
 
-        $user = User::create([
+        $user = factory(User::class)->create([
             "name" => "Ahmed Sobhy",
             "username" => "ahmedsobhy",
             "email" => "test@test.com",

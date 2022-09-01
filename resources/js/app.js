@@ -6,6 +6,7 @@
 
 require("./bootstrap");
 
+import Vue from "vue/dist/vue";
 window.Vue = require("vue");
 Vue.prototype.$user = window.User;
 
@@ -52,11 +53,11 @@ Vue.component("likes-modal", require("./components/LikesModal.vue").default);
  */
 
 const app = new Vue({
-    el: "#app"
+    el: "#app",
 });
 
 // Helpers Functions
-window.show_success = function(alert_title, alert_message, timeout = 10000) {
+window.show_success = function (alert_title, alert_message, timeout = 10000) {
     toastr.success(alert_message, alert_title, {
         closeButton: true,
         progressBar: true,
@@ -69,12 +70,12 @@ window.show_success = function(alert_title, alert_message, timeout = 10000) {
         showEasing: "swing",
         hideEasing: "linear",
         showMethod: "fadeIn",
-        hideMethod: "fadeOut"
+        hideMethod: "fadeOut",
     });
     return true;
 };
 
-window.show_error = function(alert_title, alert_message, timeout = 10000) {
+window.show_error = function (alert_title, alert_message, timeout = 10000) {
     toastr.error(alert_message, alert_title, {
         closeButton: true,
         progressBar: true,
@@ -87,7 +88,7 @@ window.show_error = function(alert_title, alert_message, timeout = 10000) {
         showEasing: "swing",
         hideEasing: "linear",
         showMethod: "fadeIn",
-        hideMethod: "fadeOut"
+        hideMethod: "fadeOut",
     });
     return true;
 };

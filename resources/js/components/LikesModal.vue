@@ -1,6 +1,6 @@
 <template>
     <div
-        class="modal fade bd-example-modal-sm show"
+        class="modal fade bd-example-modal-sm"
         id="likesModal"
         tabindex="-1"
         role="dialog"
@@ -29,7 +29,7 @@
                 >
                     <div
                         class="h3 m-0 p-3 text-center"
-                        v-if="likes.length == 0"
+                        v-if="likes.length == 0 && end"
                     >
                         {{ messages.words.nothing_found }}
                     </div>
@@ -44,7 +44,7 @@
                                         :src="like.user.profile_image"
                                         class="rounded-circle"
                                         alt="User Image"
-                                        style="width: 35px; height: 35px;"
+                                        style="width: 35px; height: 35px"
                                     />
                                 </div>
                                 <div>{{ like.user.username }}</div>
@@ -67,18 +67,24 @@
 export default {
     props: ["urls", "messages", "postId"],
 
-    data: function() {
+    data: function () {
         return {
             likes: [],
             page: 1,
             loading: false,
-            end: false
+            end: false,
         };
     },
 
     methods: {
-        getLikes() {
-            if (this.loading || this.end) return;
+        getLikes(reset) {
+            if (this.loading || (this.end && !reset)) return;
+
+            if (reset) {
+                this.likes = [];
+                this.page = 1;
+                this.end = false;
+            }
 
             this.loading = true;
 
@@ -86,16 +92,16 @@ export default {
                 .post(
                     this.urls.like.index,
                     {
-                        postId: this.postId
+                        postId: this.postId,
                     },
                     {
                         params: {
-                            page: this.page
-                        }
+                            page: this.page,
+                        },
                     }
                 )
-                .then(res => res.data)
-                .then(data => {
+                .then((res) => res.data)
+                .then((data) => {
                     this.likes.push(...data.data.data);
                     this.page++;
                     this.end =
@@ -103,7 +109,7 @@ export default {
                             ? true
                             : false;
                 })
-                .catch(err => {
+                .catch((err) => {
                     show_error(
                         err.response.data.error_title,
                         err.response.data.error_message
@@ -112,19 +118,38 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        }
+        },
     },
 
     mounted() {
         this.getLikes();
 
+        this.observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                this.$nextTick(() => {
+                    if (m.target.classList.contains("show"))
+                        this.getLikes(true);
+                });
+            }
+        });
+
+        this.observer.observe(document.getElementById("likesModal"), {
+            attributes: true,
+            attributeOldValue: true,
+            attributeFilter: ["class"],
+        });
+
         // Enable Lazy Loading (Scroll Load)
-        const elm = this.$ref.likesModal;
-        elm.addEventListener("scroll", e => {
+        const elm = this.$refs.likesModal;
+        elm.addEventListener("scroll", (e) => {
             if (elm.offsetHeight + elm.scrollTop >= elm.scrollHeight - 100) {
                 this.getLikes();
             }
         });
-    }
+    },
+
+    beforeDestroy() {
+        this.observer.disconnect();
+    },
 };
 </script>
