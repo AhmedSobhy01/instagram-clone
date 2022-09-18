@@ -19,4 +19,4 @@ mix.js("resources/js/app.js", "public/js")
     .sass("resources/sass/profile.scss", "public/css")
     .sass("resources/sass/feed.scss", "public/css")
     .sass("resources/sass/post.scss", "public/css")
-    .copyDirectory("storage/app/seeding_assets", "storage/app/public");
+    .copyDirectory("database/seeds/assets/", "storage/app/public");
