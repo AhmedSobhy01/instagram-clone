@@ -8,7 +8,7 @@
 <br />
 <div align="center">
   <a href="https://www.github.com/AhmedSobhy01/instagram-clone">
-    <img src="https://vistagram.ahmedsobhy.net/storage/logos/instagram_logo.png" alt="Logo" width="80" height="80">
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Finstagram-logo_87390&psig=AOvVaw3FaoyB6zLXN3KEKTmY7Xt0&ust=1675891892353000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCNibiv2thP0CFQAAAAAdAAAAABAE" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Vistagram</h3>
@@ -16,7 +16,7 @@
   <p align="center">
     A replicate of the official Instagram website with the ability to post images for the web application.
     <br />
-    <a href="https://www.github.com/AhmedSobhy01/instagram-clone">View Demo</a>
+    <a href="https://vistagram.ahmedsobhy.net">View Demo</a>
     ·
     <a href="https://www.github.com/AhmedSobhy01/instagram-clone/issues">Report Bug</a>
     ·
