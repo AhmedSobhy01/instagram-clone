@@ -79,7 +79,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Usage
 
-After seeding database, you can login using default user:
+After seeding the database, you can log in using the default user:
 | **Email** | **Password** |
 | --- | --- |
 | test@test.com | password |
@@ -106,7 +106,7 @@ Project Link: [https://www.github.com/AhmedSobhy01/instagram-clone](https://www.
 [issues-url]: https://www.github.com/AhmedSobhy01/instagram-clone/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/ahmed-sobhy-dev
-[product-screenshot]: https://ahmedsobhy.net/storage/a93a26d2acfa6c515419674ddfd56f2f/Main-page.png
+[product-screenshot]: https://ahmedsobhy.net/storage/8a2e0ee6c7b236035d1e43886552c789/main-phone.jpg
 [vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [vue-url]: https://vuejs.org/
 [laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
